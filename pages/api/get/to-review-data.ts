@@ -6,7 +6,7 @@ export default async function reviewData(
   res: NextApiResponse,
 ) {
   try {
-    const foo = await sql`SELECT * FROM position`;
+    const foo = await sql`SELECT * FROM admins`;
 
     return res.status(200).json(foo);
   } catch (e) {
