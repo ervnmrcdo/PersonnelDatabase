@@ -46,6 +46,14 @@ const publications: Publication[] = [
   },
 ];
 
+const retrievedData = {
+  userName: "John Doe",
+  awardTitle: "IPC",
+  PublicationTitle: " ys",
+  publicationDate: "",
+  description: "",
+};
+
 const AwardsPage: FC = () => {
   const [step, setStep] = useState<"awards" | "publications" | "form">(
     "awards",
@@ -111,6 +119,7 @@ const AwardsPage: FC = () => {
                 handleBack={handleBack}
                 selectedAward={selectedAward}
                 selectedPublication={selectedPublication}
+                autoData={retrievedData}
               />
             </motion.div>
           )}

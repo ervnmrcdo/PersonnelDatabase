@@ -1,4 +1,5 @@
 import { FC } from "react";
+import EditableAwardForm from "./EditableAwardForm";
 
 interface Award {
   id: number;
@@ -13,17 +14,39 @@ interface Publication {
   description: string;
 }
 
+interface Data {
+  userName?: string;
+  awardTitle?: string;
+  pubTitle?: string;
+  pubDate?: string;
+  pubDescription?: string;
+}
 interface FormEditingProps {
   handleBack: () => void;
   selectedAward: Award | null;
   selectedPublication: Publication | null;
+  autoData: Data;
 }
-
 const FormEditing: FC<FormEditingProps> = ({
   handleBack,
   selectedAward,
   selectedPublication,
+  autoData,
 }) => {
+  const handleDownload = async (data: any) => {
+    const response = await fetch("/api/generate-award-form", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "ipc-award-form.pdf";
+    a.click();
+  };
+
   return (
     <>
       <button
@@ -55,12 +78,17 @@ const FormEditing: FC<FormEditingProps> = ({
           </p>
         </div>
 
-        <div className="mt-6 border rounded-lg overflow-hidden">
-          <iframe
-            src="/forms/ipc-award-form.pdf"
-            className="w-full h-[600px]"
-            title="IPC Award Application Form"
-          ></iframe>
+        <div className="mt-6 border rounded-lg overflow-visible">
+          <EditableAwardForm
+            initialData={{
+              applicantName: autoData.userName,
+              awardType: selectedAward?.title,
+              publicationTitle: selectedPublication?.title,
+              publicationDate: selectedPublication?.date,
+              description: selectedPublication?.description,
+            }}
+            onDownload={handleDownload}
+          />
         </div>
       </div>
     </>
