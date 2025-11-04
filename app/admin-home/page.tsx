@@ -1,6 +1,7 @@
 "use client";
 
 import AdminSidebar from "@/components/AdminSidebar";
+import ReviewPage from "@/components/Review/ReviewPage";
 import ReviewTab from "@/components/ReviewTab";
 import { useState, ReactNode } from "react";
 
@@ -26,7 +27,7 @@ export default function Page() {
       case "Profile":
         return <>no</>;
       case "To Review":
-        return <ReviewTab />;
+        return <ReviewPage />;
     }
   };
 

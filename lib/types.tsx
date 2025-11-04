@@ -36,3 +36,12 @@ export interface Publication {
   pageNumber: string;
   publisher: string;
 }
+
+export type Application = {
+  id: string;
+  name: string;
+  role: "Student" | "Faculty";
+  award: string;
+  dateSubmitted: string;
+  pdfUrl: string;
+};
