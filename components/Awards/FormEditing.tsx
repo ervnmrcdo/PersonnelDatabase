@@ -50,7 +50,7 @@ const FormEditing: FC<FormEditingProps> = ({
   autoData,
 }) => {
   const handleDownload = async (data: any) => {
-    const response = await fetch("/api/generate-award-form", {
+    const response = await fetch("/api/generate-ipc-award/route", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
