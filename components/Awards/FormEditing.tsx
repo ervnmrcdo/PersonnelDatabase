@@ -1,6 +1,26 @@
 import { FC } from "react";
 import EditableAwardForm from "./EditableAwardForm";
 
+interface Author {
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  university?: string;
+  college?: string;
+  department?: string;
+}
+
+interface ApplicantData {
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  university?: string;
+  college?: string;
+  department?: string;
+  position: string;
+  contactNo: string;
+  emailAddress: string;
+}
 interface Award {
   id: number;
   title: string;
@@ -8,24 +28,20 @@ interface Award {
 }
 
 interface Publication {
+  authors: Author[];
   id: number;
   title: string;
   date: string;
-  description: string;
+  journalName: string;
+  volumeNumber: string;
+  pageNumber: string;
 }
 
-interface Data {
-  userName?: string;
-  awardTitle?: string;
-  pubTitle?: string;
-  pubDate?: string;
-  pubDescription?: string;
-}
 interface FormEditingProps {
   handleBack: () => void;
-  selectedAward: Award | null;
-  selectedPublication: Publication | null;
-  autoData: Data;
+  selectedAward: Award;
+  selectedPublication: Publication;
+  autoData: ApplicantData;
 }
 const FormEditing: FC<FormEditingProps> = ({
   handleBack,
@@ -77,15 +93,13 @@ const FormEditing: FC<FormEditingProps> = ({
             <strong>Date of Publication:</strong> {selectedPublication?.date}
           </p>
         </div>
-
         <div className="mt-6 border rounded-lg overflow-visible">
           <EditableAwardForm
             initialData={{
-              applicantName: autoData.userName,
-              awardType: selectedAward?.title,
-              publicationTitle: selectedPublication?.title,
-              publicationDate: selectedPublication?.date,
-              description: selectedPublication?.description,
+              applicant: autoData,
+              authors: selectedPublication.authors,
+              selectedPublication: selectedPublication,
+              selectedAward: selectedAward,
             }}
             onDownload={handleDownload}
           />

@@ -11,12 +11,48 @@ interface Award {
   description: string;
 }
 
+interface Author {
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  university?: string;
+  college?: string;
+  department?: string;
+}
+
 interface Publication {
+  authors: Author[];
   id: number;
   title: string;
   date: string;
-  description: string;
+  journalName: string;
+  volumeNumber: string;
+  pageNumber: string;
 }
+
+interface ApplicantData {
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  university?: string;
+  college?: string;
+  department?: string;
+  position: string;
+  contactNo: string;
+  emailAddress: string;
+}
+
+const applicant: ApplicantData = {
+  firstName: "Alice",
+  lastName: "Brown",
+  middleName: "Marie",
+  university: "University of California",
+  college: "College of Engineering",
+  department: "Software Engineering",
+  position: "Senior Developer",
+  contactNo: "+1-555-0123",
+  emailAddress: "alice.brown@email.com",
+};
 
 const awards: Award[] = [
   {
@@ -34,26 +70,43 @@ const awards: Award[] = [
 const publications: Publication[] = [
   {
     id: 1,
-    title: "Title of Article (from database)",
-    date: "2024-05-01",
-    description: "Description of article",
+    title: "Advanced Machine Learning Techniques for Climate Prediction",
+    authors: [
+      {
+        firstName: "John",
+        lastName: "Smith",
+        university: "University of Technology",
+        department: "Computer Science",
+      },
+      {
+        firstName: "Sarah",
+        lastName: "Johnson",
+        university: "State University",
+      },
+    ],
+    date: "2023-03-15",
+    journalName: "Journal of Artificial Intelligence Research",
+    volumeNumber: "45",
+    pageNumber: "123-145",
   },
   {
     id: 2,
-    title: "Another Publication",
-    date: "2024-07-10",
-    description: "Description of second article",
+    title: "Quantum Computing: Breaking New Grounds",
+    authors: [
+      {
+        firstName: "Michael",
+        lastName: "Chen",
+        middleName: "Wei",
+        university: "Tech University",
+        college: "College of Physics",
+      },
+    ],
+    date: "2023-07-22",
+    journalName: "Physical Review Letters",
+    volumeNumber: "130",
+    pageNumber: "250601",
   },
 ];
-
-const retrievedData = {
-  userName: "John Doe",
-  awardTitle: "IPC",
-  PublicationTitle: " ys",
-  publicationDate: "",
-  description: "",
-};
-
 const AwardsPage: FC = () => {
   const [step, setStep] = useState<"awards" | "publications" | "form">(
     "awards",
@@ -117,9 +170,9 @@ const AwardsPage: FC = () => {
             >
               <FormEditing
                 handleBack={handleBack}
-                selectedAward={selectedAward}
-                selectedPublication={selectedPublication}
-                autoData={retrievedData}
+                selectedAward={selectedAward!}
+                selectedPublication={selectedPublication!}
+                autoData={applicant}
               />
             </motion.div>
           )}

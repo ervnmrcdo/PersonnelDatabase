@@ -1,11 +1,22 @@
 import { ChevronRight } from "lucide-react";
 import { FC } from "react";
 
+interface Author {
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  university?: string;
+  college?: string;
+  department?: string;
+}
 interface Publication {
+  authors: Author[];
   id: number;
   title: string;
   date: string;
-  description: string;
+  journalName: string;
+  volumeNumber: string;
+  pageNumber: string;
 }
 
 interface PublicationSelectionProps {
@@ -38,7 +49,7 @@ const PublicationSelection: FC<PublicationSelectionProps> = ({
           >
             <div>
               <h2 className="font-semibold text-gray-800">{pub.title}</h2>
-              <p className="text-sm text-gray-400">{pub.description}</p>
+              {/* <p className="text-sm text-gray-400">{pub.description}</p> */}
             </div>
             <div className="text-sm text-gray-400">{pub.date}</div>
             <ChevronRight className="text-gray-400" />

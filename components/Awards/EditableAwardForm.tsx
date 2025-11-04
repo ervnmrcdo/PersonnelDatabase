@@ -3,28 +3,47 @@ import { useState } from "react";
 import IpaFormTemplate from "./IpaAwardTemplate";
 
 interface Author {
-  firstName: string;
+  firstName?: string;
   lastName?: string;
   middleName?: string;
   university?: string;
+  college?: string;
   department?: string;
+}
+
+interface ApplicantData {
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  university?: string;
+  college?: string;
+  department?: string;
+  position: string;
+  contactNo: string;
+  emailAddress: string;
+}
+interface Award {
+  id: number;
+  title: string;
+  description: string;
+}
+
+interface Publication {
+  authors: Author[];
+  id: number;
+  title: string;
+  date: string;
+  journalName: string;
+  volumeNumber: string;
+  pageNumber: string;
 }
 
 interface EditableAwardFormProps {
   initialData: {
-    submitee: Author;
-    authors: [Author];
-    college?: string;
-    univerity?: string;
-    department?: string;
-    position?: string;
-    publicationTitle?: string;
-    publicationDate?: string;
-    journalName?: string;
-    volumeNumber?: string;
-    pageNumber?: string;
-    contactNo?: string;
-    emailAddress: string;
+    applicant: ApplicantData;
+    authors: Author[];
+    selectedPublication: Publication;
+    selectedAward: Award | null;
   };
   onDownload: (data: any) => void;
 }
@@ -53,7 +72,7 @@ export default function EditableAwardForm({
       <input
         type="text"
         value={
-          `${formData.lastName}, ${formData.middleName} ${formData.firstName}` ||
+          `${formData.applicant.lastName}, ${formData.applicant.middleName} ${formData.applicant.firstName}` ||
           ""
         }
         onChange={(e) => handleChange("applicantName", e.target.value)}
@@ -64,7 +83,7 @@ export default function EditableAwardForm({
       <input
         type="text"
         value={
-          `${formData.lastName}, ${formData.middleName} ${formData.firstName}` ||
+          `${formData.applicant.lastName}, ${formData.applicant.middleName} ${formData.applicant.firstName}` ||
           ""
         }
         onChange={(e) => handleChange("applicantName", e.target.value)}
@@ -74,7 +93,7 @@ export default function EditableAwardForm({
 
       <input
         type="text"
-        value={formData.publicationTitle || ""}
+        value={formData.selectedPublication.title || ""}
         onChange={(e) => handleChange("publicationTitle", e.target.value)}
         className="absolute left-[100px] top-[655px] w-[350px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Publication Title"
@@ -82,7 +101,7 @@ export default function EditableAwardForm({
 
       <input
         type="text"
-        value={formData.publicationDate || ""}
+        value={formData.selectedPublication.date || ""}
         onChange={(e) => handleChange("publicationDate", e.target.value)}
         className="absolute left-[100px] top-[1300px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Date of Publication"
