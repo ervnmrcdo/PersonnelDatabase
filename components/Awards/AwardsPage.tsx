@@ -4,45 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
-
-interface Award {
-  id: number;
-  title: string;
-  description: string;
-}
-
-interface Author {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
-  university?: string;
-  college?: string;
-  department?: string;
-}
-
-interface Publication {
-  authors: Author[];
-  id: number;
-  title: string;
-  date: string;
-  journalName: string;
-  volumeNumber: string;
-  pageNumber: string;
-}
-
-interface ApplicantData {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
-  university?: string;
-  college?: string;
-  department?: string;
-  position: string;
-  contactNo: string;
-  emailAddress: string;
-}
+import { Author, ApplicantData, Award, Publication } from "@/lib/types";
 
 const applicant: ApplicantData = {
+  applicantName: "",
   firstName: "Alice",
   lastName: "Brown",
   middleName: "Marie",
@@ -53,6 +18,7 @@ const applicant: ApplicantData = {
   contactNo: "+1-555-0123",
   emailAddress: "alice.brown@email.com",
 };
+applicant.applicantName = `${applicant.lastName}, ${applicant.firstName} ${applicant.middleName}`;
 
 const awards: Award[] = [
   {
@@ -73,12 +39,14 @@ const publications: Publication[] = [
     title: "Advanced Machine Learning Techniques for Climate Prediction",
     authors: [
       {
+        authorName: "Smith John",
         firstName: "John",
         lastName: "Smith",
         university: "University of Technology",
         department: "Computer Science",
       },
       {
+        authorName: "Johnson Sarah",
         firstName: "Sarah",
         lastName: "Johnson",
         university: "State University",
@@ -88,12 +56,14 @@ const publications: Publication[] = [
     journalName: "Journal of Artificial Intelligence Research",
     volumeNumber: "45",
     pageNumber: "123-145",
+    publisher: " Some International Publishing Company",
   },
   {
     id: 2,
     title: "Quantum Computing: Breaking New Grounds",
     authors: [
       {
+        authorName: "Chen Michael",
         firstName: "Michael",
         lastName: "Chen",
         middleName: "Wei",
@@ -105,8 +75,10 @@ const publications: Publication[] = [
     journalName: "Physical Review Letters",
     volumeNumber: "130",
     pageNumber: "250601",
+    publisher: " Some International Publishing Company",
   },
 ];
+
 const AwardsPage: FC = () => {
   const [step, setStep] = useState<"awards" | "publications" | "form">(
     "awards",

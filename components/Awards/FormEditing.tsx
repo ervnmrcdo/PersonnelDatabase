@@ -1,41 +1,6 @@
 import { FC } from "react";
 import EditableAwardForm from "./EditableAwardForm";
-
-interface Author {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
-  university?: string;
-  college?: string;
-  department?: string;
-}
-
-interface ApplicantData {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
-  university?: string;
-  college?: string;
-  department?: string;
-  position: string;
-  contactNo: string;
-  emailAddress: string;
-}
-interface Award {
-  id: number;
-  title: string;
-  description: string;
-}
-
-interface Publication {
-  authors: Author[];
-  id: number;
-  title: string;
-  date: string;
-  journalName: string;
-  volumeNumber: string;
-  pageNumber: string;
-}
+import { Author, ApplicantData, Award, Publication } from "@/lib/types";
 
 interface FormEditingProps {
   handleBack: () => void;

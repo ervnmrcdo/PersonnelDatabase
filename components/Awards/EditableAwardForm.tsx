@@ -1,42 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import IpaFormTemplate from "./IpaAwardTemplate";
-
-interface Author {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
-  university?: string;
-  college?: string;
-  department?: string;
-}
-
-interface ApplicantData {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
-  university?: string;
-  college?: string;
-  department?: string;
-  position: string;
-  contactNo: string;
-  emailAddress: string;
-}
-interface Award {
-  id: number;
-  title: string;
-  description: string;
-}
-
-interface Publication {
-  authors: Author[];
-  id: number;
-  title: string;
-  date: string;
-  journalName: string;
-  volumeNumber: string;
-  pageNumber: string;
-}
+import { Author, ApplicantData, Award, Publication } from "@/lib/types";
 
 interface EditableAwardFormProps {
   initialData: {
@@ -53,10 +18,50 @@ export default function EditableAwardForm({
   onDownload,
 }: EditableAwardFormProps) {
   const [formData, setFormData] = useState(initialData);
-  const handleChange = (key: string, value: string) => {
-    setFormData({ ...formData, [key]: value });
-  };
 
+  const handleChange = (key: string, value: string) => {
+    setFormData((prev) => {
+      const updated = { ...prev };
+
+      switch (key) {
+        case "publicationTitle":
+          updated.selectedPublication = {
+            ...updated.selectedPublication,
+            title: value,
+          };
+          break;
+
+        case "date":
+          updated.selectedPublication = {
+            ...updated.selectedPublication,
+            date: value,
+          };
+          break;
+
+        case "journalName":
+          updated.selectedPublication = {
+            ...updated.selectedPublication,
+            journalName: value,
+          };
+          break;
+
+        case "applicantName":
+        case "university":
+        case "college":
+        case "department":
+          updated.applicant = {
+            ...updated.applicant,
+            [key]: value,
+          };
+          break;
+
+        default:
+          (updated as any)[key] = value;
+      }
+
+      return updated;
+    });
+  };
   return (
     <div className="relative w-[700px] mx-auto mt-6">
       <button
@@ -78,10 +83,7 @@ export default function EditableAwardForm({
 
       <input
         type="text"
-        value={
-          `${formData.applicant.lastName}, ${formData.applicant.middleName} ${formData.applicant.firstName}` ||
-          ""
-        }
+        value={formData.applicant.applicantName || ""}
         onChange={(e) => handleChange("applicantName", e.target.value)}
         className="absolute left-[100px] top-[775px] h-[20px] w-[350px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
@@ -89,24 +91,21 @@ export default function EditableAwardForm({
       <input
         type="text"
         value={formData.selectedPublication.date || ""}
-        onChange={(e) => handleChange("publicationDate", e.target.value)}
+        onChange={(e) => handleChange("date", e.target.value)}
         className="absolute left-[100px] top-[1300px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Date of Publication"
       />
       <input
         type="text"
         value={formData.selectedPublication.journalName || ""}
-        onChange={(e) => handleChange("publicationDate", e.target.value)}
+        onChange={(e) => handleChange("journalName", e.target.value)}
         className="absolute left-[100px] top-[1330px] w-[450px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Date of Publication"
       />
 
       <input
         type="text"
-        value={
-          `${formData.applicant.lastName}, ${formData.applicant.middleName} ${formData.applicant.firstName}` ||
-          ""
-        }
+        value={formData.applicant.applicantName || ""}
         onChange={(e) => handleChange("applicantName", e.target.value)}
         className="absolute left-[100px] top-[2150px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
@@ -114,21 +113,21 @@ export default function EditableAwardForm({
       <input
         type="text"
         value={`${formData.applicant.university}` || ""}
-        onChange={(e) => handleChange("applicantName", e.target.value)}
+        onChange={(e) => handleChange("university", e.target.value)}
         className="absolute left-[100px] top-[2180px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
       <input
         type="text"
         value={`${formData.applicant.college}` || ""}
-        onChange={(e) => handleChange("applicantName", e.target.value)}
+        onChange={(e) => handleChange("college", e.target.value)}
         className="absolute left-[100px] top-[2205px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
       <input
         type="text"
         value={`${formData.applicant.department}` || ""}
-        onChange={(e) => handleChange("applicantName", e.target.value)}
+        onChange={(e) => handleChange("department", e.target.value)}
         className="absolute left-[100px] top-[2230px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />

@@ -1,23 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { FC } from "react";
-
-interface Author {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
-  university?: string;
-  college?: string;
-  department?: string;
-}
-interface Publication {
-  authors: Author[];
-  id: number;
-  title: string;
-  date: string;
-  journalName: string;
-  volumeNumber: string;
-  pageNumber: string;
-}
+import { Author, ApplicantData, Award, Publication } from "@/lib/types";
 
 interface PublicationSelectionProps {
   handleBack: () => void;
