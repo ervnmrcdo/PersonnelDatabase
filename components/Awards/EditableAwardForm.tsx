@@ -68,7 +68,14 @@ export default function EditableAwardForm({
 
       <IpaFormTemplate />
 
-      {/* Overlay input fields */}
+      <input
+        type="text"
+        value={formData.selectedPublication.title || ""}
+        onChange={(e) => handleChange("publicationTitle", e.target.value)}
+        className="absolute left-[100px] top-[655px] w-[500px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Publication Title"
+      />
+
       <input
         type="text"
         value={
@@ -78,6 +85,20 @@ export default function EditableAwardForm({
         onChange={(e) => handleChange("applicantName", e.target.value)}
         className="absolute left-[100px] top-[775px] h-[20px] w-[350px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
+      />
+      <input
+        type="text"
+        value={formData.selectedPublication.date || ""}
+        onChange={(e) => handleChange("publicationDate", e.target.value)}
+        className="absolute left-[100px] top-[1300px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Date of Publication"
+      />
+      <input
+        type="text"
+        value={formData.selectedPublication.journalName || ""}
+        onChange={(e) => handleChange("publicationDate", e.target.value)}
+        className="absolute left-[100px] top-[1330px] w-[450px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Date of Publication"
       />
 
       <input
@@ -90,23 +111,27 @@ export default function EditableAwardForm({
         className="absolute left-[100px] top-[2150px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
-
       <input
         type="text"
-        value={formData.selectedPublication.title || ""}
-        onChange={(e) => handleChange("publicationTitle", e.target.value)}
-        className="absolute left-[100px] top-[655px] w-[350px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
-        placeholder="Publication Title"
+        value={`${formData.applicant.university}` || ""}
+        onChange={(e) => handleChange("applicantName", e.target.value)}
+        className="absolute left-[100px] top-[2180px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
       />
-
       <input
         type="text"
-        value={formData.selectedPublication.date || ""}
-        onChange={(e) => handleChange("publicationDate", e.target.value)}
-        className="absolute left-[100px] top-[1300px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
-        placeholder="Date of Publication"
+        value={`${formData.applicant.college}` || ""}
+        onChange={(e) => handleChange("applicantName", e.target.value)}
+        className="absolute left-[100px] top-[2205px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
       />
-      {/* Download button */}
+      <input
+        type="text"
+        value={`${formData.applicant.department}` || ""}
+        onChange={(e) => handleChange("applicantName", e.target.value)}
+        className="absolute left-[100px] top-[2230px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
     </div>
   );
 }
