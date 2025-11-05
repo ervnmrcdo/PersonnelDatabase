@@ -8,9 +8,9 @@ import { Author, ApplicantData, Award, Publication } from "@/lib/types";
 
 const applicant: ApplicantData = {
   applicantName: "",
-  firstName: "Alice",
-  lastName: "Brown",
-  middleName: "Marie",
+  firstName: "Jon",
+  lastName: "Snow",
+  middleName: "Targaryen",
   university: "University of California",
   college: "College of Engineering",
   department: "Software Engineering",

@@ -51,7 +51,7 @@ const FormEditing: FC<FormEditingProps> = ({
 
         <div className="text-gray-600 space-y-2">
           <p>
-            <strong>Applicant:</strong> Joe Burrow (from session or DB)
+            <strong>Applicant:</strong> {autoData.applicantName}
           </p>
           <p>
             <strong>Selected Award:</strong> {selectedAward?.title}
