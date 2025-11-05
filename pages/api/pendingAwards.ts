@@ -1,6 +1,7 @@
 import sql from "@/config/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
+import { title } from "process";
 
 export default async function PendingAwards(
   req: NextApiRequest,
@@ -8,12 +9,15 @@ export default async function PendingAwards(
 ) {
   try {
     const rows = await sql`
-      SELECT submission_id, submitter_type, date_submitted, status, award_id, attached_files
-      FROM PendingAwards
+      SELECT * 
+      FROM PendingAwards pa INNER JOIN NonTeachingPersonnel ntp
+      ON  pa.submitter_nonteaching_id = ntp.nonteaching_id INNER JOIN 
+      Awards a ON pa.award_id = a.award_id
       WHERE status = 'Pending';
     `;
 
     const formatted = rows.map((r) => ({
+      name: `${r.first_name} ${r.last_name}`,
       id: r.submission_id,
       submitterType: r.submitter_type,
       dateSubmitted: r.date_submitted,
@@ -22,6 +26,7 @@ export default async function PendingAwards(
       pdfBase64: r.attached_files
         ? Buffer.from(r.attached_files).toString("base64")
         : null,
+      awardTitle: r.title,
     }));
 
     return res.status(200).json(formatted);

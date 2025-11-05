@@ -16,9 +16,9 @@ export default function ListedApplications({ onSelect }: Props) {
         setData(
           result.map((item: any) => ({
             id: item.id,
-            name: "Unknown", // optional, if you want to fetch personnel names via join
+            name: item.name,
             role: item.submitterType,
-            award: `Award ID ${item.awardId}`,
+            award: item.awardTitle,
             dateSubmitted: item.dateSubmitted,
             pdfBase64: item.pdfBase64,
           })),
