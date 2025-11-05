@@ -32,10 +32,11 @@ export default function EditableAwardForm({
           };
           break;
 
+        case "publisher":
         case "date":
           updated.selectedPublication = {
             ...updated.selectedPublication,
-            date: value,
+            [key]: value,
           };
           break;
 
@@ -47,8 +48,11 @@ export default function EditableAwardForm({
           break;
 
         case "applicantName":
+        case "position":
         case "university":
         case "college":
+        case "contactNo":
+        case "emailAddress":
         case "department":
           updated.applicant = {
             ...updated.applicant,
@@ -108,6 +112,13 @@ export default function EditableAwardForm({
       />
       <input
         type="text"
+        value={formData.selectedPublication.publisher || ""}
+        onChange={(e) => handleChange("publisher", e.target.value)}
+        className="absolute left-[100px] top-[1345px] w-[500px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Date of Publication"
+      />
+      <input
+        type="text"
         value={formData.selectedPublication.journalName || ""}
         onChange={(e) => handleChange("journalName", e.target.value)}
         className="absolute left-[100px] top-[935px] w-[450px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
@@ -140,6 +151,27 @@ export default function EditableAwardForm({
         value={`${formData.applicant.department}` || ""}
         onChange={(e) => handleChange("department", e.target.value)}
         className="absolute left-[100px] top-[2250px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+      <input
+        type="text"
+        value={`${formData.applicant.position}` || ""}
+        onChange={(e) => handleChange("postion", e.target.value)}
+        className="absolute left-[150px] top-[2275px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+      <input
+        type="text"
+        value={`${formData.applicant.contactNo}` || ""}
+        onChange={(e) => handleChange("contactNo", e.target.value)}
+        className="absolute left-[500px] top-[2250px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+      <input
+        type="text"
+        value={`${formData.applicant.emailAddress}` || ""}
+        onChange={(e) => handleChange("emailAddress", e.target.value)}
+        className="absolute left-[150px] top-[2590px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
     </div>

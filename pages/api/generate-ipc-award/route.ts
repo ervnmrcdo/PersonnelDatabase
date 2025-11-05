@@ -60,6 +60,48 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       size: 11,
       font,
     });
+    page1.drawText(selectedPublication.publisher || "", {
+      x: 100,
+      y: height - 260,
+      size: 11,
+      font,
+    });
+    page2.drawText(applicant.applicantName || "", {
+      x: 100,
+      y: height - 110,
+      size: 11,
+      font,
+    });
+    page2.drawText(applicant.university || "", {
+      x: 170,
+      y: height - 135,
+      size: 11,
+      font,
+    });
+    page2.drawText(applicant.college || "", {
+      x: 100,
+      y: height - 155,
+      size: 11,
+      font,
+    });
+    page2.drawText(applicant.department || "", {
+      x: 170,
+      y: height - 175,
+      size: 11,
+      font,
+    });
+    page2.drawText(applicant.contactNo || "", {
+      x: 430,
+      y: height - 175,
+      size: 11,
+      font,
+    });
+    page2.drawText(applicant.position || "", {
+      x: 150,
+      y: height - 200,
+      size: 11,
+      font,
+    });
     page2.drawText(applicant.emailAddress || "", {
       x: 150,
       y: height - 470,
