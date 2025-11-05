@@ -43,5 +43,5 @@ export type Application = {
   role: "Student" | "Faculty";
   award: string;
   dateSubmitted: string;
-  pdfUrl: string;
+  pdfBase64: string;
 };

@@ -1,44 +1,36 @@
 import { Application } from "@/lib/types";
 import { ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
 type Props = {
   onSelect: (data: Application) => void;
 };
 
-const mockData: Application[] = [
-  {
-    id: "1",
-    name: "Joe Burrow",
-    role: "Student",
-    award: "International Publication Award",
-    dateSubmitted: "2025-02-02",
-    pdfUrl: "/sample.pdf",
-  },
-  {
-    id: "2",
-    name: "Joe Flacco",
-    role: "Student",
-    award: "International Publication Award",
-    dateSubmitted: "2025-03-03",
-    pdfUrl: "/sample.pdf",
-  },
-  {
-    id: "3",
-    name: "Lebron Wayde",
-    role: "Faculty",
-    award: "International Publication Award",
-    dateSubmitted: "2025-06-08",
-    pdfUrl: "/sample.pdf",
-  },
-];
-
 export default function ListedApplications({ onSelect }: Props) {
+  const [data, setData] = useState<Application[]>([]);
+
+  useEffect(() => {
+    fetch("/api/pendingAwards")
+      .then((res) => res.json())
+      .then((result) => {
+        setData(
+          result.map((item: any) => ({
+            id: item.id,
+            name: "Unknown", // optional, if you want to fetch personnel names via join
+            role: item.submitterType,
+            award: `Award ID ${item.awardId}`,
+            dateSubmitted: item.dateSubmitted,
+            pdfBase64: item.pdfBase64,
+          })),
+        );
+      });
+  }, []);
   return (
     <div className="bg-white rounded-xl shadow p-6">
       <h1 className="text-2xl font-bold mb-6">To Review</h1>
 
       <div className="space-y-4">
-        {mockData.map((item) => (
+        {data.map((item) => (
           <div
             key={item.id}
             className="p-4 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer flex justify-between items-center transition"

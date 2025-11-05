@@ -14,12 +14,17 @@ const FormEditing: FC<FormEditingProps> = ({
   selectedPublication,
   autoData,
 }) => {
-  const handleDownload = async (data: any) => {
+  const handleDownload = async (data: any, shouldSubmit: boolean) => {
     const response = await fetch("/api/generate-ipc-award/route", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+
+    if (shouldSubmit) {
+      console.log(response);
+      return;
+    }
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -65,6 +70,7 @@ const FormEditing: FC<FormEditingProps> = ({
               authors: selectedPublication.authors,
               selectedPublication: selectedPublication,
               selectedAward: selectedAward,
+              shouldSubmit: false,
             }}
             onDownload={handleDownload}
           />

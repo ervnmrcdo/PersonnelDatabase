@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ApplicantData, Author, Publication, Award } from "@/lib/types";
+import sql from "@/config/db";
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -12,7 +13,13 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const data = await req.body;
     console.log(data);
 
-    const { applicant, authors, selectedPublication, selectedAward } = data;
+    const {
+      applicant,
+      authors,
+      selectedPublication,
+      selectedAward,
+      shouldSubmit,
+    } = data;
 
     const templatePath = path.join(process.cwd(), "public/ipc-template.pdf");
     const templateBytes = fs.readFileSync(templatePath);
@@ -68,6 +75,32 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     //
     // Save edited PDF
     const pdfBytes = await pdfDoc.save();
+
+    if (shouldSubmit) {
+      const buffer = Buffer.from(pdfBytes);
+      const teachingId = null;
+      const nonTeachingId = 1;
+
+      const result = await sql`
+        INSERT INTO PendingAwards (
+          submitter_type,
+          submitter_teaching_id,
+          submitter_nonteaching_id,
+          award_id,
+          attached_files
+        )
+        VALUES (
+          ${"NONTEACHING"},
+          ${teachingId},
+          ${nonTeachingId},
+          1,
+          ${buffer}
+        );
+      `;
+      console.log(result);
+
+      return res.status(200).json(result);
+    }
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", "attachment; filename=example.pdf");

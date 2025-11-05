@@ -9,8 +9,9 @@ interface EditableAwardFormProps {
     authors: Author[];
     selectedPublication: Publication;
     selectedAward: Award | null;
+    shouldSubmit: boolean;
   };
-  onDownload: (data: any) => void;
+  onDownload: (data: any, shouldSubmit: boolean) => void;
 }
 
 export default function EditableAwardForm({
@@ -64,13 +65,23 @@ export default function EditableAwardForm({
   };
   return (
     <div className="relative w-[700px] mx-auto mt-6">
-      <button
-        onClick={() => onDownload(formData)}
-        className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Download Filled PDF
-      </button>
-
+      <div className="flex">
+        <button
+          onClick={() => {
+            formData.shouldSubmit = true;
+            onDownload(formData, true);
+          }}
+          className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Submit Application
+        </button>
+        <button
+          onClick={() => onDownload(formData, false)}
+          className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Download Filled PDF
+        </button>
+      </div>
       <IpaFormTemplate />
 
       <input
