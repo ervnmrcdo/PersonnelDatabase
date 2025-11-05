@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import "../app/globals.css";
 
 type NonTeachingPage =
@@ -21,11 +22,17 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
         ? "bg-blue-500/20 text-blue-400"
         : "hover:bg-gray-700 text-gray-300"
     }`;
+  const router = useRouter();
 
   return (
     <aside className="h-screen w-18 bg-[#1b1e2b] flex flex-col p-8">
       <div className="flex items-center space-x-2 mb-8">
-        <span className="font-semibold text-lg text-gray-400">DCS Records</span>
+        <span
+          className="font-semibold text-lg text-gray-400"
+          onClick={() => router.push("/")}
+        >
+          DCS Records
+        </span>
       </div>
 
       <div className="mb-6">
