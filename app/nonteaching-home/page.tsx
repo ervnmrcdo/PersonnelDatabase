@@ -3,6 +3,7 @@
 import Non from "@/components/AdminSidebar";
 import AwardsPage from "@/components/Awards/AwardsPage";
 import NonTeachingSidebar from "@/components/NonTeachingSidebar";
+import NonteachingDashboard from "@/components/Dashboard/NonteachingDashboard";
 import ReviewTab from "@/components/ReviewTab";
 import { useState, ReactNode } from "react";
 
@@ -20,11 +21,15 @@ export default function Page() {
     console.log("hi");
     switch (activeComponent) {
       case "Home":
-        return <>yes</>;
+        return <NonteachingDashboard/>;
       case "Profile":
-        return <>no</>;
+        return <>Nonteaching Profile</>;
       case "Awards":
-        return <AwardsPage />;
+        return <>Awards</>;
+      case "Publications":
+        return <>Publications</>;
+      case "Documents":
+        return <>Documents</>;
     }
   };
 

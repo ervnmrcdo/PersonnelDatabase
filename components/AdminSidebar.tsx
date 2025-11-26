@@ -56,8 +56,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <span>Profile</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Profile")}
-            className={buttonStyle("Profile")}
+            onClick={() => setActiveComponent("Account Settings")}
+            className={buttonStyle("Account Settings")}
           >
             <span>Account Settings</span>
           </li>
@@ -73,14 +73,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <h2 className="text-xs uppercase text-gray-500 mb-2">Personnel</h2>
         <ul className="space-y-1">
           <li
-            onClick={() => setActiveComponent("Home")}
-            className={buttonStyle("Home")}
+            onClick={() => setActiveComponent("Faculty")}
+            className={buttonStyle("Faculty")}
           >
             <span>Faculty</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Profile")}
-            className={buttonStyle("Profile")}
+            onClick={() => setActiveComponent("Students")}
+            className={buttonStyle("Students")}
           >
             <span>Students</span>
           </li>
@@ -90,14 +90,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <h2 className="text-xs uppercase text-gray-500 mb-2">Settings</h2>
         <ul className="space-y-1">
           <li
-            onClick={() => setActiveComponent("Home")}
-            className={buttonStyle("Home")}
+            onClick={() => setActiveComponent("Forms")}
+            className={buttonStyle("Forms")}
           >
             <span>Forms</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Profile")}
-            className={buttonStyle("Profile")}
+            onClick={() => setActiveComponent("Crawler")}
+            className={buttonStyle("Crawler")}
           >
             <span>Crawler</span>
           </li>
