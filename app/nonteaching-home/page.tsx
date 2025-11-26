@@ -4,6 +4,7 @@ import Non from "@/components/AdminSidebar";
 import AwardsPage from "@/components/Awards/AwardsPage";
 import NonTeachingSidebar from "@/components/NonTeachingSidebar";
 import NonteachingDashboard from "@/components/Dashboard/NonteachingDashboard";
+import TeachingProfile from "@/components/Profile/TeachingProfile";
 import ReviewTab from "@/components/ReviewTab";
 import { useState, ReactNode } from "react";
 
@@ -23,7 +24,7 @@ export default function Page() {
       case "Home":
         return <NonteachingDashboard/>;
       case "Profile":
-        return <>Nonteaching Profile</>;
+        return <TeachingProfile/>;
       case "Awards":
         return <>Awards</>;
       case "Publications":

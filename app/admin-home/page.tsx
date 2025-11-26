@@ -2,6 +2,7 @@
 
 import AdminSidebar from "@/components/AdminSidebar";
 import AdminDashboard from "@/components/Dashboard/AdminDashboard";
+import AdminProfile from "@/components/Profile/AdminProfile";
 import ReviewPage from "@/components/Review/ReviewPage";
 import ReviewTab from "@/components/ReviewTab";
 import { useState, ReactNode } from "react";
@@ -24,9 +25,9 @@ export default function Page() {
     console.log("hi");
     switch (activeComponent) {
       case "Home":
-        return <AdminDashboard/>;
+        return <AdminDashboard />;
       case "Profile":
-        return <>Admin Profile</>;
+        return <AdminProfile />;
       case "To Review":
         return <ReviewPage />;
       case "Faculty":

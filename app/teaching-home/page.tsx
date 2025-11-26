@@ -3,6 +3,7 @@
 import AwardsPage from "@/components/Awards/AwardsPage";
 import TeachingSidebar from "@/components/TeachingSidebar";
 import TeachingDashboard from "@/components/Dashboard/TeachingDashboard";
+import TeachingProfile from "@/components/Profile/TeachingProfile";
 import ReviewTab from "@/components/ReviewTab";
 import { useState, ReactNode } from "react";
 
@@ -22,7 +23,7 @@ export default function Page() {
       case "Home":
         return <TeachingDashboard/>;
       case "Profile":
-        return <>Teaching Profile</>;
+        return <TeachingProfile />;
       case "Awards":
         return <>Awards</>;
       case "Publications":
