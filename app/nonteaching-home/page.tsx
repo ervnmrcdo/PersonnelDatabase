@@ -26,7 +26,7 @@ export default function Page() {
       case "Profile":
         return <TeachingProfile/>;
       case "Awards":
-        return <>Awards</>;
+        return <AwardsPage/>;
       case "Publications":
         return <>Publications</>;
       case "Documents":
