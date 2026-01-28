@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
 import { Author, ApplicantData, Award, Publication } from "@/lib/types";
+import { awards, publications } from "@/lib/temp";
 
 const applicant: ApplicantData = {
   applicantName: "",
@@ -18,67 +19,8 @@ const applicant: ApplicantData = {
   contactNo: "+1-555-0123",
   emailAddress: "alice.brown@email.com",
 };
+
 applicant.applicantName = `${applicant.lastName}, ${applicant.firstName} ${applicant.middleName}`;
-
-const awards: Award[] = [
-  {
-    id: 1,
-    title: "International Publication Award",
-    description: "Given for indexed journal publications.",
-  },
-  {
-    id: 2,
-    title: "Research Excellence Award",
-    description: "For outstanding research output.",
-  },
-];
-
-const publications: Publication[] = [
-  {
-    id: 1,
-    title: "Advanced Machine Learning Techniques for Climate Prediction",
-    authors: [
-      {
-        authorName: "Smith John",
-        firstName: "John",
-        lastName: "Smith",
-        university: "University of Technology",
-        department: "Computer Science",
-      },
-      {
-        authorName: "Johnson Sarah",
-        firstName: "Sarah",
-        lastName: "Johnson",
-        university: "State University",
-      },
-    ],
-    date: "2023-03-15",
-    journalName: "Journal of Artificial Intelligence Research",
-    volumeNumber: "45",
-    pageNumber: "123-145",
-    publisher: " Some International Publishing Company",
-  },
-  {
-    id: 2,
-    title: "Quantum Computing: Breaking New Grounds",
-    authors: [
-      {
-        authorName: "Chen Michael",
-        firstName: "Michael",
-        lastName: "Chen",
-        middleName: "Wei",
-        university: "Tech University",
-        college: "College of Physics",
-      },
-    ],
-    date: "2023-07-22",
-    journalName: "Physical Review Letters",
-    volumeNumber: "130",
-    pageNumber: "250601",
-    publisher: " Some International Publishing Company",
-  },
-];
-
 const AwardsPage: FC = () => {
   const [step, setStep] = useState<"awards" | "publications" | "form">(
     "awards",

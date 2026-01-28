@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Application } from "@/lib/types";
-import ListedApplications from "@/components/Review/ListedApplications";
-import ReviewInstance from "@/components/Review/ReviewInstance";
+import ListedApplications from "@/components/review/ListedApplications";
+import ReviewInstance from "@/components/review/ReviewInstance";
 
 export default function ReviewPage() {
   const [selected, setSelected] = useState<Application | null>(null);

@@ -1,32 +1,20 @@
 
--- =========================================
---  PERSONNEL DATABASE SCHEMA (PostgreSQL)
---  Updated to match Untitled(11).jpg ERD
---  Includes hierarchy trigger constraint
--- =========================================
 
-
--- ======================
 --  DEPARTMENT TABLE
--- ======================
 CREATE TABLE Department (
     department_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT
 );
 
--- ======================
 --  POSITION TABLE
--- ======================
 CREATE TABLE Position (
     position_id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     hierarchy_value INT NOT NULL
 );
 
--- ======================
 --  ADMIN TABLE
--- ======================
 CREATE TABLE Admins (
     admin_id SERIAL PRIMARY KEY,
     up_id VARCHAR(20) UNIQUE,
@@ -36,9 +24,7 @@ CREATE TABLE Admins (
     entry_date DATE DEFAULT CURRENT_DATE
 );
 
--- ======================
 --  TEACHING PERSONNEL TABLE
--- ======================
 CREATE TABLE TeachingPersonnel (
     teaching_id SERIAL PRIMARY KEY,
     up_id VARCHAR(20) UNIQUE,
@@ -49,9 +35,7 @@ CREATE TABLE TeachingPersonnel (
     entry_date DATE DEFAULT CURRENT_DATE
 );
 
--- ======================
 --  NON-TEACHING PERSONNEL TABLE
--- ======================
 CREATE TABLE NonTeachingPersonnel (
     nonteaching_id SERIAL PRIMARY KEY,
     up_id VARCHAR(20) UNIQUE,
@@ -61,18 +45,14 @@ CREATE TABLE NonTeachingPersonnel (
     entry_date DATE DEFAULT CURRENT_DATE
 );
 
--- ======================
 --  AWARDS TABLE
--- ======================
 CREATE TABLE Awards (
     award_id SERIAL PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
     description TEXT
 );
 
--- ======================
 --  PENDING AWARDS TABLE
--- ======================
 CREATE TABLE PendingAwards (
     submission_id SERIAL PRIMARY KEY,
     submitter_type VARCHAR(20) CHECK (submitter_type IN ('TEACHING', 'NONTEACHING', 'ADMIN')),
@@ -90,9 +70,7 @@ CREATE TABLE PendingAwards (
     )
 );
 
--- ======================
 --  PUBLICATIONS TABLE
--- ======================
 CREATE TABLE Publications (
     publication_id SERIAL PRIMARY KEY,
     type VARCHAR(50),
@@ -104,9 +82,7 @@ CREATE TABLE Publications (
     issue_number VARCHAR(50)
 );
 
--- ======================
 --  PUBLICATION AUTHORS TABLE
--- ======================
 CREATE TABLE PublicationAuthors (
     publication_id INT REFERENCES Publications(publication_id) ON DELETE CASCADE,
     author_type VARCHAR(20) CHECK (author_type IN ('TEACHING', 'NONTEACHING')),
@@ -119,9 +95,7 @@ CREATE TABLE PublicationAuthors (
     )
 );
 
--- ======================
 --  PENDING PROMOTIONS TABLE
--- ======================
 CREATE TABLE PendingPromotions (
     promotion_id SERIAL PRIMARY KEY,
     submitter_type VARCHAR(20) CHECK (submitter_type IN ('TEACHING', 'NONTEACHING')),
@@ -136,9 +110,7 @@ CREATE TABLE PendingPromotions (
     )
 );
 
--- ======================
 --  TEACHING PAST PROMOTIONS TABLE
--- ======================
 CREATE TABLE TeachingPastPromotions (
     past_promotion_id SERIAL PRIMARY KEY,
     teaching_id INT REFERENCES TeachingPersonnel(teaching_id),
@@ -147,9 +119,7 @@ CREATE TABLE TeachingPastPromotions (
     approved_by_admin_id INT REFERENCES Admins(admin_id)
 );
 
--- ======================
 --  NON-TEACHING PAST PROMOTIONS TABLE
--- ======================
 CREATE TABLE NonTeachingPastPromotions (
     past_promotion_id SERIAL PRIMARY KEY,
     nonteaching_id INT REFERENCES NonTeachingPersonnel(nonteaching_id),
@@ -158,9 +128,7 @@ CREATE TABLE NonTeachingPastPromotions (
     approved_by_admin_id INT REFERENCES Admins(admin_id)
 );
 
--- ======================
 --  ADMIN PAST PROMOTIONS TABLE
--- ======================
 CREATE TABLE AdminPastPromotions (
     past_promotion_id SERIAL PRIMARY KEY,
     admin_id INT REFERENCES Admins(admin_id),
@@ -169,12 +137,7 @@ CREATE TABLE AdminPastPromotions (
     approved_by_admin_id INT REFERENCES Admins(admin_id)
 );
 
--- ======================
---  TRIGGER FUNCTION
--- ======================
-
--- This trigger ensures that only admins with a higher hierarchy_value
--- can approve promotions to a certain position.
+--  TRIGGER FUNCTIONS
 
 CREATE OR REPLACE FUNCTION check_admin_promotion_hierarchy()
 RETURNS TRIGGER AS $$

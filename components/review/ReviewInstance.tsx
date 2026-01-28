@@ -7,6 +7,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
   import.meta.url,
 ).toString();
+
 type Props = {
   data: Application;
   onBack: () => void;

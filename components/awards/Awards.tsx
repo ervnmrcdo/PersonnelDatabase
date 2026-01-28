@@ -16,7 +16,6 @@ const Awards: FC<AwardsProps> = ({ awards, onSelect }) => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Awards</h1>
-
       <div className="space-y-4">
         {awards.map((award) => (
           <div

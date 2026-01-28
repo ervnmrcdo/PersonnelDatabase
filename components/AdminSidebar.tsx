@@ -56,8 +56,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <span>Profile</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Profile")}
-            className={buttonStyle("Profile")}
+            onClick={() => setActiveComponent("Account Settings")}
+            className={buttonStyle("Account Settings")}
           >
             <span>Account Settings</span>
           </li>
@@ -90,8 +90,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <h2 className="text-xs uppercase text-gray-500 mb-2">Settings</h2>
         <ul className="space-y-1">
           <li
-            onClick={() => setActiveComponent("Home")}
-            className={buttonStyle("Home")}
+            onClick={() => setActiveComponent("Forms")}
+            className={buttonStyle("Forms")}
           >
             <span>Forms</span>
           </li>

@@ -1,7 +1,7 @@
 "use client";
 
 import Non from "@/components/AdminSidebar";
-import AwardsPage from "@/components/Awards/AwardsPage";
+import AwardsPage from "@/components/awards/AwardsPage";
 import NonTeachingSidebar from "@/components/NonTeachingSidebar";
 import ReviewTab from "@/components/ReviewTab";
 import { useState, ReactNode } from "react";
