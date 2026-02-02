@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { type User } from '@supabase/supabase-js'
 import ProfileEditForm from './ProfileEditForm'
 
-export default function AdminProfile() {
+export default function NonteachingProfile() {
   const [user, setUser] = useState<User | null>(null)
   const [fullname, setFullname] = useState<string | null>(null)
   
@@ -45,7 +45,7 @@ export default function AdminProfile() {
               </div>
               <div className="ml-6">
                 <h2 className="text-2xl font-bold text-white">{fullname}</h2>
-                <p className="text-gray-400">Admin</p>
+                <p className="text-gray-400">Student</p>
               </div>
             </div>
   

@@ -1,13 +1,41 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createClient } from '@/lib/supabase/client'
+import { type User } from '@supabase/supabase-js'
+
 export default function AdminDashboard() {
+  const [user, setUser] = useState<User | null>(null)
+  const [fullname, setFullname] = useState<string | null>(null)
+  
+    useEffect(() => {
+      const supabase = createClient()
+      const getUser = async () => {
+        const { data: { user } } = await supabase.auth.getUser()
+        setUser(user)
+
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('full_name')
+            .eq('id', user.id)
+            .single()
+          
+          if (profile) {
+            setFullname(profile.full_name)
+          }
+        }
+      }
+      getUser()
+    }, [])
+
   return (
     <div className="flex-1 overflow-auto bg-[#0f1117] text-gray-300 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
-          <p className="text-gray-400">Hello Admin!</p>
+          <p className="text-gray-400">Hello {fullname || user?.email || 'Admin'}</p>
         </div>
 
         {/* Stats */}
