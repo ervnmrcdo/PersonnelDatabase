@@ -1,34 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createClient } from '@/lib/supabase/client'
-import { type User } from '@supabase/supabase-js'
+import { useAuth } from '@/context/AuthContext'
 import ProfileEditForm from './ProfileEditForm'
 
 export default function TeachingProfile() {
-  const [user, setUser] = useState<User | null>(null)
-  const [fullname, setFullname] = useState<string | null>(null)
-  
-    useEffect(() => {
-      const supabase = createClient()
-      const getUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
-        setUser(user)
-
-        if (user) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('full_name')
-            .eq('id', user.id)
-            .single()
-          
-          if (profile) {
-            setFullname(profile.full_name)
-          }
-        }
-      }
-      getUser()
-    }, [])
+  const { user, profile } = useAuth()
 
   return (
     <div className="flex-1 overflow-auto bg-[#0f1117] text-gray-300 p-8">
@@ -45,7 +21,7 @@ export default function TeachingProfile() {
               {user?.email?.[0]?.toUpperCase() || 'A'}
             </div>
             <div className="ml-6">
-              <h2 className="text-2xl font-bold text-white">{fullname}</h2>
+              <h2 className="text-2xl font-bold text-white">{profile?.full_name || user?.email}</h2>
               <p className="text-gray-400">Faculty Member</p>
             </div>
           </div>
