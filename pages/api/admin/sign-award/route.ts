@@ -8,12 +8,10 @@ export default async function(
 ) {
 	try {
 		// body here should receive the pdf in bytes
-		const data = await req.body
+		const { pdfBase64 } = await req.body
 
-		const templatePath = path.join(process.cwd(), 'public/ipc-template.pdf')
 		const signaturePath = path.join(process.cwd(), 'public/signature.png')
-		const temp = fs.readFileSync(templatePath)
-		const pdf = await PDFDocument.load(temp);
+		const pdf = await PDFDocument.load(pdfBase64);
 
 		const signature = await pdf.embedPng(fs.readFileSync(signaturePath))
 
@@ -30,6 +28,9 @@ export default async function(
 		const pdfInBytes = await pdf.save()
 
 		return res.status(200).send(Buffer.from(pdfInBytes));
+		// return res.status(200).json({
+		// 	pdfInBytes: ${ pdfInBytes },
+		// });
 
 	} catch (err) {
 		return res.status(500).json(`Internal Server error: ${err}`)

@@ -16,22 +16,32 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [numPages, setNumPages] = useState<number>();
 
-  const tempDownload = async () => {
-    const response = await fetch('/api/admin/sign-award/route', {
+  const acceptPDF = async () => {
+    const signPDF = await fetch('/api/admin/sign-award/route', {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        pdfBase64: data.pdfBase64
+      })
     });
 
-    console.log(response);
+    // const blob = signPDF.body
+    // console.log(blob)
 
+    // const postSignedPDF = await fetch('api/admin/post-signed-award/route', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: ,
+    // });
+    //
     //download
-    const foo = await response.blob()
+    const foo = await signPDF.blob()
     const url = window.URL.createObjectURL(foo)
     const a = document.createElement('a')
     a.href = url;
     a.download = "signed.pdf";
     a.click();
+
   }
 
 
@@ -62,7 +72,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
       </div>
 
       <div className="flex gap-3">
-        <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => tempDownload()}>
+        <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => acceptPDF()}>
           Accept & Print for Signing
         </button>
         <button className="px-4 py-2 border rounded-md">Mark Errors</button>

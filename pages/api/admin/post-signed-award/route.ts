@@ -6,15 +6,15 @@ export default async function AcceptAward(
 	res: NextApiResponse
 ) {
 	const data = await req.body;
-	const { id, buffer } = data
-	// const buffer = Buffer.from(pdfBytes)
+	const { admin_id, submission_id, pdfBytes } = data
 
 	try {
 
 		const post = await sql`
 			UPDATE pendingawards
-			SET attached_files = ${buffer}
-			WHERE submission_id = ${id}
+			SET attached_files = ${pdfBytes}, status = 'ACCEPTED', 
+				reviewed_by_admin_id = ${admin_id},
+			WHERE submission_id = ${submission_id} and status = 'PENDING'
 			`
 		return res.status(200).json(post);
 
