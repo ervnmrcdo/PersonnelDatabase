@@ -15,7 +15,7 @@ export const awards: Award[] = [
     ],
   },
   {
-    id: 2,
+    id: 1,
     title: "Research Excellence Award",
     description: "For outstanding research output.",
     pages: [

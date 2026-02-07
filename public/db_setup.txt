@@ -137,45 +137,7 @@ CREATE TABLE AdminPastPromotions (
     approved_by_admin_id INT REFERENCES Admins(admin_id)
 );
 
---  TRIGGER FUNCTIONS
 
-CREATE OR REPLACE FUNCTION check_admin_promotion_hierarchy()
-RETURNS TRIGGER AS $$
-DECLARE
-    admin_hierarchy INT;
-    target_hierarchy INT;
-BEGIN
-    SELECT p.hierarchy_value
-    INTO admin_hierarchy
-    FROM Admins a
-    JOIN Position p ON a.position_id = p.position_id
-    WHERE a.admin_id = NEW.approved_by_admin_id;
-
-    SELECT hierarchy_value
-    INTO target_hierarchy
-    FROM Position
-    WHERE position_id = NEW.to_position_id;
-
-    IF admin_hierarchy <= target_hierarchy THEN
-        RAISE EXCEPTION 'Admin with lower or equal hierarchy cannot approve this promotion.';
-    END IF;
-
-    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- ======================
---  APPLY TRIGGERS
--- ======================
-
-CREATE TRIGGER trg_check_admin_promoter_teaching
-BEFORE INSERT OR UPDATE ON TeachingPastPromotions
-FOR EACH ROW EXECUTE FUNCTION check_admin_promotion_hierarchy();
-
-CREATE TRIGGER trg_check_admin_promoter_nonteaching
-BEFORE INSERT OR UPDATE ON NonTeachingPastPromotions
-FOR EACH ROW EXECUTE FUNCTION check_admin_promotion_hierarchy();
-
-CREATE TRIGGER trg_check_admin_promoter_admin
-BEFORE INSERT OR UPDATE ON AdminPastPromotions
-FOR EACH ROW EXECUTE FUNCTION check_admin_promotion_hierarchy();
