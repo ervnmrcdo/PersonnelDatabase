@@ -45,8 +45,11 @@ export default function ReviewInstance({ data, onBack }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-
-      alert('Successfully Signed')
+      if (response.status === 200) {
+        alert('Form Signed and Returned')
+      } else {
+        alert('Error Occurred')
+      }
     } catch (err) {
       alert(err)
     }
@@ -83,7 +86,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
       <div className="flex gap-3">
         <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => acceptPDF()}>
-          Accept & Print for Signing
+          Sign and Return
         </button>
         <button className="px-4 py-2 border rounded-md">Mark Errors</button>
       </div>
