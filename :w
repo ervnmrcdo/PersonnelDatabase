@@ -1,0 +1,28 @@
+import { NextApiRequest, NextApiResponse } from 'next'
+import { PDFDocument } from 'pdf-lib'
+import fs from 'fs'
+import path from 'path'
+
+export default async function(
+	req: NextApiRequest, res: NextApiResponse
+) {
+	try {
+
+		const data = await req.body
+
+
+		const templatePath = path.join(process.cwd(), "public/ipc-template.pdf")
+		const temp = fs.readFileSync(templatePath)
+		const pdf = await PDFDocument.load(temp);
+
+		const signature = pdf.embedPng(`@/public/`)
+
+		const lastPage = pdf.getPages()[-1]
+
+
+
+
+	} catch (err) {
+		return res.status(500).json(`Internal Server error: ${err}`)
+	}
+}

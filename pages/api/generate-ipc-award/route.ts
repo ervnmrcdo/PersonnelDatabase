@@ -23,7 +23,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const templateBytes = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(templateBytes);
 
-    // Get the first page of the PDF
+    // Get the pages of the PDF
     const pages = pdfDoc.getPages();
     const page0 = pages[0];
     const page1 = pages[1];
@@ -141,6 +141,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).send(Buffer.from(pdfBytes));
   } catch (err) {
     console.error(err);
-    res.status(500).json(`Internal Server Error, ${err}`);
+    return res.status(500).json(`Internal Server Error, ${err}`);
   }
 }
