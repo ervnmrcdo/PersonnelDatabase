@@ -12,8 +12,8 @@ export default async function AcceptAward(
 
 		const post = await sql`
 			UPDATE pendingawards
-			SET attached_files = ${pdf}, status = 'PENDING', reviewed_by_admin_id = ${admin_id}
-			WHERE submission_id = ${submission_id} AND status = 'ACCEPTED'
+			SET attached_files = ${pdf}, status = 'ACCEPTED', reviewed_by_admin_id = ${admin_id}
+			WHERE submission_id = ${submission_id} AND status = 'PENDING'
 			`
 		return res.status(200);
 
