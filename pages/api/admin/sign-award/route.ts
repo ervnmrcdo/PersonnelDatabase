@@ -27,10 +27,10 @@ export default async function(
 
 		const pdfInBytes = await pdf.save()
 
-		return res.status(200).send(Buffer.from(pdfInBytes));
-		// return res.status(200).json({
-		// 	pdfInBytes: ${ pdfInBytes },
-		// });
+		// return res.status(200).send(Buffer.from(pdfInBytes));
+		return res.status(200).json({
+			pdfInBytes: pdfInBytes,
+		});
 
 	} catch (err) {
 		return res.status(500).json(`Internal Server error: ${err}`)

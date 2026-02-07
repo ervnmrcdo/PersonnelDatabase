@@ -110,6 +110,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
     if (shouldSubmit) {
       const buffer = Buffer.from(pdfBytes);
+      console.log(buffer)
       const teachingId = null;
       const nonTeachingId = 1;
 

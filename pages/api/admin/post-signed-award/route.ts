@@ -7,16 +7,15 @@ export default async function AcceptAward(
 ) {
 	const data = await req.body;
 	const { admin_id, submission_id, pdfBytes } = data
-
+	const pdf = Buffer.from(pdfBytes)
 	try {
 
 		const post = await sql`
 			UPDATE pendingawards
-			SET attached_files = ${pdfBytes}, status = 'ACCEPTED', 
-				reviewed_by_admin_id = ${admin_id},
-			WHERE submission_id = ${submission_id} and status = 'PENDING'
+			SET attached_files = ${pdf}, status = 'PENDING', reviewed_by_admin_id = ${admin_id}
+			WHERE submission_id = ${submission_id} AND status = 'ACCEPTED'
 			`
-		return res.status(200).json(post);
+		return res.status(200);
 
 
 	} catch (err) {

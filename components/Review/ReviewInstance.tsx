@@ -17,30 +17,40 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const [numPages, setNumPages] = useState<number>();
 
   const acceptPDF = async () => {
-    const signPDF = await fetch('/api/admin/sign-award/route', {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        pdfBase64: data.pdfBase64
-      })
-    });
 
-    // const blob = signPDF.body
-    // console.log(blob)
+    try {
+      const signPDF = await fetch('/api/admin/sign-award/route', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pdfBase64: data.pdfBase64
+        })
+      });
 
-    // const postSignedPDF = await fetch('api/admin/post-signed-award/route', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: ,
-    // });
-    //
-    //download
-    const foo = await signPDF.blob()
-    const url = window.URL.createObjectURL(foo)
-    const a = document.createElement('a')
-    a.href = url;
-    a.download = "signed.pdf";
-    a.click();
+      const { pdfInBytes } = await signPDF.json()
+      console.log(pdfInBytes.length)
+
+      const pdfUInt8 = new Uint8Array(Object.values(pdfInBytes));
+      const foo = Buffer.from(pdfUInt8)
+
+      const payload = {
+        pdfBytes: foo,
+        // change admin id to correspond to uid of admin user
+        admin_id: '1',
+        submission_id: data.id,
+      }
+
+      const response = await fetch('api/admin/post-signed-award/route', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      alert('Successfully Signed')
+    } catch (err) {
+      alert(err)
+    }
+
 
   }
 
