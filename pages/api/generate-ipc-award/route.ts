@@ -2,7 +2,6 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ApplicantData, Author, Publication, Award } from "@/lib/types";
 import sql from "@/config/db";
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
@@ -11,7 +10,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       return res.status(405).send("Method Not Allowed");
     }
     const data = await req.body;
-    console.log(data);
 
     const {
       applicant,
@@ -108,14 +106,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       size: 11,
       font,
     });
-    // page1.drawText(description || "", {
-    //   x: 180,
-    //   y: height - 380,
-    //   size: 10,
-    //   font,
-    // });
-    //
-    // Save edited PDF
     const pdfBytes = await pdfDoc.save();
 
     if (shouldSubmit) {
@@ -141,11 +131,13 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       `;
       console.log(result);
 
+      // res.setHeader("Content-Type", "application/pdf");
+      // res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
       return res.status(200).json(result);
     }
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
+    // res.setHeader("Content-Type", "application/pdf");
+    // res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
     return res.status(200).send(Buffer.from(pdfBytes));
   } catch (err) {
     console.error(err);

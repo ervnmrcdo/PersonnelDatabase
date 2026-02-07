@@ -25,9 +25,11 @@ export default function ListedApplications({ onSelect }: Props) {
         );
       });
   }, []);
+  console.log(data);
   return (
     <div className="bg-white rounded-xl shadow p-6">
       <h1 className="text-2xl font-bold mb-6">To Review</h1>
+
 
       <div className="space-y-4">
         {data.map((item) => (

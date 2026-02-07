@@ -7,6 +7,7 @@ type NonTeachingPage =
   | "Profile"
   | "Publications"
   | "Awards"
+  | "Submissions"
   | "Documents";
 interface NonTeachingSidebarProps {
   setActiveComponent: React.Dispatch<React.SetStateAction<NonTeachingPage>>;
@@ -18,10 +19,9 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
   active,
 }) => {
   const buttonStyle = (label: NonTeachingPage): string =>
-    `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${
-      active === label
-        ? "bg-blue-500/20 text-blue-400"
-        : "hover:bg-gray-700 text-gray-300"
+    `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${active === label
+      ? "bg-blue-500/20 text-blue-400"
+      : "hover:bg-gray-700 text-gray-300"
     }`;
   const router = useRouter();
 
@@ -64,6 +64,12 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
           <li
             onClick={() => setActiveComponent("Awards")}
             className={buttonStyle("Awards")}
+          >
+            <span>Awards</span>
+          </li>
+          <li
+            onClick={() => setActiveComponent("Submissions")}
+            className={buttonStyle("Submissions")}
           >
             <span>Awards</span>
           </li>
