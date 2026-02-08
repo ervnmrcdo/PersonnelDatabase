@@ -4,8 +4,9 @@ import Non from "@/components/AdminSidebar";
 import AwardsPage from "@/components/Awards/AwardsPage";
 import NonTeachingSidebar from "@/components/NonTeachingSidebar";
 import NonteachingDashboard from "@/components/Dashboard/NonteachingDashboard";
-import TeachingProfile from "@/components/Profile/TeachingProfile";
+import NonteachingProfile from "@/components/Profile/NonteachingProfile";
 import ReviewTab from "@/components/ReviewTab";
+import Publications from "@/components/Publications/Publications";
 import { useState, ReactNode } from "react";
 
 type NonTeachingPage =
@@ -24,11 +25,11 @@ export default function Page() {
       case "Home":
         return <NonteachingDashboard/>;
       case "Profile":
-        return <TeachingProfile/>;
+        return <NonteachingProfile/>;
       case "Awards":
         return <AwardsPage/>;
       case "Publications":
-        return <>Publications</>;
+        return <Publications />;
       case "Documents":
         return <>Documents</>;
     }
