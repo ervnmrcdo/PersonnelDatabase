@@ -2,7 +2,6 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ApplicantData, Author, Publication, Award } from "@/lib/types";
 import sql from "@/config/db";
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
@@ -11,7 +10,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       return res.status(405).send("Method Not Allowed");
     }
     const data = await req.body;
-    console.log(data);
 
     const {
       applicant,
@@ -25,7 +23,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const templateBytes = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(templateBytes);
 
-    // Get the first page of the PDF
+    // Get the pages of the PDF
     const pages = pdfDoc.getPages();
     const page0 = pages[0];
     const page1 = pages[1];
@@ -108,18 +106,11 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       size: 11,
       font,
     });
-    // page1.drawText(description || "", {
-    //   x: 180,
-    //   y: height - 380,
-    //   size: 10,
-    //   font,
-    // });
-    //
-    // Save edited PDF
     const pdfBytes = await pdfDoc.save();
 
     if (shouldSubmit) {
       const buffer = Buffer.from(pdfBytes);
+      console.log(buffer)
       const teachingId = null;
       const nonTeachingId = 1;
 
@@ -154,14 +145,16 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       `;
       console.log('Verification query:', check);
 
+      // res.setHeader("Content-Type", "application/pdf");
+      // res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
       return res.status(200).json(result);
     }
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
+    // res.setHeader("Content-Type", "application/pdf");
+    // res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
     return res.status(200).send(Buffer.from(pdfBytes));
   } catch (err) {
     console.error(err);
-    res.status(500).json(`Internal Server Error, ${err}`);
+    return res.status(500).json(`Internal Server Error, ${err}`);
   }
 }

@@ -19,7 +19,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Personnel Database</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">DCS Records</h1>
           <p className="text-gray-400">Sign in to your account</p>
         </div>
 
@@ -73,32 +73,9 @@ export default function LoginPage() {
                 {isLoading ? 'Creating account...' : 'Create Account'}
               </button>
             </div>
-
-            {/* Divider */}
-            <div className="relative py-2">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-600"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-[#1b1e2b] text-gray-400">or</span>
-              </div>
-            </div>
-
-            {/* Sign Up Link */}
-            <p className="text-center text-gray-400 text-sm">
-              Don&apos;t have an account?{' '}
-              <a href="/signup" className="text-blue-400 hover:text-blue-300 font-semibold transition">
-                Sign up
-              </a>
-            </p>
           </form>
         </div>
-
-        {/* Footer */}
-        <div className="text-center mt-8 text-gray-500 text-sm">
-          <p>© 2026 Personnel Database. All rights reserved.</p>
         </div>
       </div>
-    </div>
   )
 }
