@@ -1,13 +1,14 @@
 "use client";
 
-import Non from "@/components/AdminSidebar";
 import AwardsPage from "@/components/Awards/AwardsPage";
-import NonTeachingSidebar from "@/components/NonTeachingSidebar";
+import NonTeachingSidebar from "@/components/Sidebar/NonTeachingSidebar";
 import NonteachingDashboard from "@/components/Dashboard/NonteachingDashboard";
 import NonteachingProfile from "@/components/Profile/NonteachingProfile";
 import ReviewTab from "@/components/ReviewTab";
 import Publications from "@/components/Publications/Publications";
+import TeachingProfile from "@/components/Profile/TeachingProfile";
 import { useState, ReactNode } from "react";
+import SubmissionsPage from "@/components/Submissions/SubmissionsPage";
 
 type NonTeachingPage =
   | "Home"
@@ -25,11 +26,11 @@ export default function Page() {
       case "Home":
         return <NonteachingDashboard />;
       case "Profile":
-        return <NonteachingProfile/>;
+        return <NonteachingProfile />;
       case "Awards":
         return <AwardsPage />;
       case "Submissions":
-        return <>yo</>
+        return <SubmissionsPage />
       case "Publications":
         return <Publications />;
       case "Documents":

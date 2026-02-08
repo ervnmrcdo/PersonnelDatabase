@@ -1,27 +1,27 @@
 import { useRouter } from "next/navigation";
 import { signOut } from "@/app/actions/auth";
-import "../app/globals.css";
+import "../../app/globals.css";
 
-type TeachingPage =
+type NonTeachingPage =
   | "Home"
   | "Profile"
   | "Publications"
   | "Awards"
+  | "Submissions"
   | "Documents";
-interface TeachingSidebarProps {
-  setActiveComponent: React.Dispatch<React.SetStateAction<TeachingPage>>;
-  active: TeachingPage;
+interface NonTeachingSidebarProps {
+  setActiveComponent: React.Dispatch<React.SetStateAction<NonTeachingPage>>;
+  active: NonTeachingPage;
 }
 
-const TeachingSidebar: React.FC<TeachingSidebarProps> = ({
+const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
   setActiveComponent,
   active,
 }) => {
-  const buttonStyle = (label: TeachingPage): string =>
-    `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${
-      active === label
-        ? "bg-blue-500/20 text-blue-400"
-        : "hover:bg-gray-700 text-gray-300"
+  const buttonStyle = (label: NonTeachingPage): string =>
+    `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${active === label
+      ? "bg-blue-500/20 text-blue-400"
+      : "hover:bg-gray-700 text-gray-300"
     }`;
   const router = useRouter();
 
@@ -34,7 +34,7 @@ const TeachingSidebar: React.FC<TeachingSidebarProps> = ({
       <div className="flex items-center space-x-2 mb-8">
         <span
           className="font-semibold text-lg text-gray-400"
-          onClick={() => router.push("/teaching-home")}
+          onClick={() => router.push("/nonteaching-home")}
         >
           DCS Records
         </span>
@@ -68,6 +68,12 @@ const TeachingSidebar: React.FC<TeachingSidebarProps> = ({
             <span>Awards</span>
           </li>
           <li
+            onClick={() => setActiveComponent("Submissions")}
+            className={buttonStyle("Submissions")}
+          >
+            <span>Submissions</span>
+          </li>
+          <li
             onClick={() => setActiveComponent("Documents")}
             className={buttonStyle("Documents")}
           >
@@ -88,4 +94,4 @@ const TeachingSidebar: React.FC<TeachingSidebarProps> = ({
   );
 };
 
-export default TeachingSidebar;
+export default NonTeachingSidebar;

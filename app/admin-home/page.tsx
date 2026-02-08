@@ -1,6 +1,6 @@
 "use client";
 
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import AdminDashboard from "@/components/Dashboard/AdminDashboard";
 import AdminProfile from "@/components/Profile/AdminProfile";
 import ReviewPage from "@/components/Review/ReviewPage";

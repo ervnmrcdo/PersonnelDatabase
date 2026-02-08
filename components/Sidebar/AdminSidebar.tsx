@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { signOut } from "@/app/actions/auth";
-import "../app/globals.css";
+import "../../app/globals.css";
 
 type Page =
   | "Home"
@@ -23,10 +23,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   active,
 }) => {
   const buttonStyle = (label: Page): string =>
-    `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${
-      active === label
-        ? "bg-blue-500/20 text-blue-400"
-        : "hover:bg-gray-700 text-gray-300"
+    `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${active === label
+      ? "bg-blue-500/20 text-blue-400"
+      : "hover:bg-gray-700 text-gray-300"
     }`;
   const router = useRouter();
 

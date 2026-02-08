@@ -45,11 +45,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      if (response.status === 200) {
-        alert('Form Signed and Returned')
-      } else {
-        alert('Error Occurred')
-      }
+      alert('Form Signed and Returned')
     } catch (err) {
       alert(err)
     }
@@ -88,7 +84,9 @@ export default function ReviewInstance({ data, onBack }: Props) {
         <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => acceptPDF()}>
           Sign and Return
         </button>
-        <button className="px-4 py-2 border rounded-md">Mark Errors</button>
+        <button className="px-4 py-2 border rounded-md"
+          onClick={() => { alert('nothging so far') }}
+        >Mark Errors</button>
       </div>
 
       {

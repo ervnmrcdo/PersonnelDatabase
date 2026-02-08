@@ -1,7 +1,7 @@
 "use client";
 
 import AwardsPage from "@/components/Awards/AwardsPage";
-import TeachingSidebar from "@/components/TeachingSidebar";
+import TeachingSidebar from "@/components/Sidebar/TeachingSidebar";
 import TeachingDashboard from "@/components/Dashboard/TeachingDashboard";
 import TeachingProfile from "@/components/Profile/TeachingProfile";
 import ReviewTab from "@/components/ReviewTab";
@@ -22,11 +22,11 @@ export default function Page() {
     console.log("hi");
     switch (activeComponent) {
       case "Home":
-        return <TeachingDashboard/>;
+        return <TeachingDashboard />;
       case "Profile":
         return <TeachingProfile />;
       case "Awards":
-        return <AwardsPage/>;
+        return <AwardsPage />;
       case "Publications":
         return <Publications/>;
       case "Documents":

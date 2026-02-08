@@ -1,24 +1,23 @@
 import { useRouter } from "next/navigation";
 import { signOut } from "@/app/actions/auth";
-import "../app/globals.css";
+import "../../app/globals.css";
 
-type NonTeachingPage =
+type TeachingPage =
   | "Home"
   | "Profile"
   | "Publications"
   | "Awards"
-  | "Submissions"
   | "Documents";
-interface NonTeachingSidebarProps {
-  setActiveComponent: React.Dispatch<React.SetStateAction<NonTeachingPage>>;
-  active: NonTeachingPage;
+interface TeachingSidebarProps {
+  setActiveComponent: React.Dispatch<React.SetStateAction<TeachingPage>>;
+  active: TeachingPage;
 }
 
-const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
+const TeachingSidebar: React.FC<TeachingSidebarProps> = ({
   setActiveComponent,
   active,
 }) => {
-  const buttonStyle = (label: NonTeachingPage): string =>
+  const buttonStyle = (label: TeachingPage): string =>
     `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${active === label
       ? "bg-blue-500/20 text-blue-400"
       : "hover:bg-gray-700 text-gray-300"
@@ -34,7 +33,7 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
       <div className="flex items-center space-x-2 mb-8">
         <span
           className="font-semibold text-lg text-gray-400"
-          onClick={() => router.push("/nonteaching-home")}
+          onClick={() => router.push("/teaching-home")}
         >
           DCS Records
         </span>
@@ -68,12 +67,6 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
             <span>Awards</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Submissions")}
-            className={buttonStyle("Submissions")}
-          >
-            <span>Awards</span>
-          </li>
-          <li
             onClick={() => setActiveComponent("Documents")}
             className={buttonStyle("Documents")}
           >
@@ -94,4 +87,4 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
   );
 };
 
-export default NonTeachingSidebar;
+export default TeachingSidebar;
