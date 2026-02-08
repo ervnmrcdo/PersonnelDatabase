@@ -129,17 +129,30 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           submitter_teaching_id,
           submitter_nonteaching_id,
           award_id,
-          attached_files
+          attached_files,
+          status,
+          date_submitted
         )
         VALUES (
           ${"NONTEACHING"},
           ${teachingId},
           ${nonTeachingId},
           1,
-          ${buffer}
-        );
+          ${buffer},
+          'Pending',
+          CURRENT_DATE
+        )
+        RETURNING *;
       `;
-      console.log(result);
+      console.log('INSERT result:', result);
+
+      // Verify what was actually inserted
+      const check = await sql`
+        SELECT submission_id, status, date_submitted, submitter_type, award_id
+        FROM PendingAwards 
+        WHERE submission_id = ${result[0].submission_id};
+      `;
+      console.log('Verification query:', check);
 
       return res.status(200).json(result);
     }

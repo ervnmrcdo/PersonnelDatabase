@@ -9,12 +9,26 @@ export default async function PendingAwards(
 ) {
   try {
     const rows = await sql`
-      SELECT * 
-      FROM PendingAwards pa INNER JOIN NonTeachingPersonnel ntp
-      ON  pa.submitter_nonteaching_id = ntp.nonteaching_id INNER JOIN 
-      Awards a ON pa.award_id = a.award_id
-      WHERE status = 'Pending';
+      SELECT 
+        pa.submission_id,
+        pa.submitter_type,
+        pa.date_submitted,
+        pa.status,
+        pa.award_id,
+        pa.attached_files,
+        COALESCE(ntp.first_name, tp.first_name) as first_name,
+        COALESCE(ntp.last_name, tp.last_name) as last_name,
+        a.title
+      FROM PendingAwards pa 
+      LEFT JOIN NonTeachingPersonnel ntp ON pa.submitter_nonteaching_id = ntp.nonteaching_id
+      LEFT JOIN TeachingPersonnel tp ON pa.submitter_teaching_id = tp.teaching_id
+      LEFT JOIN Awards a ON pa.award_id = a.award_id;
     `;
+    
+    console.log('Pending awards query returned:', rows.length, 'rows');
+    if (rows.length > 0) {
+      console.log('Sample row:', rows[0]);
+    }
 
     const formatted = rows.map((r) => ({
       name: `${r.first_name} ${r.last_name}`,
