@@ -17,10 +17,22 @@ export default function AcceptedFormInstance({ data, onBack }: Props) {
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [numPages, setNumPages] = useState<number>();
 
+    async function download() {
+        const foo = Buffer.from(data.pdfBufferData).toString('base64')
+        const blob = new Blob(
+            [Uint8Array.from(atob(foo), (c) => c.charCodeAt(0))],
+            { type: "application/pdf" },
+        );
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ipc-award-form.pdf";
+        a.click();
+    }
+
     useEffect(() => {
         if (data) {
             const foo = Buffer.from(data.pdfBufferData).toString('base64')
-            console.log(foo)
             const blob = new Blob(
                 [Uint8Array.from(atob(foo), (c) => c.charCodeAt(0))],
                 { type: "application/pdf" },
@@ -51,11 +63,10 @@ export default function AcceptedFormInstance({ data, onBack }: Props) {
             </div>
 
             <div className="flex gap-3">
-                <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => { }}>
+                <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={download}>
                     Download for Printing
                 </button>
             </div>
-
             {
                 pdfUrl ? (
                     <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-gray-50">
