@@ -7,6 +7,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
   import.meta.url,
 ).toString();
+
 type Props = {
   data: Application;
   onBack: () => void;
@@ -49,13 +50,11 @@ export default function ReviewInstance({ data, onBack }: Props) {
     } catch (err) {
       alert(err)
     }
-
-
   }
-
 
   useEffect(() => {
     if (data.pdfBase64) {
+      console.log(data.pdfBase64);
       const blob = new Blob(
         [Uint8Array.from(atob(data.pdfBase64), (c) => c.charCodeAt(0))],
         { type: "application/pdf" },
