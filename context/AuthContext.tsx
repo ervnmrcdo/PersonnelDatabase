@@ -10,6 +10,7 @@ interface Profile {
   role?: string | null
 }
 
+
 interface AuthContextValue {
   user: User | null
   profile: Profile | null
