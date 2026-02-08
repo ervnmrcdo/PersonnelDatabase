@@ -14,20 +14,22 @@ type NonTeachingPage =
   | "Profile"
   | "Publications"
   | "Awards"
+  | "Submissions"
   | "Documents";
 export default function Page() {
   const [activeComponent, setActiveComponent] =
     useState<NonTeachingPage>("Home");
 
   const renderContent = (): ReactNode => {
-    console.log("hi");
     switch (activeComponent) {
       case "Home":
-        return <NonteachingDashboard/>;
+        return <NonteachingDashboard />;
       case "Profile":
         return <NonteachingProfile/>;
       case "Awards":
-        return <AwardsPage/>;
+        return <AwardsPage />;
+      case "Submissions":
+        return <>yo</>
       case "Publications":
         return <Publications />;
       case "Documents":

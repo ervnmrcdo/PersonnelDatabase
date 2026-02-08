@@ -13,7 +13,7 @@ export default async function PendingAwards(
       FROM PendingAwards pa INNER JOIN NonTeachingPersonnel ntp
       ON  pa.submitter_nonteaching_id = ntp.nonteaching_id INNER JOIN 
       Awards a ON pa.award_id = a.award_id
-      WHERE status = 'Pending';
+      WHERE status = 'PENDING';
     `;
 
     const formatted = rows.map((r) => ({
