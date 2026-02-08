@@ -45,3 +45,13 @@ export type Application = {
   dateSubmitted: string;
   pdfBase64: string;
 };
+
+export interface AcceptedAward {
+  firstName: string;
+  lastName: string;
+  submission_id: string;
+  pdfBufferData: string;
+  date_submitted: string;
+  award_title: string;
+}
+

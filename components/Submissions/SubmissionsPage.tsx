@@ -1,24 +1,46 @@
-import { useState } from "react";
+'use client'
 
-interface AcceptedAward {
-    submission_id: string;
-    pdfBytes: 'string';
+import { AcceptedAward } from "@/lib/types"
+import { AnimatePresence, motion } from "framer-motion"
+import { useState } from "react"
+import AcceptedListing from "./AcceptedListing"
+import AcceptedFormInstance from "./AcceptedInstance"
+
+interface RejectedForm {
+
 }
 
-//hard-coded id of sudent need to be changed
-let id = 1
+export default function SubmissionsPage() {
+    const [selected, setSelected] = useState<AcceptedAward | null>(null)
 
-export default async function SubmissionsPage() {
-    const [step, setStep] = useState<'listing' | 'accepted-review'>('listing')
-    const [acceptedAward, setAcceptedAward] = useState<AcceptedAward | null>(null)
+    console.log(selected)
 
-    const data = await fetch('', {
-        body:
-    })
+    return (
+        <div className="p-6">
+            <AnimatePresence mode="wait">
+                {!selected ? (
+                    <motion.div
+                        key='list'
+                        initial={{ x: 100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: -100, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <AcceptedListing onSelect={setSelected} />
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key='list'
+                        initial={{ x: 100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: -100, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <AcceptedFormInstance data={selected} onBack={() => setSelected(null)} />
 
-
-    return (<div>
-        <h2>Accepted</h2>
-
-    </div>);
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    )
 }
