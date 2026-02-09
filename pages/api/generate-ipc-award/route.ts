@@ -130,7 +130,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           ${nonTeachingId},
           1,
           ${buffer},
-          'Pending',
+          'PENDING',
           CURRENT_DATE
         )
         RETURNING *;
