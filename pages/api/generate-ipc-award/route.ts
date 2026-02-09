@@ -118,8 +118,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       })
     }
 
-
-
     if (ipaData.scopus) {
       page1.drawSquare({
         x: 55,
@@ -129,54 +127,117 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       })
     }
 
+    page1.drawText(ipaData.impactFactor || "", {
+      x: 350,
+      y: height - 198,
+      size: 11,
+      font,
+    });
+
+    page1.drawText(ipaData.impactFactorYear || "", {
+      x: 415,
+      y: height - 198,
+      size: 11,
+      font,
+    });
+
     page1.drawText(ipaData.dateOfPublication || "", {
       x: 100,
       y: height - 233,
       size: 11,
       font,
     });
-    // page1.drawText(selectedPublication.publisher || "", {
-    //   x: 100,
-    //   y: height - 260,
-    //   size: 11,
-    //   font,
-    // });
-    // page2.drawText(applicant.applicantName || "", {
-    //   x: 100,
-    //   y: height - 110,
-    //   size: 11,
-    //   font,
-    // });
-    // page2.drawText(applicant.university || "", {
-    //   x: 170,
-    //   y: height - 135,
-    //   size: 11,
-    //   font,
-    // });
-    // page2.drawText(applicant.college || "", {
-    //   x: 100,
-    //   y: height - 155,
-    //   size: 11,
-    //   font,
-    // });
-    // page2.drawText(applicant.department || "", {
-    //   x: 170,
-    //   y: height - 175,
-    //   size: 11,
-    //   font,
-    // });
-    // page2.drawText(applicant.contactNo || "", {
-    //   x: 430,
-    //   y: height - 175,
-    //   size: 11,
-    //   font,
-    // });
-    // page2.drawText(applicant.position || "", {
-    //   x: 150,
-    //   y: height - 200,
-    //   size: 11,
-    //   font,
-    // });
+
+    page1.drawText(ipaData.publisherName || "", {
+      x: 100,
+      y: height - 260,
+      size: 11,
+      font,
+    });
+
+    if (ipaData.upSystemFunding) {
+      page1.drawSquare({
+        x: 55,
+        y: height - 285,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.upCUGrant) {
+      page1.drawSquare({
+        x: 55,
+        y: height - 297,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.dost) {
+      page1.drawSquare({
+        x: 55,
+        y: height - 310,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.otherFunding) {
+      page1.drawSquare({
+        x: 55,
+        y: height - 323,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    page1.drawText(ipaData.otherFundingSpecfics || "", {
+      x: 170,
+      y: height - 323,
+      size: 11,
+      font,
+    });
+
+    page2.drawText(ipaData.author1Name || "", {
+      x: 100,
+      y: height - 110,
+      size: 11,
+      font,
+    });
+    page2.drawText(ipaData.author1University || "", {
+      x: 170,
+      y: height - 135,
+      size: 11,
+      font,
+    });
+
+    page2.drawText(ipaData.author1College || "", {
+      x: 100,
+      y: height - 155,
+      size: 11,
+      font,
+    });
+    page2.drawText(ipaData.author1Department || "", {
+      x: 170,
+      y: height - 175,
+      size: 11,
+      font,
+    });
+    page2.drawText(ipaData.author1Contact || "", {
+      x: 430,
+      y: height - 175,
+      size: 11,
+      font,
+    });
+    page2.drawText(ipaData.author1Position || "", {
+      x: 150,
+      y: height - 200,
+      size: 11,
+      font,
+    });
+
+
+
     // page2.drawText(applicant.emailAddress || "", {
     //   x: 150,
     //   y: height - 470,
