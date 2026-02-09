@@ -15,11 +15,11 @@ export default async function PendingAwards(
       Awards a ON pa.award_id = a.award_id
       WHERE status = 'PENDING';
     `;
-    
-    console.log('Pending awards query returned:', rows.length, 'rows');
-    if (rows.length > 0) {
-      console.log('Sample row:', rows[0]);
-    }
+
+    // console.log('Pending awards query returned:', rows.length, 'rows');
+    // if (rows.length > 0) {
+    //   console.log('Sample row:', rows[0]);
+    // }
 
     const formatted = rows.map((r) => ({
       name: `${r.first_name} ${r.last_name}`,

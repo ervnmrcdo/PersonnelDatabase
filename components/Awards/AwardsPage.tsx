@@ -4,90 +4,48 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
-import { Author, ApplicantData, Award, Publication } from "@/lib/types";
+import { Author, Award, Publication, PendingAward } from "@/lib/types";
+import { awards, tempPublicationsGenerated } from "@/lib/temp";
 
-interface PendingAward {
-  id: number;
-  name: string;
-  submitterType: string;
-  dateSubmitted: string;
-  status: string;
-  awardId: number;
-  awardTitle: string;
-}
-
-const applicant: ApplicantData = {
-  applicantName: "",
-  firstName: "Jon",
-  lastName: "Snow",
-  middleName: "Targaryen",
-  university: "University of California",
-  college: "College of Engineering",
-  department: "Software Engineering",
-  position: "Senior Developer",
-  contactNo: "+1-555-0123",
-  emailAddress: "alice.brown@email.com",
-};
-applicant.applicantName = `${applicant.lastName}, ${applicant.firstName} ${applicant.middleName}`;
-
-const awards: Award[] = [
-  {
-    id: 1,
-    title: "International Publication Award",
-    description: "Given for indexed journal publications.",
-  },
-  {
-    id: 2,
-    title: "Research Excellence Award",
-    description: "For outstanding research output.",
-  },
-];
-
-const publications: Publication[] = [
-  {
-    id: 1,
-    title: "Advanced Machine Learning Techniques for Climate Prediction",
-    authors: [
-      {
-        authorName: "Smith John",
-        firstName: "John",
-        lastName: "Smith",
-        university: "University of Technology",
-        department: "Computer Science",
-      },
-      {
-        authorName: "Johnson Sarah",
-        firstName: "Sarah",
-        lastName: "Johnson",
-        university: "State University",
-      },
-    ],
-    date: "2023-03-15",
-    journalName: "Journal of Artificial Intelligence Research",
-    volumeNumber: "45",
-    pageNumber: "123-145",
-    publisher: " Some International Publishing Company",
-  },
-  {
-    id: 2,
-    title: "Quantum Computing: Breaking New Grounds",
-    authors: [
-      {
-        authorName: "Chen Michael",
-        firstName: "Michael",
-        lastName: "Chen",
-        middleName: "Wei",
-        university: "Tech University",
-        college: "College of Physics",
-      },
-    ],
-    date: "2023-07-22",
-    journalName: "Physical Review Letters",
-    volumeNumber: "130",
-    pageNumber: "250601",
-    publisher: " Some International Publishing Company",
-  },
-];
+//
+// interface ApiPublicationData {
+//   nonteaching_id: number;
+//   up_id: string;
+//   first_name: string;
+//   last_name: string;
+//   position_id: number;
+//   entry_date: string;
+//   publication_id: number;
+//   author_type: string;
+//   author_teaching_id: number | null;
+//   author_nonteaching_id: number | null;
+//   type: string;
+//   title: string;
+//   publisher: string;
+//   publication_status: string;
+//   date_published: string;
+//   page_number: string;
+//   issue_number: string;
+//   page_numbers: string;
+//   journal_publication: string;
+//   volume_number: string;
+//   total_authors: number;
+// }
+//
+// const applicant: ApplicantData = {
+//   applicantName: "",
+//   firstName: "Ervin",
+//   lastName: "Mercado",
+//   middleName: "Poblete",
+//   university: "University of the Philippines",
+//   college: "College of Engineering",
+//   department: "Computer Science",
+//   position: "Student",
+//   contactNo: "+1-555-0123",
+//   emailAddress: "epmercado2@up.edu.ph",
+// };
+//
+// applicant.applicantName = `${applicant.lastName}, ${applicant.firstName} ${applicant.middleName}`;
 
 const AwardsPage: FC = () => {
   const [step, setStep] = useState<"awards" | "publications" | "form">(
@@ -99,6 +57,7 @@ const AwardsPage: FC = () => {
 
   const [pendingAwards, setPendingAwards] = useState<PendingAward[]>([]);
   const [isLoadingPending, setIsLoadingPending] = useState(true);
+
 
   useEffect(() => {
     const fetchPendingAwards = async () => {
@@ -117,6 +76,65 @@ const AwardsPage: FC = () => {
 
     fetchPendingAwards();
   }, []);
+
+  const payload = {
+    'id': '1',
+    'submitterType': 'NONTEACHING'
+  }
+
+  // useEffect(() => {
+  //   console.log('allo');
+  //
+  //   fetch('api/get/publications', {
+  //     method: "POST",
+  //     body: JSON.stringify(payload),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((result: PublicationData[]) => { // Assuming result is an array
+  //       // Transform the API response to match your Publication interface
+  //       const transformedPublications: Publication[] = result.map((item: PublicationData) => ({
+  //         id: item.publication_id,
+  //         title: item.title,
+  //         date: item.publication_date,
+  //         journalName: item.journal_publication,
+  //         volumeNumber: item.volume_number,
+  //         pageNumber: item.pag_number,
+  //         publisher: item.publisher // Fixed typo
+  //       }));
+  //
+  //       // Update state with the transformed array
+  //       setPublications(transformedPublications);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching publications:', error);
+  //     });
+  // }, []); // Make sure to include dependencies if needed
+
+  // const publications: Publication[] = []
+  // useEffect(() => {
+  //   console.log('allo')
+  //   fetch('api/get/publications', {
+  //     method: "POST",
+  //     body: JSON.stringify(payload),
+  //   }).then((res) => res.json())
+  //     .then((result) => {
+  //       publications.push(
+  //         result.map((item: any) => ({
+  //           id: item.publication_id,
+  //           title: item.title,
+  //           date: item.publication_date,
+  //           journalName: item.journal_publication,
+  //           volumeNumber: item.volume_number,
+  //           pageNumber: item.pag_number,
+  //           publishe: item.publisher
+  //         }))
+  //       )
+  //     })
+  // }, [])
+  //
+
+
+
 
   const handleAwardSelect = (award: Award) => {
     setSelectedAward(award);
@@ -158,7 +176,7 @@ const AwardsPage: FC = () => {
               <PublicationSelection
                 handleBack={handleBack}
                 handlePublicationSelect={(pub) => handlePublicationSelect(pub)}
-                publications={publications}
+                publications={tempPublicationsGenerated}
               />
             </motion.div>
           )}
@@ -175,81 +193,13 @@ const AwardsPage: FC = () => {
                 handleBack={handleBack}
                 selectedAward={selectedAward!}
                 selectedPublication={selectedPublication!}
-                autoData={applicant}
+                autoData={selectedPublication!.authors[0]}
               />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Pending Awards Table */}
-      <div className="p-6 mt-8">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">
-          Pending Awards Status
-        </h2>
-        {isLoadingPending ? (
-          <div className="flex justify-center items-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-          </div>
-        ) : pendingAwards.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No pending awards at this time.
-          </div>
-        ) : (
-          <div className="overflow-x-auto shadow-md rounded-lg">
-            <table className="min-w-full bg-white border border-gray-200">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">
-                    Submission ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">
-                    Applicant Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">
-                    Award Title
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">
-                    Submitter Type
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">
-                    Date Submitted
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {pendingAwards.map((award) => (
-                  <tr key={award.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      #{award.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {award.name}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {award.awardTitle}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {award.submitterType}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {new Date(award.dateSubmitted).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                        {award.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
     </>
   );
 };

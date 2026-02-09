@@ -1,12 +1,12 @@
 import { FC } from "react";
 import EditableAwardForm from "./EditableAwardForm";
-import { Author, ApplicantData, Award, Publication } from "@/lib/types";
+import { Author, Award, Publication } from "@/lib/types";
 
 interface FormEditingProps {
   handleBack: () => void;
   selectedAward: Award;
   selectedPublication: Publication;
-  autoData: ApplicantData;
+  autoData: Author;
 }
 const FormEditing: FC<FormEditingProps> = ({
   handleBack,
@@ -15,22 +15,33 @@ const FormEditing: FC<FormEditingProps> = ({
   autoData,
 }) => {
   const handleDownload = async (data: any, shouldSubmit: boolean) => {
-    const response = await fetch("/api/generate-ipc-award/route", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    try {
 
-    if (shouldSubmit) {
-      console.log(response);
-      return;
+      const response = await fetch("/api/generate-ipc-award/route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (shouldSubmit) {
+        if (response.ok) {
+          alert('Form successfully Sumitted.')
+        } else {
+          alert('Failed to submit application.')
+        }
+        return;
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ipc-award-form.pdf";
+      a.click();
+
+    } catch (err) {
+      alert('Submission Failed');
+      console.log(`Internal Server Error: ${err}`)
     }
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "ipc-award-form.pdf";
-    a.click();
   };
 
   return (
@@ -51,7 +62,7 @@ const FormEditing: FC<FormEditingProps> = ({
 
         <div className="text-gray-600 space-y-2">
           <p>
-            <strong>Applicant:</strong> {autoData.applicantName}
+            <strong>Applicant:</strong> {selectedPublication.authors[0].firstName + ' ' + selectedPublication.authors[0].lastName}
           </p>
           <p>
             <strong>Selected Award:</strong> {selectedAward?.title}
