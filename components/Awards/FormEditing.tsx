@@ -25,7 +25,7 @@ const FormEditing: FC<FormEditingProps> = ({
 
       if (shouldSubmit) {
         if (response.ok) {
-          alert('Form successfully Sumitted.')
+          alert('Form successfully Submitted.')
         } else {
           alert('Failed to submit application.')
         }

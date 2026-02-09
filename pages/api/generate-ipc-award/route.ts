@@ -236,14 +236,120 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       font,
     });
 
+    if (ipaData.author1Personnel) {
+      page2.drawSquare({
+        x: 56,
+        y: height - 242,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
 
+    if (ipaData.author1Faculty) {
+      page2.drawSquare({
+        x: 69,
+        y: height - 254,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
 
-    // page2.drawText(applicant.emailAddress || "", {
-    //   x: 150,
-    //   y: height - 470,
-    //   size: 11,
-    //   font,
-    // });
+    if (ipaData.author1ResearchFaculty) {
+      page2.drawSquare({
+        x: 69,
+        y: height - 266,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1REPS) {
+      page2.drawSquare({
+        x: 69,
+        y: height - 280,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1AdminStaff) {
+      page2.drawSquare({
+        x: 69,
+        y: height - 293,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1UpAffiliated) {
+      page2.drawSquare({
+        x: 56,
+        y: height - 317,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1Student) {
+      page2.drawSquare({
+        x: 68,
+        y: height - 343,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1ProjectPersonnell) {
+      page2.drawSquare({
+        x: 68,
+        y: height - 357,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1Permanent) {
+      page2.drawSquare({
+        x: 69,
+        y: height - 407,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1Temporary) {
+      page2.drawSquare({
+        x: 69,
+        y: height - 421,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1UpContractual) {
+      page2.drawSquare({
+        x: 69,
+        y: height - 432,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.author1NonUpContractual) {
+      page2.drawSquare({
+        x: 69,
+        y: height - 445,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    page2.drawText(ipaData.author1EmailAddress || "", {
+      x: 150,
+      y: height - 470,
+      size: 11,
+      font,
+    });
 
     const pdfBytes = await pdfDoc.save();
 
@@ -269,7 +375,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           ${nonTeachingId},
           1,
           ${buffer},
-          'Pending',
+          'PENDING',
           CURRENT_DATE
         )
         RETURNING *;
