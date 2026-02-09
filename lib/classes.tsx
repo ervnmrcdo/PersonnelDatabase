@@ -21,6 +21,7 @@ export class initialIPAFormData implements IPAFormData {
   upCUGrant: boolean = false;
   dost: boolean = false;
   otherFunding: boolean = false;
+  otherFundingSpecfics: string = ''
   author1Name: string = '';
   author1University: string = '';
   author1College: string = '';

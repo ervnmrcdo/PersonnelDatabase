@@ -55,18 +55,6 @@ export interface PendingAward {
   awardTitle: string;
 }
 
-
-export interface EditableAwardFormProps {
-  initialData: {
-    applicant: Author;
-    authors: Author[];
-    selectedPublication: Publication;
-    selectedAward: Award | null;
-    shouldSubmit: boolean;
-  };
-  onDownload: (data: any, shouldSubmit: boolean) => void;
-}
-
 export interface EditableAwardFormData {
   ipaData: IPAFormData;
   shouldSubmit: boolean;
@@ -94,6 +82,7 @@ export interface IPAFormData {
   upCUGrant: boolean;
   dost: boolean;
   otherFunding: boolean;
+  otherFundingSpecfics: string;
   author1Name: string;
   author1University: string;
   author1College: string;

@@ -39,7 +39,15 @@ export default function EditableAwardForm({
       totalAuthorNumber: rawData.authors.length.toString(),
       journalName: rawData.selectedPublication.journalName,
       dateOfPublication: rawData.selectedPublication.date,
-      publisherName: rawData.selectedPublication.publisher
+      publisherName: rawData.selectedPublication.publisher,
+      author1Name: `${rawData.authors[0].firstName} ${rawData.authors[0].middleName}, ${rawData.authors[0].lastName}`,
+      author1University: rawData.authors[0].university,
+      author1College: rawData.authors[0].college,
+      author1Department: rawData.authors[0].department,
+      author1Contact: rawData.authors[0].contactNo,
+      author1Position: rawData.authors[0].position,
+      author1EmailAddress: rawData.authors[0].emailAddress,
+
 
     })
     return result
@@ -205,6 +213,23 @@ export default function EditableAwardForm({
 
       <input
         type="text"
+        value={formData.ipaData.impactFactor || ""}
+        onChange={(e) => handleChange("impactFactor", e.target.value)}
+        className="absolute left-[390px] top-[1270px] w-[60px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="IF"
+      />
+
+      <input
+        type="text"
+        value={formData.ipaData.impactFactorYear || ""}
+        onChange={(e) => handleChange("impactFactorYear", e.target.value)}
+        className="absolute left-[480px] top-[1270px] w-[60px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="IF Year"
+      />
+
+
+      <input
+        type="text"
         value={formData.ipaData.dateOfPublication || ""}
         onChange={(e) => handleChange("dateOfPublication", e.target.value)}
         className="absolute left-[100px] top-[1315px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
@@ -218,63 +243,176 @@ export default function EditableAwardForm({
         className="absolute left-[100px] top-[1345px] w-[500px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Publisher Name"
       />
-      {/* <input */}
-      {/*   type="text" */}
-      {/*   value={formData.selectedPublication.journalName || ""} */}
-      {/*   onChange={(e) => handleChange("journalName", e.target.value)} */}
-      {/*   className="absolute left-[100px] top-[935px] w-[450px] border border-gray-300 bg-transparent px-2 py-1 text-sm" */}
-      {/*   placeholder="Date of Publication" */}
-      {/* /> */}
-      {/**/}
-      {/* <input */}
-      {/*   type="text" */}
-      {/*   value={formData.authors[0].firstName + ' ' + formData.authors[0].lastName || ""} */}
-      {/*   onChange={(e) => handleChange("applicantName", e.target.value)} */}
-      {/*   className="absolute left-[100px] top-[2165px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm" */}
-      {/*   placeholder="Applicant Name" */}
-      {/* /> */}
-      {/* <input */}
-      {/*   type="text" */}
-      {/*   value={`${formData.applicant.university}` || ""} */}
-      {/*   onChange={(e) => handleChange("university", e.target.value)} */}
-      {/*   className="absolute left-[100px] top-[2195px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm" */}
-      {/*   placeholder="Applicant Name" */}
-      {/* /> */}
-      {/* <input */}
-      {/*   type="text" */}
-      {/*   value={`${formData.applicant.college}` || ""} */}
-      {/*   onChange={(e) => handleChange("college", e.target.value)} */}
-      {/*   className="absolute left-[100px] top-[2220px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm" */}
-      {/*   placeholder="Applicant Name" */}
-      {/* /> */}
-      {/* <input */}
-      {/*   type="text" */}
-      {/*   value={`${formData.applicant.department}` || ""} */}
-      {/*   onChange={(e) => handleChange("department", e.target.value)} */}
-      {/*   className="absolute left-[100px] top-[2250px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm" */}
-      {/*   placeholder="Applicant Name" */}
-      {/* /> */}
-      {/* <input */}
-      {/*   type="text" */}
-      {/*   value={`${formData.applicant.position}` || ""} */}
-      {/*   onChange={(e) => handleChange("postion", e.target.value)} */}
-      {/*   className="absolute left-[150px] top-[2275px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm" */}
-      {/*   placeholder="Applicant Name" */}
-      {/* /> */}
-      {/* <input */}
-      {/*   type="text" */}
-      {/*   value={`${formData.applicant.contactNo}` || ""} */}
-      {/*   onChange={(e) => handleChange("contactNo", e.target.value)} */}
-      {/*   className="absolute left-[500px] top-[2250px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm" */}
-      {/*   placeholder="Applicant Name" */}
-      {/* /> */}
-      {/* <input */}
-      {/*   type="text" */}
-      {/*   value={`${formData.applicant.emailAddress}` || ""} */}
-      {/*   onChange={(e) => handleChange("emailAddress", e.target.value)} */}
-      {/*   className="absolute left-[150px] top-[2590px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm" */}
-      {/*   placeholder="Applicant Name" */}
-      {/* /> */}
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.upSystemFunding}
+        onChange={(e) => handleChange("upSystemFunding", e.target.checked)}
+        className="absolute left-[-30px] top-[1382px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.upCUGrant}
+        onChange={(e) => handleChange("upCUGrant", e.target.checked)}
+        className="absolute left-[-30px] top-[1397px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.dost}
+        onChange={(e) => handleChange("dost", e.target.checked)}
+        className="absolute left-[-30px] top-[1412px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.otherFunding}
+        onChange={(e) => handleChange("otherFunding", e.target.checked)}
+        className="absolute left-[-30px] top-[1427px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type="text"
+        value={formData.ipaData.author1Name || ""}
+        onChange={(e) => handleChange("author1Name", e.target.value)}
+        className="absolute left-[100px] top-[2165px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+
+      <input
+        type="text"
+        value={`${formData.ipaData.author1University}` || ""}
+        onChange={(e) => handleChange("author1University", e.target.value)}
+        className="absolute left-[100px] top-[2195px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+
+      <input
+        type="text"
+        value={`${formData.ipaData.author1College}` || ""}
+        onChange={(e) => handleChange("author1College", e.target.value)}
+        className="absolute left-[100px] top-[2220px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+
+      <input
+        type="text"
+        value={`${formData.ipaData.author1Department}` || ""}
+        onChange={(e) => handleChange("author1Department", e.target.value)}
+        className="absolute left-[100px] top-[2250px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+
+      <input
+        type="text"
+        value={`${formData.ipaData.author1Contact}` || ""}
+        onChange={(e) => handleChange("author1Contact", e.target.value)}
+        className="absolute left-[500px] top-[2250px] h-[20px] w-[150px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+
+      <input
+        type="text"
+        value={`${formData.ipaData.author1Position}` || ""}
+        onChange={(e) => handleChange("author1Position", e.target.value)}
+        className="absolute left-[150px] top-[2275px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1Personnel}
+        onChange={(e) => handleChange("author1Personnel", e.target.checked)}
+        className="absolute left-[-30px] top-[2320px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1Faculty}
+        onChange={(e) => handleChange("author1Faculty", e.target.checked)}
+        className="absolute left-[-14px] top-[2337px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1ResearchFaculty}
+        onChange={(e) => handleChange("author1ResearchFaculty", e.target.checked)}
+        className="absolute left-[-14px] top-[2352px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1REPS}
+        onChange={(e) => handleChange("author1REPS", e.target.checked)}
+        className="absolute left-[-14px] top-[2367px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1AdminStaff}
+        onChange={(e) => handleChange("author1AdminStaff", e.target.checked)}
+        className="absolute left-[-14px] top-[2383px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1UpAffiliated}
+        onChange={(e) => handleChange("author1UpAffiliated", e.target.checked)}
+        className="absolute left-[-30px] top-[2410px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1Student}
+        onChange={(e) => handleChange("author1Student", e.target.checked)}
+        className="absolute left-[-14px] top-[2440px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1ProjectPersonnell}
+        onChange={(e) => handleChange("author1ProjectPersonnell", e.target.checked)}
+        className="absolute left-[-14px] top-[2455px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1Permanent}
+        onChange={(e) => handleChange("author1Permanent", e.target.checked)}
+        className="absolute left-[-14px] top-[2517px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1Temporary}
+        onChange={(e) => handleChange("author1Temporary", e.target.checked)}
+        className="absolute left-[-14px] top-[2532px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1UpContractual}
+        onChange={(e) => handleChange("author1Temporary", e.target.checked)}
+        className="absolute left-[-14px] top-[2547px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.author1NonUpContractual}
+        onChange={(e) => handleChange("author1NonUpContractual", e.target.checked)}
+        className="absolute left-[-14px] top-[2562px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+
+      <input
+        type="text"
+        value={`${formData.ipaData.author1EmailAddress}` || ""}
+        onChange={(e) => handleChange("author1EmailAddress", e.target.value)}
+        className="absolute left-[150px] top-[2590px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="Applicant Name"
+      />
+
     </div>
   );
 }
