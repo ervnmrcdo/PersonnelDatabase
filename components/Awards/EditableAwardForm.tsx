@@ -401,7 +401,7 @@ export default function EditableAwardForm({
       <input
         type='checkbox'
         checked={formData.ipaData.author1UpContractual}
-        onChange={(e) => handleChange("author1Temporary", e.target.checked)}
+        onChange={(e) => handleChange("author1UpContractual", e.target.checked)}
         className="absolute left-[-14px] top-[2547px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
       />
 

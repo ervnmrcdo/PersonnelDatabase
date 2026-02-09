@@ -12,10 +12,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const data = await req.body;
 
     const {
-      applicant,
-      authors,
-      selectedPublication,
-      selectedAward,
+      ipaData,
       shouldSubmit,
     } = data;
 
@@ -33,79 +30,160 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const { height } = page0.getSize();
 
     // 🖋️ Write text at specific coordinates (you’ll tweak these values)
-    page0.drawText(selectedPublication.title || "", {
+    page0.drawText(ipaData.articleTitle || "", {
       x: 130,
       y: height - 530,
       size: 11,
       font,
       color: rgb(0, 0, 0),
     });
-    page0.drawText(applicant.applicantName || "", {
+
+    page0.drawText(ipaData.completeCitation || "", {
+      x: 100,
+      y: height - 570,
+      size: 11,
+      font,
+    });
+
+    page0.drawText(ipaData.author1NameLastFirst || "", {
       x: 100,
       y: height - 625,
       size: 11,
       font,
     });
-    page0.drawText(selectedPublication.journalName || "", {
+
+    page0.drawText(ipaData.author1UniversityAndDept || "", {
+      x: 303,
+      y: height - 625,
+      size: 11,
+      font,
+    });
+
+    page0.drawText(ipaData.totalAuthorNumber || "", {
+      x: 270,
+      y: height - 720,
+      size: 11,
+      font,
+    });
+
+    page0.drawText(ipaData.journalName || "", {
       x: 100,
       y: height - 750,
       size: 11,
       font,
     });
-    page1.drawText(selectedPublication.date || "", {
+
+    if (ipaData.WSCC) {
+      page1.drawSquare({
+        x: 55,
+        y: height - 110,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.AHCI) {
+      page1.drawSquare({
+        x: 69,
+        y: height - 123,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.SCIE) {
+      page1.drawSquare({
+        x: 69,
+        y: height - 134,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.SSCI) {
+      page1.drawSquare({
+        x: 69,
+        y: height - 147,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    if (ipaData.CPCI) {
+      page1.drawSquare({
+        x: 69,
+        y: height - 162,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+
+
+    if (ipaData.scopus) {
+      page1.drawSquare({
+        x: 55,
+        y: height - 186,
+        size: 8,
+        color: rgb(0, 0, 0),
+      })
+    }
+
+    page1.drawText(ipaData.dateOfPublication || "", {
       x: 100,
       y: height - 233,
       size: 11,
       font,
     });
-    page1.drawText(selectedPublication.publisher || "", {
-      x: 100,
-      y: height - 260,
-      size: 11,
-      font,
-    });
-    page2.drawText(applicant.applicantName || "", {
-      x: 100,
-      y: height - 110,
-      size: 11,
-      font,
-    });
-    page2.drawText(applicant.university || "", {
-      x: 170,
-      y: height - 135,
-      size: 11,
-      font,
-    });
-    page2.drawText(applicant.college || "", {
-      x: 100,
-      y: height - 155,
-      size: 11,
-      font,
-    });
-    page2.drawText(applicant.department || "", {
-      x: 170,
-      y: height - 175,
-      size: 11,
-      font,
-    });
-    page2.drawText(applicant.contactNo || "", {
-      x: 430,
-      y: height - 175,
-      size: 11,
-      font,
-    });
-    page2.drawText(applicant.position || "", {
-      x: 150,
-      y: height - 200,
-      size: 11,
-      font,
-    });
-    page2.drawText(applicant.emailAddress || "", {
-      x: 150,
-      y: height - 470,
-      size: 11,
-      font,
-    });
+    // page1.drawText(selectedPublication.publisher || "", {
+    //   x: 100,
+    //   y: height - 260,
+    //   size: 11,
+    //   font,
+    // });
+    // page2.drawText(applicant.applicantName || "", {
+    //   x: 100,
+    //   y: height - 110,
+    //   size: 11,
+    //   font,
+    // });
+    // page2.drawText(applicant.university || "", {
+    //   x: 170,
+    //   y: height - 135,
+    //   size: 11,
+    //   font,
+    // });
+    // page2.drawText(applicant.college || "", {
+    //   x: 100,
+    //   y: height - 155,
+    //   size: 11,
+    //   font,
+    // });
+    // page2.drawText(applicant.department || "", {
+    //   x: 170,
+    //   y: height - 175,
+    //   size: 11,
+    //   font,
+    // });
+    // page2.drawText(applicant.contactNo || "", {
+    //   x: 430,
+    //   y: height - 175,
+    //   size: 11,
+    //   font,
+    // });
+    // page2.drawText(applicant.position || "", {
+    //   x: 150,
+    //   y: height - 200,
+    //   size: 11,
+    //   font,
+    // });
+    // page2.drawText(applicant.emailAddress || "", {
+    //   x: 150,
+    //   y: height - 470,
+    //   size: 11,
+    //   font,
+    // });
+
     const pdfBytes = await pdfDoc.save();
 
     if (shouldSubmit) {
