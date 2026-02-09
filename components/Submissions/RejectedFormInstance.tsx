@@ -13,7 +13,7 @@ type Props = {
     onBack: () => void;
 }
 
-export default function AcceptedFormInstance({ data, onBack }: Props) {
+export default function RejectedFormInstance({ data, onBack }: Props) {
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [numPages, setNumPages] = useState<number>();
 

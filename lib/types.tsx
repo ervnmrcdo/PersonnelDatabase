@@ -36,7 +36,16 @@ export type Application = {
   pdfBase64: string;
 };
 
-export interface AcceptedAward {
+export interface AcceptedForm {
+  firstName: string;
+  lastName: string;
+  submission_id: string;
+  pdfBufferData: string;
+  date_submitted: string;
+  award_title: string;
+}
+
+export interface RejectedForm {
   firstName: string;
   lastName: string;
   submission_id: string;

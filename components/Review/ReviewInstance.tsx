@@ -62,8 +62,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
         submission_id: data.id,
       }
 
-
-
       const rejectPdf = await fetch('/api/admin/reject-form/route', {
         method: "POST",
         body: JSON.stringify(payload),

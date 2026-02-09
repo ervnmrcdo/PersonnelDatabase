@@ -35,7 +35,7 @@ export default function PendingAwardsTable() {
     }, []);
 
     return (
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-6 mt-5">
 
             {/* Pending Awards Table */}
             <div className="p-6 mt-8">
