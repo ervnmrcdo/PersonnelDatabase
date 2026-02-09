@@ -20,7 +20,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const acceptPDF = async () => {
 
     try {
-      const signPDF = await fetch('/api/admin/sign-award/route', {
+      const signPDF = await fetch('/api/admin/sign-form/route', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -46,7 +46,31 @@ export default function ReviewInstance({ data, onBack }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      alert('Form Signed and Returned')
+      if (response.ok) {
+        alert('Form Signed and Returned')
+      }
+    } catch (err) {
+      alert(err)
+    }
+  }
+
+  const rejectPDF = async () => {
+
+    try {
+      const payload = {
+        admin_id: '1',
+        submission_id: data.id,
+      }
+
+
+
+      const rejectPdf = await fetch('/api/admin/reject-form/route', {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      if (rejectPdf.ok) {
+        alert('Form rejected.')
+      }
     } catch (err) {
       alert(err)
     }
@@ -84,8 +108,8 @@ export default function ReviewInstance({ data, onBack }: Props) {
           Sign and Return
         </button>
         <button className="px-4 py-2 border rounded-md"
-          onClick={() => { alert('nothging so far') }}
-        >Mark Errors</button>
+          onClick={() => rejectPDF()}
+        >Reject</button>
       </div>
 
       {
