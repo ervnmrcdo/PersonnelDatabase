@@ -273,6 +273,14 @@ export default function EditableAwardForm({
       />
 
       <input
+        type='text'
+        value={formData.ipaData.otherFundingSpecfics}
+        onChange={(e) => handleChange("otherFundingSpecfics", e.target.value)}
+        className="absolute left-[180px] top-[1425px] h-[15px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        placeholder="specifics"
+      />
+
+      <input
         type="text"
         value={formData.ipaData.author1Name || ""}
         onChange={(e) => handleChange("author1Name", e.target.value)}
