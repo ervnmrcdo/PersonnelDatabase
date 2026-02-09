@@ -166,7 +166,41 @@ export default function EditableAwardForm({
         checked={formData.ipaData.WSCC}
         onChange={(e) => handleChange("WSCC", e.target.checked)}
         className="absolute left-[-30px] top-[1180px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
-        placeholder="Date of Publication"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.AHCI}
+        onChange={(e) => handleChange("AHCI", e.target.checked)}
+        className="absolute left-[-14px] top-[1193px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.SCIE}
+        onChange={(e) => handleChange("SCIE", e.target.checked)}
+        className="absolute left-[-14px] top-[1208px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.SSCI}
+        onChange={(e) => handleChange("SSCI", e.target.checked)}
+        className="absolute left-[-14px] top-[1223px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.CPCI}
+        onChange={(e) => handleChange("CPCI", e.target.checked)}
+        className="absolute left-[-14px] top-[1238px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+      />
+
+      <input
+        type='checkbox'
+        checked={formData.ipaData.scopus}
+        onChange={(e) => handleChange("scopus", e.target.checked)}
+        className="absolute left-[-30px] top-[1265px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
       />
 
       <input
