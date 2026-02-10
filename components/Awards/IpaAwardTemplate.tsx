@@ -29,14 +29,6 @@ export default function IpaFormTemplate() {
         unoptimized
       />
       <Image
-        src="d03338e6-7966-4512-bcac-7cdad4cabcd5-3.jpg"
-        alt="IPC Award Form"
-        className="w-full border shadow"
-        width={700}
-        height={700}
-        unoptimized
-      />
-      <Image
         src="d03338e6-7966-4512-bcac-7cdad4cabcd5-4.jpg"
         alt="IPC Award Form"
         className="w-full border shadow"

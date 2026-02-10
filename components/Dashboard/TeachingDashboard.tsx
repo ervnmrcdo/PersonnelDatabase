@@ -1,13 +1,16 @@
 "use client";
 
+import { useAuth } from '@/context/AuthContext'
+
 export default function TeachingDashboard() {
+  const { user, profile } = useAuth()
   return (
     <div className="flex-1 overflow-auto bg-[#0f1117] text-gray-300 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Teaching Dashboard</h1>
-          <p className="text-gray-400">Hello Teaching!</p>
+          <p className="text-gray-400">Hello {profile?.full_name || user?.email || 'Faculty'}</p>
         </div>
 
         {/* some stats */}

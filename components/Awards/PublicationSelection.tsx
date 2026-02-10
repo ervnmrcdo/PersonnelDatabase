@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { FC } from "react";
-import { Author, ApplicantData, Award, Publication } from "@/lib/types";
+import { Author, Award, Publication } from "@/lib/types";
 
 interface PublicationSelectionProps {
   handleBack: () => void;

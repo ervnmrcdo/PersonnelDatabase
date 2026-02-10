@@ -1,34 +1,38 @@
 "use client";
 
-import Non from "@/components/AdminSidebar";
 import AwardsPage from "@/components/Awards/AwardsPage";
-import NonTeachingSidebar from "@/components/NonTeachingSidebar";
+import NonTeachingSidebar from "@/components/Sidebar/NonTeachingSidebar";
 import NonteachingDashboard from "@/components/Dashboard/NonteachingDashboard";
-import TeachingProfile from "@/components/Profile/TeachingProfile";
+import NonteachingProfile from "@/components/Profile/NonteachingProfile";
 import ReviewTab from "@/components/ReviewTab";
+import Publications from "@/components/Publications/Publications";
+import TeachingProfile from "@/components/Profile/TeachingProfile";
 import { useState, ReactNode } from "react";
+import SubmissionsPage from "@/components/Submissions/SubmissionsPage";
 
 type NonTeachingPage =
   | "Home"
   | "Profile"
   | "Publications"
   | "Awards"
+  | "Submissions"
   | "Documents";
 export default function Page() {
   const [activeComponent, setActiveComponent] =
     useState<NonTeachingPage>("Home");
 
   const renderContent = (): ReactNode => {
-    console.log("hi");
     switch (activeComponent) {
       case "Home":
-        return <NonteachingDashboard/>;
+        return <NonteachingDashboard />;
       case "Profile":
-        return <TeachingProfile/>;
+        return <NonteachingProfile />;
       case "Awards":
-        return <AwardsPage/>;
+        return <AwardsPage />;
+      case "Submissions":
+        return <SubmissionsPage />
       case "Publications":
-        return <>Publications</>;
+        return <Publications />;
       case "Documents":
         return <>Documents</>;
     }

@@ -1,11 +1,13 @@
 import { useRouter } from "next/navigation";
-import "../app/globals.css";
+import { signOut } from "@/app/actions/auth";
+import "../../app/globals.css";
 
 type NonTeachingPage =
   | "Home"
   | "Profile"
   | "Publications"
   | "Awards"
+  | "Submissions"
   | "Documents";
 interface NonTeachingSidebarProps {
   setActiveComponent: React.Dispatch<React.SetStateAction<NonTeachingPage>>;
@@ -17,19 +19,22 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
   active,
 }) => {
   const buttonStyle = (label: NonTeachingPage): string =>
-    `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${
-      active === label
-        ? "bg-blue-500/20 text-blue-400"
-        : "hover:bg-gray-700 text-gray-300"
+    `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${active === label
+      ? "bg-blue-500/20 text-blue-400"
+      : "hover:bg-gray-700 text-gray-300"
     }`;
   const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut()
+  }
 
   return (
     <aside className="h-screen w-18 bg-[#1b1e2b] flex flex-col p-8">
       <div className="flex items-center space-x-2 mb-8">
         <span
           className="font-semibold text-lg text-gray-400"
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/nonteaching-home")}
         >
           DCS Records
         </span>
@@ -63,12 +68,27 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
             <span>Awards</span>
           </li>
           <li
+            onClick={() => setActiveComponent("Submissions")}
+            className={buttonStyle("Submissions")}
+          >
+            <span>Submissions</span>
+          </li>
+          <li
             onClick={() => setActiveComponent("Documents")}
             className={buttonStyle("Documents")}
           >
             <span>Documents</span>
           </li>
         </ul>
+      </div>
+
+      <div className="mt-auto">
+        <button
+          onClick={handleLogout}
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-3 rounded-lg transition"
+        >
+          Sign Out
+        </button>
       </div>
     </aside>
   );
