@@ -2,12 +2,12 @@
 import { AcceptedForm, RejectedForm } from "@/lib/types"
 import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
-import AcceptedListing from "./AcceptedListing"
-import AcceptedFormInstance from "./AcceptedInstance"
+import AcceptedListing from "./ValidatedListing"
+import AcceptedFormInstance from "./ValidatedInstance"
 import { useEffect } from "react"
 import PendingAwardsTable from "../PendingAwardsTable"
-import RejectedListing from "./RejectedListing"
-import RejectedFormInstance from "./RejectedFormInstance"
+import RejectedListing from "./ReturnedListing"
+import RejectedFormInstance from "./ReturnedFormInstance"
 
 
 

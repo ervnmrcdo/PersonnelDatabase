@@ -1,7 +1,7 @@
 import sql from "@/config/db"
 import { NextApiRequest, NextApiResponse } from "next"
 
-export default async function RejectAward(
+export default async function ReturnAward(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
@@ -12,7 +12,7 @@ export default async function RejectAward(
 
 		const post = await sql`
 			UPDATE pendingawards
-			SET status = 'REJECTED', reviewed_by_admin_id = ${admin_id}
+			SET status = 'RETURNED', reviewed_by_admin_id = ${admin_id}
 			WHERE submission_id = ${submission_id} AND status = 'PENDING'
 			`
 		return res.status(200).json(post);

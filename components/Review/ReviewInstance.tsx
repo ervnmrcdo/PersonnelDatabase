@@ -54,7 +54,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
     }
   }
 
-  const rejectPDF = async () => {
+  const returnPDF = async () => {
 
     try {
       const payload = {
@@ -106,8 +106,8 @@ export default function ReviewInstance({ data, onBack }: Props) {
           Sign and Return
         </button>
         <button className="px-4 py-2 border rounded-md"
-          onClick={() => rejectPDF()}
-        >Reject</button>
+          onClick={() => returnPDF()}
+        >with Errors</button>
       </div>
 
       {

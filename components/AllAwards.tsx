@@ -48,7 +48,7 @@ export default function AllAwards() {
                     </div>
                 ) : pendingAwards.length === 0 ? (
                     <div className="text-center py-8 text-gray-500">
-                        No pending awards at this time.
+                        Database doesn't contain past awards.
                     </div>
                 ) : (
                     <div className="overflow-x-auto shadow-md rounded-lg">
@@ -94,14 +94,14 @@ export default function AllAwards() {
                                             {new Date(award.dateSubmitted).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {(award.status === 'ACCEPTED') && (<span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-yellow-800">
+                                            {(award.status === 'VALIDATED') && (<span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-yellow-800">
                                                 {award.status}
                                             </span>
                                             )}
                                             {award.status === 'PENDING' && (<span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                                 {award.status}
                                             </span>)}
-                                            {award.status === 'REJECTED' && (<span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-yellow-800">
+                                            {award.status === 'RETURNED' && (<span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-yellow-800">
                                                 {award.status}
                                             </span>
                                             )}

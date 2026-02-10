@@ -53,12 +53,9 @@ export default function EditableAwardForm({
     return result
   }
 
-
   const handleChange = (key: string, value: string | boolean) => {
     setFormData((prev) => {
       const updated = { ...prev };
-
-      console.log(value)
 
       switch (key) {
         case 'WSCC':
@@ -100,20 +97,41 @@ export default function EditableAwardForm({
     });
   };
 
+  function constraints(formData: IPAFormData): boolean {
+    // incomplete, should be exactly 1 journal indexed
+    // if (formData.WSCC) { alert('Exactly 1 indexed location'); return false; }
+    // if (!formData.impactFactor && !formData.impactFactorYear) { alert('Missing Impact Factor Data'); return false; }
+    // if (!formData.upSystemFunding && !formData.upCUGrant && !formData.dost && !formData.otherFunding) { alert('Missing at least 1 funding source.'); return false; }
+    // if (!formData.otherFunding && !formData.otherFundingSpecfics) { alert('Specify other funding sources.'); return false; }
+    // if (!formData.author1Personnel && !formData.author1UpAffiliated) { alert('Missing general type of affiliation'); return false; }
+    // if (formData.author1Personnel && !formData.author1Faculty && !formData.author1ResearchFaculty && !formData.author1REPS && !formData.author1AdminStaff) {
+    //   alert('Missing specific type of UP Personnel'); return false;
+    // }
+    // if (formData.author1UpAffiliated && !formData.author1Student && !formData.author1ProjectPersonnell) {
+    //   alert('Missing specific type of UP affiliated'); return false;
+    // }
+    // if (formData.author1UpAffiliated && !formData.author1Student && !formData.author1ProjectPersonnell) {
+    //   alert('Missing specific type of UP affiliated'); return false;
+    // }
+    // incomplete, should be exactly 1 status of appointment 
+    return true;
+
+  }
+
   return (
     <div className="relative w-[700px] mx-auto mt-6">
       <div className="flex">
         <button
           onClick={() => {
             formData.shouldSubmit = true;
-            onDownload(formData, true);
+            constraints(formData.ipaData) && onDownload(formData, false);
           }}
           className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           Submit Application
         </button>
         <button
-          onClick={() => onDownload(formData, false)}
+          onClick={() => constraints(formData.ipaData) && onDownload(formData, false)}
           className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           Download Filled PDF

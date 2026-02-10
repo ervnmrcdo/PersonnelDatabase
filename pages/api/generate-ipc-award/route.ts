@@ -390,13 +390,9 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       `;
       console.log('Verification query:', check);
 
-      // res.setHeader("Content-Type", "application/pdf");
-      // res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
       return res.status(200).json(result);
     }
 
-    // res.setHeader("Content-Type", "application/pdf");
-    // res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
     return res.status(200).send(Buffer.from(pdfBytes));
   } catch (err) {
     console.error(err);
