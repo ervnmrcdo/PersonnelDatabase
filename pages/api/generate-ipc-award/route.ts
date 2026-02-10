@@ -376,8 +376,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           1,
           ${buffer},
           'PENDING',
-          CURRENT_DATE
-        )
+          NOW())
         RETURNING *;
       `;
       console.log('INSERT result:', result);
