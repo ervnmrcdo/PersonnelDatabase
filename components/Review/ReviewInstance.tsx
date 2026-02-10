@@ -62,12 +62,12 @@ export default function ReviewInstance({ data, onBack }: Props) {
         submission_id: data.id,
       }
 
-      const rejectPdf = await fetch('/api/admin/reject-form/route', {
+      const rejectPdf = await fetch('/api/admin/return-form/route', {
         method: "POST",
         body: JSON.stringify(payload),
       });
       if (rejectPdf.ok) {
-        alert('Form rejected.')
+        alert('Form returned.')
       }
     } catch (err) {
       alert(err)
@@ -107,7 +107,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
         </button>
         <button className="px-4 py-2 border rounded-md"
           onClick={() => returnPDF()}
-        >with Errors</button>
+        >Return with Errors</button>
       </div>
 
       {

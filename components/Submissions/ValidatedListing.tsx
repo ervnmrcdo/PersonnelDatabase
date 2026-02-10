@@ -39,7 +39,7 @@ export default function AcceptedListing({ onSelect }: Props) {
 
     return (<div>
         <div className="bg-white rounded-xl shadow p-6 mt-5">
-            <h1 className="text-2xl font-bold mb-6">Accepted</h1>
+            <h1 className="text-2xl font-bold mb-6">Validated</h1>
 
 
             <div className="space-y-4">

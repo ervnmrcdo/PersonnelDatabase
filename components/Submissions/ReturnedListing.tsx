@@ -6,11 +6,13 @@ type Props = {
     onSelect: (data: RejectedForm) => void;
 }
 
-export default function RejectedListing({ onSelect }: Props) {
+export default function ReturnedListing({ onSelect }: Props) {
 
     const [step, setStep] = useState<'listing' | 'accepted-review'>('listing')
+    //
     // should store selected data to be viewed later
     const [rejectedForm, setRejectedForm] = useState<RejectedForm | null>(null)
+    //
     // stores retrieved data
     const [rejectedData, setRejectedData] = useState<RejectedForm[]>([])
     // const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -22,7 +24,7 @@ export default function RejectedListing({ onSelect }: Props) {
     }
 
     useEffect(() => {
-        fetch("/api/get/rejected-forms", {
+        fetch("/api/get/returned-forms", {
             method: 'POST',
             body: JSON.stringify(payload)
         }).then((res) => res.json()).then((result) => {
@@ -32,14 +34,15 @@ export default function RejectedListing({ onSelect }: Props) {
                 firstName: item.first_name,
                 lastName: item.last_name,
                 date_submitted: item.date_submitted,
-                award_title: item.title
+                award_title: item.title,
+                pdf_json_data: item.pdf_json_data
             })))
         })
     }, [])
 
     return (<div>
         <div className="bg-white rounded-xl shadow p-6 mt-5">
-            <h1 className="text-2xl font-bold mb-6">Rejected</h1>
+            <h1 className="text-2xl font-bold mb-6">Returned</h1>
 
 
             <div className="space-y-4">

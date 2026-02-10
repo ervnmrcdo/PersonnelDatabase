@@ -52,6 +52,7 @@ export interface RejectedForm {
   pdfBufferData: string;
   date_submitted: string;
   award_title: string;
+  pdf_json_data: JSON;
 }
 
 export interface PendingAward {
@@ -69,6 +70,13 @@ export interface EditableAwardFormData {
   shouldSubmit: boolean;
 }
 
+export interface RawData {
+  applicant: Author;
+  authors: Author[];
+  selectedPublication: Publication;
+  selectedAward: Award | null;
+  shouldSubmit: boolean;
+}
 
 export interface IPAFormData {
   articleTitle: string;

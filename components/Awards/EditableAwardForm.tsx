@@ -1,57 +1,27 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import IpaFormTemplate from "./IpaAwardTemplate";
-import { Author, Award, EditableAwardFormData, IPAFormData, Publication } from "@/lib/types";
+import { Author, Award, EditableAwardFormData, IPAFormData, Publication, RawData } from "@/lib/types";
 import { initialIPAFormData } from "@/lib/classes";
-
-interface RawData {
-  applicant: Author;
-  authors: Author[];
-  selectedPublication: Publication;
-  selectedAward: Award | null;
-  shouldSubmit: boolean;
-}
+import { transformToIPAFormData } from "@/utils/transformRawData";
 
 export interface EditableAwardFormProps {
-  initialData: RawData;
+  initialData: IPAFormData;
+  shouldSubmit: boolean;
   onDownload: (data: any, shouldSubmit: boolean) => void;
 }
 
-
 export default function EditableAwardForm({
   initialData,
+  shouldSubmit,
   onDownload,
 }: EditableAwardFormProps) {
 
   const initialFormData: EditableAwardFormData = {
-    ipaData: transformToIPAFormData(initialData),
-    shouldSubmit: initialData.shouldSubmit
+    ipaData: initialData,
+    shouldSubmit: shouldSubmit
   }
   const [formData, setFormData] = useState<EditableAwardFormData>(initialFormData);
-
-
-  function transformToIPAFormData(rawData: RawData): IPAFormData {
-    const result = new initialIPAFormData({
-      articleTitle: rawData.selectedPublication.title,
-      completeCitation: `${rawData.selectedPublication.title}, ${rawData.selectedPublication.journalName}, ${rawData.selectedPublication.volumeNumber}, ${rawData.selectedPublication.pageNumber}`,
-      author1NameLastFirst: `${rawData.authors[0].lastName}, ${rawData.authors[0].firstName}, ${rawData.authors[0].middleName}`,
-      author1UniversityAndDept: `${rawData.authors[0].university}/${rawData.authors[0].department}`,
-      totalAuthorNumber: rawData.authors.length.toString(),
-      journalName: rawData.selectedPublication.journalName,
-      dateOfPublication: rawData.selectedPublication.date,
-      publisherName: rawData.selectedPublication.publisher,
-      author1Name: `${rawData.authors[0].firstName} ${rawData.authors[0].middleName}, ${rawData.authors[0].lastName}`,
-      author1University: rawData.authors[0].university,
-      author1College: rawData.authors[0].college,
-      author1Department: rawData.authors[0].department,
-      author1Contact: rawData.authors[0].contactNo,
-      author1Position: rawData.authors[0].position,
-      author1EmailAddress: rawData.authors[0].emailAddress,
-
-
-    })
-    return result
-  }
 
   const handleChange = (key: string, value: string | boolean) => {
     setFormData((prev) => {
@@ -124,7 +94,7 @@ export default function EditableAwardForm({
         <button
           onClick={() => {
             formData.shouldSubmit = true;
-            constraints(formData.ipaData) && onDownload(formData, false);
+            constraints(formData.ipaData) && onDownload(formData, true);
           }}
           className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >

@@ -367,7 +367,8 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           award_id,
           attached_files,
           status,
-          date_submitted
+          date_submitted,
+          pdf_json_data
         )
         VALUES (
           ${"NONTEACHING"},
@@ -376,7 +377,8 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           1,
           ${buffer},
           'PENDING',
-          CURRENT_DATE
+          CURRENT_DATE,
+          ${JSON.stringify(ipaData)}
         )
         RETURNING *;
       `;

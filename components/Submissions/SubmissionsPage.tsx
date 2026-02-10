@@ -4,21 +4,20 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
 import AcceptedListing from "./ValidatedListing"
 import AcceptedFormInstance from "./ValidatedInstance"
-import { useEffect } from "react"
 import PendingAwardsTable from "../PendingAwardsTable"
-import RejectedListing from "./ReturnedListing"
-import RejectedFormInstance from "./ReturnedFormInstance"
+import ReturnedListing from "./ReturnedListing"
+import ReturnedFormInstance from "./ReturnedFormInstance"
 
 
 
 export default function SubmissionsPage() {
     const [selectedAccepted, setSelectedAccepted] = useState<AcceptedForm | null>(null)
-    const [selectedRejected, setSelectedRejected] = useState<RejectedForm | null>(null)
+    const [selectedReturned, setSelectedReturned] = useState<RejectedForm | null>(null)
 
     return (
         <div className="p-6">
             <AnimatePresence mode="wait">
-                {(!selectedAccepted && !selectedRejected) && (
+                {(!selectedAccepted && !selectedReturned) && (
                     <motion.div
                         key='list'
                         initial={{ x: 100, opacity: 0 }}
@@ -27,12 +26,12 @@ export default function SubmissionsPage() {
                         transition={{ duration: 0.3 }}
                     >
                         <AcceptedListing onSelect={setSelectedAccepted} />
-                        <RejectedListing onSelect={setSelectedRejected} />
+                        <ReturnedListing onSelect={setSelectedReturned} />
                         <PendingAwardsTable />
                     </motion.div>
                 )}
 
-                {(selectedAccepted && !selectedRejected) && (
+                {(selectedAccepted && !selectedReturned) && (
                     <motion.div
                         key='list'
                         initial={{ x: 100, opacity: 0 }}
@@ -45,7 +44,7 @@ export default function SubmissionsPage() {
                     </motion.div>
                 )}
 
-                {(!selectedAccepted && selectedRejected) && (
+                {(!selectedAccepted && selectedReturned) && (
                     <motion.div
                         key='list'
                         initial={{ x: 100, opacity: 0 }}
@@ -53,7 +52,7 @@ export default function SubmissionsPage() {
                         exit={{ x: -100, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <RejectedFormInstance data={selectedRejected} onBack={() => setSelectedRejected(null)} />
+                        <ReturnedFormInstance data={selectedReturned} onBack={() => setSelectedReturned(null)} />
 
                     </motion.div>
                 )}

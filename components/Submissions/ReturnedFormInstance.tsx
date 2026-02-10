@@ -1,7 +1,9 @@
-import { AcceptedForm } from "@/lib/types"
+import { AcceptedForm, IPAFormData, RejectedForm } from "@/lib/types"
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+import EditableAwardForm from "../Awards/EditableAwardForm";
+import { transformToIPAFormData } from "@/utils/transformRawData";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
@@ -9,11 +11,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 type Props = {
-    data: AcceptedForm;
+    data: RejectedForm;
     onBack: () => void;
 }
 
-export default function RejectedFormInstance({ data, onBack }: Props) {
+export default function ReturnedFormInstance({ data, onBack }: Props) {
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [numPages, setNumPages] = useState<number>();
 
@@ -30,24 +32,9 @@ export default function RejectedFormInstance({ data, onBack }: Props) {
         a.click();
     }
 
-    useEffect(() => {
-        if (data) {
-            const foo = Buffer.from(data.pdfBufferData).toString('base64')
-            const blob = new Blob(
-                [Uint8Array.from(atob(foo), (c) => c.charCodeAt(0))],
-                { type: "application/pdf" },
-            );
-            // const blob = new Blob(
-            //     [Uint8Array.from(data.pdfBufferData), (c) => c.charCodeAt(0))],
-            //     { type: 'application/pdf' },)
-            setPdfUrl(URL.createObjectURL(blob))
-            console.log(pdfUrl)
-        }
-    }, [data])
-
+    const foo = data.pdf_json_data as unknown as IPAFormData
 
     return (
-
         <div className="bg-white rounded-xl shadow p-6 space-y-4">
             <button
                 onClick={onBack}
@@ -64,31 +51,35 @@ export default function RejectedFormInstance({ data, onBack }: Props) {
 
             <div className="flex gap-3">
                 <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={download}>
-                    Download for Printing
+                    Resubmit
                 </button>
             </div>
-            {
-                pdfUrl ? (
-                    <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-gray-50">
-                        <Document
-                            file={pdfUrl}
-                            onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-                        >
-                            {Array.from(new Array(numPages), (_, i) => (
-                                <Page
-                                    key={i}
-                                    pageNumber={i + 1}
-                                    renderTextLayer={false}
-                                    renderAnnotationLayer={false}
-                                    className="mb-4 shadow"
-                                />
-                            ))}
-                        </Document>
-                    </div>
-                ) : (
-                    <p>No PDF attached.</p>
-                )
-            }
+
+
+            <EditableAwardForm initialData={foo} shouldSubmit={false} onDownload={() => { }} />
         </div >
     )
 }
+
+// {
+//                 pdfUrl ? (
+//                     <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-gray-50">
+//                         <Document
+//                             file={pdfUrl}
+//                             onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+//                         >
+//                             {Array.from(new Array(numPages), (_, i) => (
+//                                 <Page
+//                                     key={i}
+//                                     pageNumber={i + 1}
+//                                     renderTextLayer={false}
+//                                     renderAnnotationLayer={false}
+//                                     className="mb-4 shadow"
+//                                 />
+//                             ))}
+//                         </Document>
+//                     </div>
+//                 ) : (
+//                     <p>No PDF attached.</p>
+//                 )
+//             }

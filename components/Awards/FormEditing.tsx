@@ -1,6 +1,7 @@
 import { FC } from "react";
 import EditableAwardForm from "./EditableAwardForm";
-import { Author, Award, Publication } from "@/lib/types";
+import { Author, Award, Publication, RawData } from "@/lib/types";
+import { transformToIPAFormData } from "@/utils/transformRawData";
 
 interface FormEditingProps {
   handleBack: () => void;
@@ -8,15 +9,16 @@ interface FormEditingProps {
   selectedPublication: Publication;
   autoData: Author;
 }
+
 const FormEditing: FC<FormEditingProps> = ({
   handleBack,
   selectedAward,
   selectedPublication,
   autoData,
+
 }) => {
   const handleDownload = async (data: any, shouldSubmit: boolean) => {
     try {
-
       const response = await fetch("/api/generate-ipc-award/route", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,6 +45,14 @@ const FormEditing: FC<FormEditingProps> = ({
       console.log(`Internal Server Error: ${err}`)
     }
   };
+
+  const foo: RawData = {
+    applicant: autoData,
+    authors: selectedPublication.authors,
+    selectedPublication: selectedPublication,
+    selectedAward: selectedAward,
+    shouldSubmit: false,
+  }
 
   return (
     <>
@@ -76,13 +86,8 @@ const FormEditing: FC<FormEditingProps> = ({
         </div>
         <div className="mt-6 border rounded-lg overflow-visible">
           <EditableAwardForm
-            initialData={{
-              applicant: autoData,
-              authors: selectedPublication.authors,
-              selectedPublication: selectedPublication,
-              selectedAward: selectedAward,
-              shouldSubmit: false,
-            }}
+            initialData={transformToIPAFormData(foo)}
+            shouldSubmit={false}
             onDownload={handleDownload}
           />
         </div>
