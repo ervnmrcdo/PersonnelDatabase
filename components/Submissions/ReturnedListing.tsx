@@ -35,7 +35,8 @@ export default function ReturnedListing({ onSelect }: Props) {
                 lastName: item.last_name,
                 date_submitted: item.date_submitted,
                 award_title: item.title,
-                pdf_json_data: item.pdf_json_data
+                pdf_json_data: item.pdf_json_data,
+                remarks: item.remarks
             })))
         })
     }, [])
@@ -56,6 +57,7 @@ export default function ReturnedListing({ onSelect }: Props) {
                             <p className="font-semibold text-lg">{item.firstName + item.lastName}</p>
                             <p className="text-sm">{item.award_title}</p>
                             <p className="text-xs text-gray-400">{item.date_submitted}</p>
+                            <p className="text-xs text-gray-400">{item.remarks}</p>
                         </div>
                         <ChevronRight className="text-gray-400" />
                     </div>

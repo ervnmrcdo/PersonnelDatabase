@@ -52,6 +52,11 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
                 <p className="text-xs text-gray-400">{data.date_submitted}</p>
             </div>
 
+            <div className="p-4 bg-gray-100 rounded-lg">
+                <p className="font-bold text-med">{`Remarks:`}</p>
+                <p className="text-sm">{data.remarks}</p>
+            </div>
+
 
             <EditableAwardForm initialData={foo} onSubmit={handleSubmit} onResubmit={handleResubmit} onDownload={handleDownload} isResubmitting={true}
                 submission_id={data.submission_id} />

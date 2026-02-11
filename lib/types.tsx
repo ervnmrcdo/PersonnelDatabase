@@ -53,6 +53,7 @@ export interface RejectedForm {
   date_submitted: string;
   award_title: string;
   pdf_json_data: JSON;
+  remarks: string;
 }
 
 export interface PendingAward {
