@@ -54,7 +54,7 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
 
             <div className="p-4 bg-gray-100 rounded-lg">
                 <p className="font-bold text-med">{`Remarks:`}</p>
-                <p className="text-sm">{data.remarks}</p>
+                <p className="text-sm">{data.remarks ?? 'No remarks noted.'}</p>
             </div>
 
 

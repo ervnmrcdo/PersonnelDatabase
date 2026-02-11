@@ -34,6 +34,7 @@ export type Application = {
   award: string;
   dateSubmitted: string;
   pdfBase64: string;
+  logs: SubmissionLog[];
 };
 
 export interface AcceptedForm {
@@ -43,6 +44,7 @@ export interface AcceptedForm {
   pdfBufferData: string;
   date_submitted: string;
   award_title: string;
+  logs: SubmissionLog[];
 }
 
 export interface RejectedForm {
@@ -54,6 +56,7 @@ export interface RejectedForm {
   award_title: string;
   pdf_json_data: JSON;
   remarks: string;
+  logs: SubmissionLog[];
 }
 
 export interface PendingAward {
@@ -77,6 +80,12 @@ export interface RawData {
   selectedPublication: Publication;
   selectedAward: Award | null;
   shouldSubmit: boolean;
+}
+
+export interface SubmissionLog {
+  remarks: string;
+  date: string;
+  action: 'RETURNED' | 'SUBMITTED' | 'VALIDATED' | 'RESUBMITTED';
 }
 
 export interface IPAFormData {

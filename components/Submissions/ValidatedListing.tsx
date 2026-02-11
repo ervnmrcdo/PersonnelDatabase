@@ -32,7 +32,8 @@ export default function AcceptedListing({ onSelect }: Props) {
                 firstName: item.first_name,
                 lastName: item.last_name,
                 date_submitted: item.date_submitted,
-                award_title: item.title
+                award_title: item.title,
+                // logs: item.logs
             })))
         })
     }, [])

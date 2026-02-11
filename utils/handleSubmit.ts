@@ -21,8 +21,15 @@ export default async function handleSubmit(data: any) {
     const temp = await fetch('/api/post-ipa-award/route', {
       method: "POST",
       body: JSON.stringify(payload)
-
     })
+
+    if (temp.ok) {
+      alert('Form Submitted')
+    } else {
+      alert('Failed to submit form.')
+    }
+
+
   } catch (err) {
     console.log(err)
     // return res.status(500).json(`Internal Server Error, ${err}`);

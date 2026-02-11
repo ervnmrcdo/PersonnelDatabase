@@ -1,4 +1,4 @@
-import { Application } from "@/lib/types";
+import { Application, SubmissionLog } from "@/lib/types";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import A from "../AllAwards";
@@ -23,10 +23,12 @@ export default function ListedApplications({ onSelect }: Props) {
             award: item.awardTitle,
             dateSubmitted: item.dateSubmitted,
             pdfBase64: item.pdfBase64,
+            logs: item.logs as SubmissionLog,
           })),
         );
       });
   }, []);
+  console.log(data)
   return (
     <>
       <div className="bg-white rounded-xl shadow p-6">

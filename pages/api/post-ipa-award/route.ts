@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import sql from "@/config/db";
+import { SubmissionLog } from "@/lib/types";
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -14,15 +15,22 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
     const foo = Buffer.from(buffer)
 
+    const initialLog: SubmissionLog[] = [
+      {
+        action: 'SUBMITTED',
+        remarks: '',
+        date: Date().toLocaleString(),
+      }
+    ]
 
     const teachingId = null;
     const nonTeachingId = 1;
 
     const result = await sql`
         INSERT INTO PendingAwards 
-          (submitter_type, submitter_teaching_id, submitter_nonteaching_id, award_id, attached_files, status, date_submitted, pdf_json_data)
+          (submitter_type, submitter_teaching_id, submitter_nonteaching_id, award_id, attached_files, status, date_submitted, pdf_json_data, logs)
         VALUES 
-          ( ${"NONTEACHING"}, ${teachingId}, ${nonTeachingId}, 1, ${foo}, 'PENDING', CURRENT_DATE, ${JSON.stringify(ipaData)})
+          ( ${"NONTEACHING"}, ${teachingId}, ${nonTeachingId}, 1, ${foo}, 'PENDING', CURRENT_DATE, ${JSON.stringify(ipaData)}, ${JSON.stringify(initialLog)})
         RETURNING *;
       `;
 

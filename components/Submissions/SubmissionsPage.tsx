@@ -7,6 +7,8 @@ import AcceptedFormInstance from "./ValidatedInstance"
 import PendingAwardsTable from "../PendingAwardsTable"
 import ReturnedListing from "./ReturnedListing"
 import ReturnedFormInstance from "./ReturnedFormInstance"
+import SubmissionLogs from "../SubmissionLogs"
+import { fileSubmissionLogs } from "@/lib/temp"
 
 
 
@@ -40,7 +42,7 @@ export default function SubmissionsPage() {
                         transition={{ duration: 0.3 }}
                     >
                         <AcceptedFormInstance data={selectedAccepted} onBack={() => setSelectedAccepted(null)} />
-
+                        <SubmissionLogs logs={selectedAccepted.logs} />
                     </motion.div>
                 )}
 
@@ -53,6 +55,7 @@ export default function SubmissionsPage() {
                         transition={{ duration: 0.3 }}
                     >
                         <ReturnedFormInstance data={selectedReturned} onBack={() => setSelectedReturned(null)} />
+                        <SubmissionLogs logs={selectedReturned.logs} />
 
                     </motion.div>
                 )}

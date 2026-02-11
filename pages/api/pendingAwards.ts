@@ -26,6 +26,7 @@ export default async function PendingAwards(
         ? Buffer.from(r.attached_files).toString("base64")
         : null,
       awardTitle: r.title,
+      logs: r.logs,
     }));
 
     return res.status(200).json(formatted);

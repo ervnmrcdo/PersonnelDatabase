@@ -36,10 +36,13 @@ export default function ReturnedListing({ onSelect }: Props) {
                 date_submitted: item.date_submitted,
                 award_title: item.title,
                 pdf_json_data: item.pdf_json_data,
-                remarks: item.remarks
+                remarks: item.remarks,
+                logs: item.logs
             })))
         })
     }, [])
+
+    console.log(rejectedData)
 
     return (<div>
         <div className="bg-white rounded-xl shadow p-6 mt-5">
@@ -56,8 +59,8 @@ export default function ReturnedListing({ onSelect }: Props) {
                         <div>
                             <p className="font-semibold text-lg">{item.firstName + item.lastName}</p>
                             <p className="text-sm">{item.award_title}</p>
-                            <p className="text-xs text-gray-400">{item.date_submitted}</p>
-                            <p className="text-xs text-gray-400">{item.remarks}</p>
+                            {/* <p className="text-xs text-gray-400">{item.date_submitted}</p> */}
+                            <p className="text-xs text-red-400">{(item.remarks) ? ` ${item.remarks}` : ''}</p>
                         </div>
                         <ChevronRight className="text-gray-400" />
                     </div>
