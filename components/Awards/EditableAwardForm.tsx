@@ -7,19 +7,23 @@ import { transformToIPAFormData } from "@/utils/transformRawData";
 
 export interface EditableAwardFormProps {
   initialData: IPAFormData;
-  shouldSubmit: boolean;
-  onDownload: (data: any, shouldSubmit: boolean) => void;
+  isResubmitting: boolean;
+  onSubmit: (data: any) => void;
+  onResubmit: (data: any) => void;
+  onDownload: (data: any) => void;
 }
 
 export default function EditableAwardForm({
   initialData,
-  shouldSubmit,
+  isResubmitting,
+  onSubmit,
+  onResubmit,
   onDownload,
 }: EditableAwardFormProps) {
 
   const initialFormData: EditableAwardFormData = {
     ipaData: initialData,
-    shouldSubmit: shouldSubmit
+    isResubmitting: false,
   }
   const [formData, setFormData] = useState<EditableAwardFormData>(initialFormData);
 
@@ -90,23 +94,37 @@ export default function EditableAwardForm({
 
   return (
     <div className="relative w-[700px] mx-auto mt-6">
-      <div className="flex">
-        <button
-          onClick={() => {
-            formData.shouldSubmit = true;
-            constraints(formData.ipaData) && onDownload(formData, true);
-          }}
-          className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Submit Application
-        </button>
-        <button
-          onClick={() => constraints(formData.ipaData) && onDownload(formData, false)}
-          className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Download Filled PDF
-        </button>
-      </div>
+      {(isResubmitting) ? (
+        <div className="flex">
+          <button
+            onClick={() => {
+              //need to fix submitting variables, too much ambiguity
+              formData.isResubmitting = true;
+              constraints(formData.ipaData) && onResubmit(formData);
+            }}
+            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Resubmit
+          </button>
+        </div>) : (
+        <div className="flex">
+          <button
+            onClick={() => {
+              constraints(formData.ipaData) && onSubmit(formData);
+            }}
+            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Submit Application
+          </button>
+          <button
+            onClick={() => constraints(formData.ipaData) && onDownload(formData)}
+            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Download Filled PDF
+          </button>
+        </div>)
+      }
+
       <IpaFormTemplate />
 
       <input

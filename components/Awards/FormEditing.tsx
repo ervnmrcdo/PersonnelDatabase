@@ -2,6 +2,9 @@ import { FC } from "react";
 import EditableAwardForm from "./EditableAwardForm";
 import { Author, Award, Publication, RawData } from "@/lib/types";
 import { transformToIPAFormData } from "@/utils/transformRawData";
+import { handleDownload } from "@/utils/handleDownload";
+import handleSubmit from "@/utils/handleSubmit";
+import { handleResubmit } from "@/utils/handleResubmit";
 
 interface FormEditingProps {
   handleBack: () => void;
@@ -17,34 +20,6 @@ const FormEditing: FC<FormEditingProps> = ({
   autoData,
 
 }) => {
-  const handleDownload = async (data: any, shouldSubmit: boolean) => {
-    try {
-      const response = await fetch("/api/generate-ipc-award/route", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (shouldSubmit) {
-        if (response.ok) {
-          alert('Form successfully Submitted.')
-        } else {
-          alert('Failed to submit application.')
-        }
-        return;
-      }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "ipc-award-form.pdf";
-      a.click();
-
-    } catch (err) {
-      alert('Submission Failed');
-      console.log(`Internal Server Error: ${err}`)
-    }
-  };
 
   const foo: RawData = {
     applicant: autoData,
@@ -87,8 +62,10 @@ const FormEditing: FC<FormEditingProps> = ({
         <div className="mt-6 border rounded-lg overflow-visible">
           <EditableAwardForm
             initialData={transformToIPAFormData(foo)}
-            shouldSubmit={false}
+            onSubmit={handleSubmit}
+            onResubmit={handleResubmit}
             onDownload={handleDownload}
+            isResubmitting={false}
           />
         </div>
       </div>

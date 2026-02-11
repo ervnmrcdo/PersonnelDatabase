@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import EditableAwardForm from "../Awards/EditableAwardForm";
 import { transformToIPAFormData } from "@/utils/transformRawData";
+import { handleDownload } from "@/utils/handleDownload";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
@@ -49,14 +50,8 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
                 <p className="text-xs text-gray-400">{data.date_submitted}</p>
             </div>
 
-            <div className="flex gap-3">
-                <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={download}>
-                    Resubmit
-                </button>
-            </div>
 
-
-            <EditableAwardForm initialData={foo} shouldSubmit={false} onDownload={() => { }} />
+            <EditableAwardForm initialData={foo} shouldSubmit={false} onDownload={handleDownload} isResubmitting={true} />
         </div >
     )
 }

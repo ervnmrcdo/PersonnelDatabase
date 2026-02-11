@@ -22,4 +22,32 @@ export function transformToIPAFormData(rawData: RawData): IPAFormData {
   return result
 }
 
+export const handleDownload = async (data: any, shouldSubmit: boolean) => {
+  try {
+    const response = await fetch("/api/generate-ipc-award/route", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (shouldSubmit) {
+      if (response.ok) {
+        alert('Form successfully Submitted.')
+      } else {
+        alert('Failed to submit application.')
+      }
+      return;
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "ipc-award-form.pdf";
+    a.click();
+
+  } catch (err) {
+    alert('Submission Failed');
+    console.log(`Internal Server Error: ${err}`)
+  }
+};
 

@@ -1,20 +1,14 @@
+import { IPAFormData } from "@/lib/types";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
-import sql from "@/config/db";
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
+export default async function generateIPAPDF(
+  req: NextApiRequest, res: NextApiResponse
+) {
+  const { ipaData } = JSON.parse(await req.body)
   try {
-    if (req.method !== "POST") {
-      return res.status(405).send("Method Not Allowed");
-    }
-    const data = await req.body;
-
-    const {
-      ipaData,
-      shouldSubmit,
-    } = data;
 
     const templatePath = path.join(process.cwd(), "public/ipc-template.pdf");
     const templateBytes = fs.readFileSync(templatePath);
@@ -29,7 +23,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const { height } = page0.getSize();
 
-    // 🖋️ Write text at specific coordinates (you’ll tweak these values)
     page0.drawText(ipaData.articleTitle || "", {
       x: 130,
       y: height - 530,
@@ -353,51 +346,9 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
     const pdfBytes = await pdfDoc.save();
 
-    if (shouldSubmit) {
-      const buffer = Buffer.from(pdfBytes);
-      console.log(buffer)
-      const teachingId = null;
-      const nonTeachingId = 1;
-
-      const result = await sql`
-        INSERT INTO PendingAwards (
-          submitter_type,
-          submitter_teaching_id,
-          submitter_nonteaching_id,
-          award_id,
-          attached_files,
-          status,
-          date_submitted,
-          pdf_json_data
-        )
-        VALUES (
-          ${"NONTEACHING"},
-          ${teachingId},
-          ${nonTeachingId},
-          1,
-          ${buffer},
-          'PENDING',
-          CURRENT_DATE,
-          ${JSON.stringify(ipaData)}
-        )
-        RETURNING *;
-      `;
-      console.log('INSERT result:', result);
-
-      // Verify what was actually inserted
-      const check = await sql`
-        SELECT submission_id, status, date_submitted, submitter_type, award_id
-        FROM PendingAwards 
-        WHERE submission_id = ${result[0].submission_id};
-      `;
-      console.log('Verification query:', check);
-
-      return res.status(200).json(result);
-    }
-
-    return res.status(200).send(Buffer.from(pdfBytes));
+    return res.status(200).send(Buffer.from(pdfBytes))
   } catch (err) {
-    console.error(err);
-    return res.status(500).json(`Internal Server Error, ${err}`);
+    return res.status(500).json(`Internal Server error: ${err}`)
   }
+
 }

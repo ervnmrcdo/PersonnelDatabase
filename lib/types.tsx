@@ -67,7 +67,7 @@ export interface PendingAward {
 
 export interface EditableAwardFormData {
   ipaData: IPAFormData;
-  shouldSubmit: boolean;
+  isResubmitting: boolean;
 }
 
 export interface RawData {
