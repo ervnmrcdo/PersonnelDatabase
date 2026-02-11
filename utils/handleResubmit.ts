@@ -22,8 +22,13 @@ export default async function handleResubmit(data: EditableAwardFormData, submis
     const temp = await fetch('/api/resubmit-award/route', {
       method: "POST",
       body: JSON.stringify(payload)
-
     })
+
+    if (temp.ok) {
+      alert('Form Resubmitted')
+    } else {
+      alert('Failed to submit form.')
+    }
 
   } catch (err) {
     console.log(err)
