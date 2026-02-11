@@ -17,6 +17,9 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [numPages, setNumPages] = useState<number>();
 
+  const [errorRemarks, setErrorRemarks] = useState<string>("");
+  const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
+
   const acceptPDF = async () => {
 
     try {
@@ -67,12 +70,27 @@ export default function ReviewInstance({ data, onBack }: Props) {
   }
 
   const returnPDF = async () => {
+    if (!errorRemarks.trim()) {
+      alert('Please provide error remarks');
+      return;
+    }
+
+    // console.log(errorRemarks);
+    const returnedLog: SubmissionLog = {
+      action: 'RETURNED',
+      remarks: errorRemarks,
+      date: new Date().toISOString(),
+    }
+
+    const newLogs = [...data.logs]
+    newLogs.push(returnedLog)
 
     try {
       const payload = {
         admin_id: '1',
         submission_id: data.id,
-        logs: '',
+        remarks: errorRemarks,
+        logs: newLogs,
       }
 
       const rejectPdf = await fetch('/api/admin/return-form/route', {
@@ -118,9 +136,47 @@ export default function ReviewInstance({ data, onBack }: Props) {
           Sign and Return
         </button>
         <button className="px-4 py-2 border rounded-md"
-          onClick={() => returnPDF()}
+          onClick={() => setShowErrorDialog(true)}
         >Return with Errors</button>
       </div>
+
+
+      {/* Error Remarks Dialog */}
+      {showErrorDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4">Return with Errors</h3>
+            <p className="text-sm text-gray-600 mb-2">
+              Please specify the errors or issues found in this submission:
+            </p>
+            <textarea
+              className="w-full border rounded-md p-3 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g., Missing signatures on page 3, Incorrect dates, etc."
+              value={errorRemarks}
+              onChange={(e) => setErrorRemarks(e.target.value)}
+              autoFocus
+            />
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                className="px-4 py-2 border rounded-md hover:bg-gray-50"
+                onClick={() => {
+                  setErrorRemarks("");
+                  setShowErrorDialog(false);
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:opacity-50"
+                onClick={returnPDF}
+                disabled={!errorRemarks.trim()}
+              >
+                Submit Errors
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {
         pdfUrl ? (

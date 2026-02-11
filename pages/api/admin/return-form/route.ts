@@ -6,13 +6,14 @@ export default async function ReturnAward(
 	res: NextApiResponse
 ) {
 	const data = await req.body;
-	const { admin_id, submission_id } = JSON.parse(data)
+	const { admin_id, submission_id, remarks, logs } = JSON.parse(data)
+	console.log(remarks, logs)
 
 	try {
 
 		const post = await sql`
 			UPDATE pendingawards
-			SET status = 'RETURNED', reviewed_by_admin_id = ${admin_id}
+			SET status = 'RETURNED', reviewed_by_admin_id = ${admin_id}, remarks = ${remarks}, logs = ${JSON.stringify(logs)}
 			WHERE submission_id = ${submission_id} AND status = 'PENDING'
 			`
 		return res.status(200).json(post);
