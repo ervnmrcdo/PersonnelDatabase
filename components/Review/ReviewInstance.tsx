@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { Application } from "@/lib/types";
+import { Application, SubmissionLog } from "@/lib/types";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
@@ -20,16 +20,25 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const acceptPDF = async () => {
 
     try {
+
+      const verifiedLog: SubmissionLog = {
+        action: 'VALIDATED',
+        remarks: '',
+        date: Date().toLocaleString(),
+      }
+
+      const newLogs = [...data.logs]
+      newLogs.push(verifiedLog)
+
       const signPDF = await fetch('/api/admin/sign-form/route', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          pdfBase64: data.pdfBase64
+          pdfBase64: data.pdfBase64,
         })
       });
 
       const { pdfInBytes } = await signPDF.json()
-      console.log(pdfInBytes.length)
 
       const pdfUInt8 = new Uint8Array(Object.values(pdfInBytes));
       const foo = Buffer.from(pdfUInt8)
@@ -39,6 +48,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
         // change admin id to correspond to uid of admin user
         admin_id: '1',
         submission_id: data.id,
+        newLogs
       }
 
       const response = await fetch('api/admin/post-signed-award/route', {
@@ -48,6 +58,8 @@ export default function ReviewInstance({ data, onBack }: Props) {
       });
       if (response.ok) {
         alert('Form Signed and Returned')
+      } else {
+        alert('Failed to return signed form')
       }
     } catch (err) {
       alert(err)
@@ -60,6 +72,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
       const payload = {
         admin_id: '1',
         submission_id: data.id,
+        logs: '',
       }
 
       const rejectPdf = await fetch('/api/admin/return-form/route', {
@@ -76,7 +89,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
   useEffect(() => {
     if (data.pdfBase64) {
-      console.log(data.pdfBase64);
       const blob = new Blob(
         [Uint8Array.from(atob(data.pdfBase64), (c) => c.charCodeAt(0))],
         { type: "application/pdf" },

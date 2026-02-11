@@ -28,7 +28,6 @@ export default function ListedApplications({ onSelect }: Props) {
         );
       });
   }, []);
-  console.log(data)
   return (
     <>
       <div className="bg-white rounded-xl shadow p-6">

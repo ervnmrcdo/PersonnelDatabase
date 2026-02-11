@@ -30,7 +30,7 @@ function SubmissionLogs({ logs }: SubmissionLogsProps) {
     }
 
     return (
-        <div className="w-full max-w-2xl mx-auto">
+        <div className="bg-white rounded-xl shadow p-6 space-y-4 mt-5">
             <h2 className="text-xl font-bold mb-4">Submission History</h2>
 
             <div className="space-y-3">
