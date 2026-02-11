@@ -10,16 +10,22 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const {
       ipaData,
       buffer,
-      submission_id
+      submission_id,
+      newLogs
     } = data;
+
 
     const foo = Buffer.from(buffer)
     const admin_id = 1;
 
     const result = await sql`
-     	UPDATE pendingawards
-     	SET attached_files = ${foo}, pdf_json_data = ${JSON.stringify(ipaData)}, status = 'PENDING', reviewed_by_admin_id = ${admin_id}
-     	WHERE submission_id = ${submission_id} AND status = 'RETURNED'
+     	UPDATE 
+          pendingawards
+     	SET 
+          attached_files = ${foo}, pdf_json_data = ${JSON.stringify(ipaData)}, status = 'PENDING',
+          reviewed_by_admin_id = ${admin_id}, logs = ${JSON.stringify(newLogs)}
+     	WHERE 
+          submission_id = ${submission_id} AND status = 'RETURNED'
         RETURNING *;
       `;
 

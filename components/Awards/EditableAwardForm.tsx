@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import IpaFormTemplate from "./IpaAwardTemplate";
-import { Author, Award, EditableAwardFormData, IPAFormData, Publication, RawData } from "@/lib/types";
+import { Author, Award, EditableAwardFormData, IPAFormData, Publication, RawData, SubmissionLog } from "@/lib/types";
 import { initialIPAFormData } from "@/lib/classes";
 import { transformToIPAFormData } from "@/utils/transformRawData";
 
@@ -9,9 +9,10 @@ export interface EditableAwardFormProps {
   initialData: IPAFormData;
   isResubmitting: boolean;
   onSubmit: (data: any) => void;
-  onResubmit: (data: any, id: string) => void;
+  onResubmit: (data: any, submission_id: string, logs: SubmissionLog[]) => void;
   onDownload: (data: any) => void;
   submission_id: string;
+  logs: SubmissionLog[] | null;
 }
 
 export default function EditableAwardForm({
@@ -21,6 +22,7 @@ export default function EditableAwardForm({
   onResubmit,
   onDownload,
   submission_id,
+  logs
 }: EditableAwardFormProps) {
 
   console.log(submission_id)
@@ -104,7 +106,7 @@ export default function EditableAwardForm({
             onClick={() => {
               //need to fix submitting variables, too much ambiguity
               formData.isResubmitting = true;
-              constraints(formData.ipaData) && onResubmit(formData, submission_id);
+              constraints(formData.ipaData) && onResubmit(formData, submission_id, logs!);
             }}
             className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >

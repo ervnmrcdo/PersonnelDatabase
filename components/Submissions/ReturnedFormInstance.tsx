@@ -59,30 +59,8 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
 
 
             <EditableAwardForm initialData={foo} onSubmit={handleSubmit} onResubmit={handleResubmit} onDownload={handleDownload} isResubmitting={true}
-                submission_id={data.submission_id} />
+                submission_id={data.submission_id} logs={data.logs} />
         </div >
     )
 }
 
-// {
-//                 pdfUrl ? (
-//                     <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-gray-50">
-//                         <Document
-//                             file={pdfUrl}
-//                             onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-//                         >
-//                             {Array.from(new Array(numPages), (_, i) => (
-//                                 <Page
-//                                     key={i}
-//                                     pageNumber={i + 1}
-//                                     renderTextLayer={false}
-//                                     renderAnnotationLayer={false}
-//                                     className="mb-4 shadow"
-//                                 />
-//                             ))}
-//                         </Document>
-//                     </div>
-//                 ) : (
-//                     <p>No PDF attached.</p>
-//                 )
-//             }

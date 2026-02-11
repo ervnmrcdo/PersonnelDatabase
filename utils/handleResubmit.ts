@@ -1,6 +1,6 @@
-import { EditableAwardFormData, IPAFormData } from "@/lib/types"
+import { EditableAwardFormData, IPAFormData, SubmissionLog } from "@/lib/types"
 
-export default async function handleResubmit(data: EditableAwardFormData, submission_id: string) {
+export default async function handleResubmit(data: EditableAwardFormData, submission_id: string, logs: SubmissionLog[]) {
   try {
 
     const pdf = await fetch('/api/generate-ipa-award/route', {
@@ -12,10 +12,21 @@ export default async function handleResubmit(data: EditableAwardFormData, submis
     const buffer = Buffer.from(new Uint8Array(foo))
     const { ipaData } = data
 
+    const resubmissionLog: SubmissionLog = {
+      action: 'RESUBMITTED',
+      remarks: '',
+      date: Date().toLocaleString()
+    }
+
+    const newLogs = [...logs]
+    newLogs.push(resubmissionLog)
+
+
     const payload = {
       ipaData,
       buffer,
-      submission_id
+      submission_id,
+      newLogs,
     }
 
     console.log(payload)
@@ -32,7 +43,6 @@ export default async function handleResubmit(data: EditableAwardFormData, submis
 
   } catch (err) {
     console.log(err)
-    // return res.status(500).json(`Internal Server Error, ${err}`);
   }
 }
 // export const handleResubmit = async (data: ) => {

@@ -57,7 +57,7 @@ export default function ReturnedListing({ onSelect }: Props) {
                         onClick={() => { onSelect(item) }}
                     >
                         <div>
-                            <p className="font-semibold text-lg">{item.firstName + item.lastName}</p>
+                            <p className="font-semibold text-lg">{item.firstName + ' ' + item.lastName}</p>
                             <p className="text-sm">{item.award_title}</p>
                             {/* <p className="text-xs text-gray-400">{item.date_submitted}</p> */}
                             <p className="text-xs text-red-400">{(item.remarks) ? ` ${item.remarks}` : ''}</p>

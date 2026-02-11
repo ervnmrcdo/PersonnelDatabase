@@ -5,6 +5,7 @@ import { transformToIPAFormData } from "@/utils/transformRawData";
 import { handleDownload } from "@/utils/handleDownload";
 import handleSubmit from "@/utils/handleSubmit";
 import handleResubmit from "@/utils/handleResubmit";
+import SubmissionLogs from "../SubmissionLogs";
 
 interface FormEditingProps {
   handleBack: () => void;
@@ -67,6 +68,7 @@ const FormEditing: FC<FormEditingProps> = ({
             onDownload={handleDownload}
             isResubmitting={false}
             submission_id=''
+            logs={null}
           />
         </div>
       </div>
