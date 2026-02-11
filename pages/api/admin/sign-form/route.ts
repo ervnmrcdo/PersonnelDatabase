@@ -25,12 +25,21 @@ export default async function(
 			height: 300,
 		})
 
+		lastPage.drawText(new Date().toLocaleDateString('en-US', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			timeZone: 'Asia/Manila'
+		}), {
+			x: 85,
+			y: height - 208,
+			size: 10,
+		})
+
 		const pdfInBytes = await pdf.save()
 
-		// return res.status(200).send(Buffer.from(pdfInBytes));
-		return res.status(200).json({
-			pdfInBytes: pdfInBytes,
-		});
+		// return res.status(200).send(Buffer.from(pdfInBytes)) //temp fix to try downloading
+		return res.status(200).json({ pdfInBytes: pdfInBytes, });
 
 	} catch (err) {
 		return res.status(500).json(`Internal Server error: ${err}`)

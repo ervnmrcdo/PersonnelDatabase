@@ -41,6 +41,14 @@ export default function ReviewInstance({ data, onBack }: Props) {
         })
       });
 
+      // const blob = await signPDF.blob()
+      // const url = window.URL.createObjectURL(blob);
+      // const a = document.createElement("a");
+      // a.href = url;
+      // a.download = "ipc-award-form.pdf";
+      // a.click();
+
+
       const { pdfInBytes } = await signPDF.json()
 
       const pdfUInt8 = new Uint8Array(Object.values(pdfInBytes));
