@@ -5,6 +5,8 @@ import { Document, Page, pdfjs } from "react-pdf";
 import EditableAwardForm from "../Awards/EditableAwardForm";
 import { transformToIPAFormData } from "@/utils/transformRawData";
 import { handleDownload } from "@/utils/handleDownload";
+import handleSubmit from "@/utils/handleSubmit";
+import handleResubmit from "@/utils/handleResubmit";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
@@ -51,7 +53,8 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
             </div>
 
 
-            <EditableAwardForm initialData={foo} shouldSubmit={false} onDownload={handleDownload} isResubmitting={true} />
+            <EditableAwardForm initialData={foo} onSubmit={handleSubmit} onResubmit={handleResubmit} onDownload={handleDownload} isResubmitting={true}
+                submission_id={data.submission_id} />
         </div >
     )
 }

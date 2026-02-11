@@ -1,33 +1,64 @@
+import { EditableAwardFormData, IPAFormData } from "@/lib/types"
 
-export const handleResubmit = async (data: any) => {
+export default async function handleResubmit(data: EditableAwardFormData, submission_id: string) {
   try {
-    const response = await fetch("/api/generate-ipc-award/route", {
+
+    const pdf = await fetch('/api/generate-ipa-award/route', {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+      body: JSON.stringify(data)
+    })
 
-    // if (shouldSubmit) {
-    //   if (response.ok) {
-    //     alert('Form successfully Submitted.')
-    //   } else {
-    //     alert('Failed to submit application.')
-    //   }
-    //   return;
-    // }
-    // const blob = await response.blob();
-    // const url = window.URL.createObjectURL(blob);
-    // const a = document.createElement("a");
-    // a.href = url;
-    // a.download = "ipc-award-form.pdf";
-    // a.click();
-    //
+    const foo = await pdf.arrayBuffer()
+    const buffer = Buffer.from(new Uint8Array(foo))
+    const { ipaData } = data
+
+    const payload = {
+      ipaData,
+      buffer,
+      submission_id
+    }
+
+    console.log(payload)
+    const temp = await fetch('/api/resubmit-award/route', {
+      method: "POST",
+      body: JSON.stringify(payload)
+
+    })
+
   } catch (err) {
-    alert('Submission Failed');
-    console.log(`Internal Server Error: ${err}`)
+    console.log(err)
+    // return res.status(500).json(`Internal Server Error, ${err}`);
   }
-};
-
+}
+// export const handleResubmit = async (data: ) => {
+//   try {
+//     const response = await fetch("/api/generate-ipc-award/route", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(data),
+//     });
+//
+// if (shouldSubmit) {
+//   if (response.ok) {
+//     alert('Form successfully Submitted.')
+//   } else {
+//     alert('Failed to submit application.')
+//   }
+//   return;
+// }
+// const blob = await response.blob();
+// const url = window.URL.createObjectURL(blob);
+// const a = document.createElement("a");
+// a.href = url;
+// a.download = "ipc-award-form.pdf";
+// a.click();
+//
+//   } catch (err) {
+//     alert('Submission Failed');
+//     console.log(`Internal Server Error: ${err}`)
+//   }
+// };
+//
 
 // if (isResubmitting && shouldSubmit) {
 //   const buffer = Buffer.from(pdfBytes);

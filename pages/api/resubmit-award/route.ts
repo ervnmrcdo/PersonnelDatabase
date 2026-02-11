@@ -10,19 +10,16 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const {
       ipaData,
       buffer,
+      submission_id
     } = data;
 
     const foo = Buffer.from(buffer)
-
-
-    const teachingId = null;
-    const nonTeachingId = 1;
+    const admin_id = 1;
 
     const result = await sql`
-        INSERT INTO PendingAwards 
-          (submitter_type, submitter_teaching_id, submitter_nonteaching_id, award_id, attached_files, status, date_submitted, pdf_json_data)
-        VALUES 
-          ( ${"NONTEACHING"}, ${teachingId}, ${nonTeachingId}, 1, ${foo}, 'PENDING', CURRENT_DATE, ${JSON.stringify(ipaData)})
+     	UPDATE pendingawards
+     	SET attached_files = ${foo}, pdf_json_data = ${JSON.stringify(ipaData)}, status = 'PENDING', reviewed_by_admin_id = ${admin_id}
+     	WHERE submission_id = ${submission_id} AND status = 'RETURNED'
         RETURNING *;
       `;
 

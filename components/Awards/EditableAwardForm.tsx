@@ -9,8 +9,9 @@ export interface EditableAwardFormProps {
   initialData: IPAFormData;
   isResubmitting: boolean;
   onSubmit: (data: any) => void;
-  onResubmit: (data: any) => void;
+  onResubmit: (data: any, id: string) => void;
   onDownload: (data: any) => void;
+  submission_id: string;
 }
 
 export default function EditableAwardForm({
@@ -19,7 +20,10 @@ export default function EditableAwardForm({
   onSubmit,
   onResubmit,
   onDownload,
+  submission_id,
 }: EditableAwardFormProps) {
+
+  console.log(submission_id)
 
   const initialFormData: EditableAwardFormData = {
     ipaData: initialData,
@@ -100,7 +104,7 @@ export default function EditableAwardForm({
             onClick={() => {
               //need to fix submitting variables, too much ambiguity
               formData.isResubmitting = true;
-              constraints(formData.ipaData) && onResubmit(formData);
+              constraints(formData.ipaData) && onResubmit(formData, submission_id);
             }}
             className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >

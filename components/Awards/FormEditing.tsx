@@ -4,7 +4,7 @@ import { Author, Award, Publication, RawData } from "@/lib/types";
 import { transformToIPAFormData } from "@/utils/transformRawData";
 import { handleDownload } from "@/utils/handleDownload";
 import handleSubmit from "@/utils/handleSubmit";
-import { handleResubmit } from "@/utils/handleResubmit";
+import handleResubmit from "@/utils/handleResubmit";
 
 interface FormEditingProps {
   handleBack: () => void;
@@ -66,6 +66,7 @@ const FormEditing: FC<FormEditingProps> = ({
             onResubmit={handleResubmit}
             onDownload={handleDownload}
             isResubmitting={false}
+            submission_id=''
           />
         </div>
       </div>
