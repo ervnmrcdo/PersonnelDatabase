@@ -52,6 +52,7 @@ export async function POST(req: Request) {
   try {
     const { title, authors, ...publicationFields } = await req.json();
 
+    console.log(authors)
     // Insert publication
     const pubRes = await pool.query(
       `INSERT INTO publications (title, type, publisher, publication_status, date_published, page_number, issue_number, page_numbers, journal_publication, volume_number, total_authors)
@@ -63,6 +64,7 @@ export async function POST(req: Request) {
     const newPublication = pubRes.rows[0];
 
     // Insert authors & link to publication
+
     for (const author of authors) {
       // Insert author
       const authorRes = await pool.query(
