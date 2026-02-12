@@ -62,7 +62,9 @@ const FormEditing: FC<FormEditingProps> = ({
 
         <div className="text-gray-600 space-y-2">
           <p>
-            <strong>Applicant:</strong> {selectedPublication.authors[0].firstName + ' ' + selectedPublication.authors[0].lastName}
+            <strong>Applicant:</strong> {selectedPublication.authors?.[0] ? 
+              `${selectedPublication.authors[0].first_name ?? ''} ${selectedPublication.authors[0].last_name ?? ''}` : 
+              'N/A'}
           </p>
           <p>
             <strong>Selected Award:</strong> {selectedAward?.title}

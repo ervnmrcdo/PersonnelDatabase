@@ -1,7 +1,7 @@
 export interface Author {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
+  first_name?: string;
+  last_name?: string;
+  middle_name?: string;
   university?: string;
   college?: string;
   department?: string;
@@ -23,6 +23,7 @@ export interface Publication {
   date: string;
   journalName: string;
   volumeNumber: string;
+  issueNumber: string
   pageNumber: string;
   publisher: string;
 }
@@ -37,8 +38,8 @@ export type Application = {
 };
 
 export interface AcceptedForm {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   submission_id: string;
   pdfBufferData: string;
   date_submitted: string;
@@ -46,8 +47,8 @@ export interface AcceptedForm {
 }
 
 export interface RejectedForm {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   submission_id: string;
   pdfBufferData: string;
   date_submitted: string;

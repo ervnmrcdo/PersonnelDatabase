@@ -6,6 +6,7 @@ import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
 import { Author, Award, Publication, PendingAward } from "@/lib/types";
 import { awards, tempPublicationsGenerated } from "@/lib/temp";
+import { useAuth } from "@/context/AuthContext";
 
 //
 // interface ApiPublicationData {
@@ -48,15 +49,19 @@ import { awards, tempPublicationsGenerated } from "@/lib/temp";
 // applicant.applicantName = `${applicant.lastName}, ${applicant.firstName} ${applicant.middleName}`;
 
 const AwardsPage: FC = () => {
+  const { user } = useAuth(); // logged-in user
+
   const [step, setStep] = useState<"awards" | "publications" | "form">(
     "awards",
   );
   const [selectedAward, setSelectedAward] = useState<Award | null>(null);
-  const [selectedPublication, setSelectedPublication] =
-    useState<Publication | null>(null);
+  const [selectedPublication, setSelectedPublication] = useState<Publication | null>(null);
 
   const [pendingAwards, setPendingAwards] = useState<PendingAward[]>([]);
   const [isLoadingPending, setIsLoadingPending] = useState(true);
+
+  const [publications, setPublications] = useState<Publication[]>([]);
+  const [loadingPublications, setLoadingPublications] = useState(true);
 
 
   useEffect(() => {
@@ -77,10 +82,45 @@ const AwardsPage: FC = () => {
     fetchPendingAwards();
   }, []);
 
-  const payload = {
-    'id': '1',
-    'submitterType': 'NONTEACHING'
-  }
+    useEffect(() => {
+    const fetchPublications = async () => {
+      if (!user?.id) return;
+      try {
+        const response = await fetch(`/api/publications?authorId=${user.id}`);
+
+        const data = await response.json();
+
+        const formatted = data.map((p:any) => ({
+              id: p.publication_id,
+              title: p.title,
+              authors: p.authors ?? [],
+
+              date: p.date_published,
+              journalName: p.journal_publication,
+              volumeNumber: p.volume_number,
+              pageNumber: p.page_number,
+              issueNumber: p.issue_number,
+              publisher: p.publisher,
+            }));
+
+
+        if (response.ok) {
+          setPublications(formatted);
+        }
+      } catch (error) {
+        console.error("Failed to fetch pending awards:", error);
+      } finally {
+        setLoadingPublications(false);
+      }
+    };
+
+    fetchPublications();
+  }, [user]);
+
+  // const payload = {
+  //   'id': '1',
+  //   'submitterType': 'NONTEACHING'
+  // }
 
   // useEffect(() => {
   //   console.log('allo');
@@ -150,6 +190,7 @@ const AwardsPage: FC = () => {
     if (step === "form") setStep("publications");
     else if (step === "publications") setStep("awards");
   };
+
   return (
     <>
       <div className="relative overflow-hidden p-6">
@@ -176,7 +217,7 @@ const AwardsPage: FC = () => {
               <PublicationSelection
                 handleBack={handleBack}
                 handlePublicationSelect={(pub) => handlePublicationSelect(pub)}
-                publications={tempPublicationsGenerated}
+                publications={publications}
               />
             </motion.div>
           )}

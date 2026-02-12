@@ -31,26 +31,31 @@ export default function EditableAwardForm({
 
 
   function transformToIPAFormData(rawData: RawData): IPAFormData {
-    const result = new initialIPAFormData({
-      articleTitle: rawData.selectedPublication.title,
-      completeCitation: `${rawData.selectedPublication.title}, ${rawData.selectedPublication.journalName}, ${rawData.selectedPublication.volumeNumber}, ${rawData.selectedPublication.pageNumber}`,
-      author1NameLastFirst: `${rawData.authors[0].lastName}, ${rawData.authors[0].firstName}, ${rawData.authors[0].middleName}`,
-      author1UniversityAndDept: `${rawData.authors[0].university}/${rawData.authors[0].department}`,
-      totalAuthorNumber: rawData.authors.length.toString(),
-      journalName: rawData.selectedPublication.journalName,
-      dateOfPublication: rawData.selectedPublication.date,
-      publisherName: rawData.selectedPublication.publisher,
-      author1Name: `${rawData.authors[0].firstName} ${rawData.authors[0].middleName}, ${rawData.authors[0].lastName}`,
-      author1University: rawData.authors[0].university,
-      author1College: rawData.authors[0].college,
-      author1Department: rawData.authors[0].department,
-      author1Contact: rawData.authors[0].contactNo,
-      author1Position: rawData.authors[0].position,
-      author1EmailAddress: rawData.authors[0].emailAddress,
+    const firstAuthor = rawData.authors?.[0];
 
-
+    return new initialIPAFormData({
+      articleTitle: rawData.selectedPublication?.title ?? "",
+      completeCitation: rawData.selectedPublication
+        ? `${rawData.selectedPublication.title}, ${rawData.selectedPublication.journalName}, ${rawData.selectedPublication.volumeNumber}, ${rawData.selectedPublication.pageNumber}`
+        : "",
+      author1NameLastFirst: firstAuthor
+        ? `${firstAuthor.last_name}, ${firstAuthor.first_name}, ${firstAuthor.middle_name ?? ""}`
+        : "",
+      author1UniversityAndDept: firstAuthor ? `${firstAuthor.university ?? ""}/${firstAuthor.department ?? ""}` : "",
+      totalAuthorNumber: rawData.authors?.length?.toString() ?? "0",
+      journalName: rawData.selectedPublication?.journalName ?? "",
+      dateOfPublication: rawData.selectedPublication?.date ?? "",
+      publisherName: rawData.selectedPublication?.publisher ?? "",
+      author1Name: firstAuthor
+        ? `${firstAuthor.first_name} ${firstAuthor.middle_name ?? ""} ${firstAuthor.last_name}`.trim()
+        : "",
+      author1University: firstAuthor?.university ?? "",
+      author1College: firstAuthor?.college ?? "",
+      author1Department: firstAuthor?.department ?? "",
+      author1Contact: firstAuthor?.contactNo ?? "",
+      author1Position: firstAuthor?.position ?? "",
+      author1EmailAddress: firstAuthor?.emailAddress ?? "",
     })
-    return result
   }
 
 
