@@ -100,6 +100,39 @@ export default function EditableAwardForm({
     });
   };
 
+  function constraints(formData: IPAFormData): boolean {
+    const indexedCount = [formData.WSCC, formData.AHCI, formData.SCIE, formData.SSCI, formData.CPCI, formData.scopus].filter(Boolean).length;
+    const affiliationCount = [formData.author1Faculty, formData.author1ResearchFaculty, formData.author1REPS, formData.author1AdminStaff, formData.author1Student, formData.author1ProjectPersonnell].filter(Boolean).length;
+    const appointmentCount = [formData.author1Permanent, formData.author1Temporary, formData.author1UpContractual, formData.author1NonUpContractual].filter(Boolean).length;
+
+
+    if (indexedCount !== 1) { alert('Need exactly 1 indexed location'); return false; }
+    if (!formData.impactFactor && !formData.impactFactorYear) { alert('Missing Impact Factor Data'); return false; }
+    if (!formData.upSystemFunding && !formData.upCUGrant && !formData.dost && !formData.otherFunding) { alert('Missing at least 1 funding source.'); return false; }
+    if (formData.otherFunding && !formData.otherFundingSpecfics) { alert('Specify other funding sources.'); return false; }
+    if (!formData.author1Personnel && !formData.author1UpAffiliated) { alert('Missing general type of affiliation'); return false; }
+
+    if ((formData.author1Personnel && formData.author1UpAffiliated)) {
+      alert('Only 1 general affiliation'); return false;
+    }
+
+    if (formData.author1Personnel && !formData.author1Faculty && !formData.author1ResearchFaculty && !formData.author1REPS && !formData.author1AdminStaff) {
+      alert('Missing specific type of UP Personnel'); return false;
+    }
+    if (formData.author1UpAffiliated && !formData.author1Student && !formData.author1ProjectPersonnell) {
+      alert('Missing specific type of UP affiliated'); return false;
+    }
+
+    if (formData.author1UpAffiliated && !formData.author1Student && !formData.author1ProjectPersonnell) {
+      alert('Missing specific type of UP affiliated'); return false;
+    }
+    if (affiliationCount !== 1) { alert('Exactly 1 specific selection.'); return false; }
+    if (appointmentCount !== 1) { alert('Exactly 1 status of appointment.'); return false; }
+    // incomplete, should be exactly 1 status of appointment 
+    return true;
+
+  }
+
   return (
     <div className="relative w-[700px] mx-auto mt-6">
       <div className="flex">
