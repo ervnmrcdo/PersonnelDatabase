@@ -6,8 +6,8 @@ export interface Author {
   college?: string;
   department?: string;
   position: string;
-  contactNo: string;
-  emailAddress: string;
+  contact_no: string;
+  email: string;
 }
 
 export interface Award {

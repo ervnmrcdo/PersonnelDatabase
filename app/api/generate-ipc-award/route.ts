@@ -3,13 +3,11 @@ import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
 import sql from "@/config/db";
+import { NextResponse } from "next/server";
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: Request) {
   try {
-    if (req.method !== "POST") {
-      return res.status(405).send("Method Not Allowed");
-    }
-    const data = await req.body;
+    const data = await req.json();
 
     const {
       applicant,
@@ -17,6 +15,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       selectedPublication,
       selectedAward,
       shouldSubmit,
+      ipaData
     } = data;
 
     const templatePath = path.join(process.cwd(), "public/ipc-template.pdf");
@@ -31,6 +30,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const page4 = pages[4];
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const { height } = page0.getSize();
+
 
     // 🖋️ Write text at specific coordinates (you’ll tweak these values)
     page0.drawText(selectedPublication.title || "", {
@@ -100,7 +100,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       size: 11,
       font,
     });
-    page2.drawText(applicant.email || "", {
+    page2.drawText(applicant.emailAddress || "", {
       x: 150,
       y: height - 470,
       size: 11,
@@ -114,6 +114,15 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       const teachingId = null;
       const nonTeachingId = 1;
 
+      const jsonData = {
+        applicant,
+        authors,
+        selectedPublication,
+        selectedAward,
+        ipaData,
+        submittedAt: new Date().toISOString()
+      };
+
       const result = await sql`
         INSERT INTO PendingAwards (
           submitter_type,
@@ -121,6 +130,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           submitter_nonteaching_id,
           award_id,
           attached_files,
+          pdf_json_data,
           status,
           date_submitted
         )
@@ -130,6 +140,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           ${nonTeachingId},
           1,
           ${buffer},
+          ${JSON.stringify(jsonData)},
           'PENDING',
           CURRENT_DATE
         )
@@ -147,14 +158,22 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
       // res.setHeader("Content-Type", "application/pdf");
       // res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
-      return res.status(200).json(result);
+      return NextResponse.json({ success: true, data: result[0] });
     }
 
     // res.setHeader("Content-Type", "application/pdf");
     // res.setHeader("Content-Disposition", "attachment; filename=example.pdf");
-    return res.status(200).send(Buffer.from(pdfBytes));
+    return new NextResponse(Buffer.from(pdfBytes), {
+                headers: {
+                  "Content-Type": "application/pdf",
+                  "Content-Disposition": "attachment; filename=ipc-award-form.pdf",
+                },
+});
   } catch (err) {
     console.error(err);
-    return res.status(500).json(`Internal Server Error, ${err}`);
+    return NextResponse.json(
+  { error: `Internal Server Error ${err}` },
+  { status: 500 }
+);
   }
 }

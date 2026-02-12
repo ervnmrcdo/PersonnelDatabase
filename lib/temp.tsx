@@ -6,14 +6,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Advances in Quantum Computing",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -28,14 +28,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Quantum Entanglement and Communication",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -50,14 +50,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Superconducting Qubits: Design and Implementation",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -72,14 +72,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Quantum Error Correction Algorithms",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -94,14 +94,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Topological Quantum Computing",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -116,14 +116,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Quantum Machine Learning Applications",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -138,14 +138,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Photonic Quantum Computing Platforms",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -160,14 +160,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Quantum Cryptography Protocols",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -182,14 +182,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Quantum Simulation of Molecular Systems",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],
@@ -204,14 +204,14 @@ export const tempPublicationsGenerated: Publication[] = [
 //     title: "Noise-Resilient Quantum Algorithms",
 //     authors: [
 //       {
-//         firstName: "Ervin",
-//         lastName: "Mercado",
-//         middleName: "Poblete",
+//         first_name: "Ervin",
+//         last_name: "Mercado",
+//         middle_name: "Poblete",
 //         university: "University of the Philippines",
 //         college: "College of Engineering",
 //         department: "Computer Science",
 //         position: "Student",
-//         contactNo: "+1-555-0123",
+//         contact_no: "+1-555-0123",
 //         emailAddress: "epmercado2@up.edu.ph",
 //       }
 //     ],

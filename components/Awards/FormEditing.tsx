@@ -17,12 +17,13 @@ const FormEditing: FC<FormEditingProps> = ({
   const handleDownload = async (data: any, shouldSubmit: boolean) => {
     try {
 
-      const response = await fetch("/api/generate-ipc-award/route", {
+      const response = await fetch('/api/generate-ipc-award', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
+      
       if (shouldSubmit) {
         if (response.ok) {
           alert('Form successfully Submitted.')
@@ -61,10 +62,11 @@ const FormEditing: FC<FormEditingProps> = ({
         <h2 className="text-lg font-semibold mb-4">Auto-filled Award Form</h2>
 
         <div className="text-gray-600 space-y-2">
-          <p>
-            <strong>Applicant:</strong> {selectedPublication.authors?.[0] ? 
-              `${selectedPublication.authors[0].first_name ?? ''} ${selectedPublication.authors[0].last_name ?? ''}` : 
-              'N/A'}
+            <p>
+            <strong>Applicant:</strong>{" "}
+            {selectedPublication?.authors?.[0] 
+              ? `${selectedPublication.authors[0].first_name || selectedPublication.authors[0].first_name || ''} ${selectedPublication.authors[0].last_name || selectedPublication.authors[0].last_name || ''}`.trim() || 'N/A'
+              : 'N/A'}
           </p>
           <p>
             <strong>Selected Award:</strong> {selectedAward?.title}
@@ -80,7 +82,7 @@ const FormEditing: FC<FormEditingProps> = ({
           <EditableAwardForm
             initialData={{
               applicant: autoData,
-              authors: selectedPublication.authors,
+              authors: selectedPublication?.authors ?? [],
               selectedPublication: selectedPublication,
               selectedAward: selectedAward,
               shouldSubmit: false,

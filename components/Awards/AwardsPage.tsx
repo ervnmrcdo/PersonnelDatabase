@@ -35,18 +35,18 @@ import { useAuth } from "@/context/AuthContext";
 //
 // const applicant: ApplicantData = {
 //   applicantName: "",
-//   firstName: "Ervin",
-//   lastName: "Mercado",
-//   middleName: "Poblete",
+//   first_name: "Ervin",
+//   last_name: "Mercado",
+//   middle_name: "Poblete",
 //   university: "University of the Philippines",
 //   college: "College of Engineering",
 //   department: "Computer Science",
 //   position: "Student",
-//   contactNo: "+1-555-0123",
+//   contact_no: "+1-555-0123",
 //   emailAddress: "epmercado2@up.edu.ph",
 // };
 //
-// applicant.applicantName = `${applicant.lastName}, ${applicant.firstName} ${applicant.middleName}`;
+// applicant.applicantName = `${applicant.last_name}, ${applicant.first_name} ${applicant.middle_name}`;
 
 const AwardsPage: FC = () => {
   const { user } = useAuth(); // logged-in user

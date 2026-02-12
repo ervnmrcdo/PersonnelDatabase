@@ -20,7 +20,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const acceptPDF = async () => {
 
     try {
-      const signPDF = await fetch('/api/admin/sign-form/route', {
+      const signPDF = await fetch('/api/admin/sign-form', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -41,7 +41,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
         submission_id: data.id,
       }
 
-      const response = await fetch('api/admin/post-signed-award/route', {
+      const response = await fetch('api/admin/post-signed-award', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -62,7 +62,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
         submission_id: data.id,
       }
 
-      const rejectPdf = await fetch('/api/admin/reject-form/route', {
+      const rejectPdf = await fetch('/api/admin/reject-form', {
         method: "POST",
         body: JSON.stringify(payload),
       });

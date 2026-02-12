@@ -34,7 +34,7 @@ export async function GET(req: Request) {
         department: a.department,
         position: a.position,
         contact_no: a.contact_no,
-        email_address: a.email_address
+        email: a.email
       }));
 
       publications.push({ ...pub, authors });
@@ -66,10 +66,10 @@ export async function POST(req: Request) {
   for (const author of authors) {
     // Insert author
     const authorRes = await pool.query(
-      `INSERT INTO authors (first_name, middle_name, last_name, university, college, department, position, contact_no, email_address)
+      `INSERT INTO authors (first_name, middle_name, last_name, university, college, department, position, contact_no, email)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
       RETURNING id`,
-      [author.first_name, author.middle_name, author.last_name, author.university, author.college, author.department, author.position, author.contact_no, author.email_address]
+      [author.first_name, author.middle_name, author.last_name, author.university, author.college, author.department, author.position, author.contact_no, author.email]
     );
 
     const authorId = authorRes.rows[0].id;

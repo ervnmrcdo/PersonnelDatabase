@@ -52,9 +52,9 @@ export default function EditableAwardForm({
       author1University: firstAuthor?.university ?? "",
       author1College: firstAuthor?.college ?? "",
       author1Department: firstAuthor?.department ?? "",
-      author1Contact: firstAuthor?.contactNo ?? "",
+      author1Contact: firstAuthor?.contact_no ?? "",
       author1Position: firstAuthor?.position ?? "",
-      author1EmailAddress: firstAuthor?.emailAddress ?? "",
+      author1EmailAddress: firstAuthor?.email ?? "",
     })
   }
 
@@ -110,15 +110,22 @@ export default function EditableAwardForm({
       <div className="flex">
         <button
           onClick={() => {
-            formData.shouldSubmit = true;
-            onDownload(formData, true);
-          }}
+                  onDownload({
+                    ...initialData,
+                    ipaData: formData.ipaData,
+                    shouldSubmit: true
+                  }, true);
+                }}
           className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           Submit Application
         </button>
         <button
-          onClick={() => onDownload(formData, false)}
+          onClick={() => onDownload({
+                        ...initialData,  // ✅ Include the original data
+                        ipaData: formData.ipaData,
+                        shouldSubmit: false
+                      }, false)}
           className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           Download Filled PDF
