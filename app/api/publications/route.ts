@@ -49,39 +49,39 @@ export async function GET(req: Request) {
 
 
 export async function POST(req: Request) {
-      try {
-      const { title, authors, ...publicationFields } = await req.json();
+  try {
+    const { title, authors, ...publicationFields } = await req.json();
 
-  // Insert publication
-  const pubRes = await pool.query(
-    `INSERT INTO publications (title, type, publisher, publication_status, date_published, page_number, issue_number, page_numbers, journal_publication, volume_number, total_authors)
+    // Insert publication
+    const pubRes = await pool.query(
+      `INSERT INTO publications (title, type, publisher, publication_status, date_published, page_number, issue_number, page_numbers, journal_publication, volume_number, total_authors)
     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
     RETURNING *`,
-    [title, publicationFields.type, publicationFields.publisher, publicationFields.publication_status, publicationFields.date_published, publicationFields.page_number, publicationFields.issue_number, publicationFields.page_numbers, publicationFields.journal_publication, publicationFields.volume_number, publicationFields.total_authors]
-  );
+      [title, publicationFields.type, publicationFields.publisher, publicationFields.publication_status, publicationFields.date_published, publicationFields.page_number, publicationFields.issue_number, publicationFields.page_numbers, publicationFields.journal_publication, publicationFields.volume_number, publicationFields.total_authors]
+    );
 
-  const newPublication = pubRes.rows[0];
+    const newPublication = pubRes.rows[0];
 
-  // Insert authors & link to publication
-  for (const author of authors) {
-    // Insert author
-    const authorRes = await pool.query(
-      `INSERT INTO authors (first_name, middle_name, last_name, university, college, department, position, contact_no, email)
+    // Insert authors & link to publication
+    for (const author of authors) {
+      // Insert author
+      const authorRes = await pool.query(
+        `INSERT INTO authors (first_name, middle_name, last_name, university, college, department, position, contact_no, email)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
       RETURNING id`,
-      [author.first_name, author.middle_name, author.last_name, author.university, author.college, author.department, author.position, author.contact_no, author.email]
-    );
+        [author.first_name, author.middle_name, author.last_name, author.university, author.college, author.department, author.position, author.contact_no, author.email]
+      );
 
-    const authorId = authorRes.rows[0].id;
+      const authorId = authorRes.rows[0].id;
 
-    // Link publication <-> author
-    await pool.query(
-      `INSERT INTO publication_authors (publication_id, author_id) VALUES ($1,$2)`,
-      [newPublication.publication_id, authorId]
-    );
-  }
+      // Link publication <-> author
+      await pool.query(
+        `INSERT INTO publication_authors (publication_id, author_id) VALUES ($1,$2)`,
+        [newPublication.publication_id, authorId]
+      );
+    }
 
-  return NextResponse.json(newPublication);
+    return NextResponse.json(newPublication);
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Database error" }, { status: 500 });

@@ -1,4 +1,4 @@
-import { Pool } from "pg";
+import { Pool } from "@neondatabase/serverless";
 
 const globalForPg = globalThis as unknown as {
   pool: Pool | undefined;
