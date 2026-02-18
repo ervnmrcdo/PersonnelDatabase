@@ -68,3 +68,17 @@ CREATE TABLE submissions (
     pdf_json_data JSONB NOT NULL DEFAULT '{}',
     logs JSONB DEFAULT '[]'
 );
+
+
+-- 8. Publication-Award Application Tracker
+CREATE TABLE publication_award_applications (
+    id SERIAL PRIMARY KEY,
+    publication_id INTEGER NOT NULL REFERENCES publications(publication_id) ON DELETE CASCADE,
+    award_id INTEGER NOT NULL REFERENCES awards(award_id) ON DELETE CASCADE,
+    submission_id INTEGER REFERENCES submissions(submission_id), -- Links to the actual process
+    application_date DATE DEFAULT CURRENT_DATE,
+    
+    -- This constraint prevents the SAME publication 
+    -- from being applied for the SAME award twice.
+    UNIQUE(publication_id, award_id)
+);
