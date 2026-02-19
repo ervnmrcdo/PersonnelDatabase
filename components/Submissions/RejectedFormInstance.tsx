@@ -1,10 +1,12 @@
+'use client';
+
 import { AcceptedForm } from "@/lib/types"
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
+    "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
     import.meta.url,
 ).toString();
 

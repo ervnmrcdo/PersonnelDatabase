@@ -3,11 +3,13 @@ import { AcceptedForm, RejectedForm } from "@/lib/types"
 import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
 import AcceptedListing from "./AcceptedListing"
-import AcceptedFormInstance from "./AcceptedInstance"
 import { useEffect } from "react"
 import PendingAwardsTable from "../PendingAwardsTable"
 import RejectedListing from "./RejectedListing"
-import RejectedFormInstance from "./RejectedFormInstance"
+import dynamic from 'next/dynamic'
+
+const AcceptedFormInstance = dynamic(() => import('./AcceptedInstance'), { ssr: false })
+const RejectedFormInstance = dynamic(() => import('./RejectedFormInstance'), { ssr: false })
 
 
 

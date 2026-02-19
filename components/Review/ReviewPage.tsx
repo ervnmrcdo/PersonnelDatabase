@@ -4,7 +4,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Application } from "@/lib/types";
 import ListedApplications from "@/components/Review/ListedApplications";
-import ReviewInstance from "@/components/Review/ReviewInstance";
+import dynamic from 'next/dynamic';
+
+const ReviewInstance = dynamic(() => import('@/components/Review/ReviewInstance'), { ssr: false });
 
 export default function ReviewPage() {
   const [selected, setSelected] = useState<Application | null>(null);
