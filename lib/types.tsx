@@ -27,6 +27,18 @@ export interface Publication {
   publisher: string;
 }
 
+export interface SupabasePublication {
+  publication_id: number;
+  type: string;
+  title: string;
+  publisher: string;
+  publication_status: string;
+  date_published: string;
+  issue_number: string;
+  page_numbers: string;
+  volume_numer: string;
+}
+
 export type Application = {
   id: string;
   name: string;
