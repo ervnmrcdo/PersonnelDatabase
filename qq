@@ -1,0 +1,400 @@
+[33mcommit ac45993755bcafc6dd0ef4e25d31ae19e578e745[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mslow-application[m[33m)[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Fri Feb 20 00:40:25 2026 +0800
+
+    fix: DOM Matrix error fixed by disabling SSR
+
+[33mcommit 366040449627bab0ff5ea7770863d847be20c0fb[m[33m ([m[1;31morigin/slow-application[m[33m)[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Fri Feb 20 02:06:54 2026 +0800
+
+    not rlly sure
+
+[33mcommit 4a38140dd47d3842553b4854df1713a14a0d085f[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 18 12:39:26 2026 +0800
+
+    add: supabase create client
+
+[33mcommit dfd223880b774d5d58a5c1bae0a06ad3c06af745[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 18 01:43:08 2026 +0800
+
+    new relation layout: migrating to supabase
+
+[33mcommit cf118b386dd5490fa70058c1e5af7a9045cca28e[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Thu Feb 12 08:54:53 2026 +0800
+
+    fully added checkbox and If constraints
+
+[33mcommit fa9d7adbc192fbfb7144fc6229f2a5f5a5e9ef72[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Thu Feb 12 00:50:02 2026 +0800
+
+    add date when admin signing
+
+[33mcommit 5d29739250aa2a7c7c6d9938a91c5f4d80f3a715[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Thu Feb 12 00:09:50 2026 +0800
+
+    add working resubmit and logs for resubmission
+
+[33mcommit b51dd8ce1494de01d7de05eead892f5c0942ac02[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 11 23:50:10 2026 +0800
+
+    add remarks for before returning
+
+[33mcommit cd52a0f96a40900a261f742b1f384b86f844ac6d[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 11 23:12:19 2026 +0800
+
+    add validated log
+
+[33mcommit 0e151745e056382f47f37db19ba5fe6dfe6932d9[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 11 22:36:34 2026 +0800
+
+    add initial submission
+
+[33mcommit 0f5963901298612ee98bc7b239e5961d58e1b9b5[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 11 20:11:33 2026 +0800
+
+    show remarks when returned
+
+[33mcommit 828a42e1ac1d9996225f39dc43bb96a71a5ec66c[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 11 20:01:29 2026 +0800
+
+    add alert
+
+[33mcommit f24e26614567675cb8d744a7249bea06364cafb2[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 11 19:56:34 2026 +0800
+
+    working resubmission and returning
+
+[33mcommit 3c49dcb85ae52c41a0565e3a11721855e994ce10[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Feb 11 19:23:57 2026 +0800
+
+    fixed working decomposition of submission
+
+[33mcommit 566b4a42a1355a9cc6e7f24703155a728fe858e5[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 23:07:09 2026 +0800
+
+    allow returned documents to be re-edited
+
+[33mcommit bdcacd88b0900fa170de7f9f63d095af7803b38b[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 21:29:12 2026 +0800
+
+    add: commented out constraints and changed rejected to returned
+
+[33mcommit 75d06c8b9a930849528584d4e6c05a71f885e68e[m
+Merge: 37f18e9 be728cd
+Author: Ervin Mercado <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 08:31:54 2026 +0800
+
+    Merge pull request #1 from ervnmrcdo/login
+    
+    First Sprint
+
+[33mcommit be728cd519ac3bad4c47b09f059bb04af19c216e[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 07:30:07 2026 +0800
+
+    viewing of rejected forms
+
+[33mcommit 5d59fa7f26db92bdc77f0b7dabf28cf8b7a3b56f[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 07:06:09 2026 +0800
+
+    add: reject forms
+
+[33mcommit e0bca6b80cdd0dd2c24f97d185a095dc68fbde80[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 03:53:46 2026 +0800
+
+    fix: add all necessary information for pdf in 4.1 ipa
+
+[33mcommit 129c729a4a3a82521210b678ee41caff832065ae[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 03:26:04 2026 +0800
+
+    more progress
+
+[33mcommit 4f8350de932b262995c200c94dc7835685430acc[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 03:10:13 2026 +0800
+
+    progress with pdf api values
+
+[33mcommit 856ecd8c26a39ad7a91206b17be7a9aa3c169809[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 02:33:55 2026 +0800
+
+    done with the inputs in Editable Award Form
+
+[33mcommit 5c7dca883868d6afea740503d02f2634c2a7b31e[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 02:24:18 2026 +0800
+
+    done with the inputs in Editable Award Form
+
+[33mcommit 648bbaca8b92eed81a638cca3aa9b15bf31be563[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 01:33:48 2026 +0800
+
+    progress
+
+[33mcommit 1c5c581c89ac353de7c17b325bc0bac22fd2f2aa[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Feb 10 01:27:31 2026 +0800
+
+    progress with form fillup info
+
+[33mcommit b35eb2c2d376dc88f2c41ab3b4c83f4209f35911[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Mon Feb 9 21:17:13 2026 +0800
+
+    unable to push bug fix because of unstaged commits
+
+[33mcommit 3554c04863f8851ebfef3a3eeb0b0dc54d43a0a3[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Mon Feb 9 00:26:28 2026 +0800
+
+    add api route for retrieving publications
+
+[33mcommit 565a01e4a40bfe472ec2508506fb3601e1c3edbb[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Tue Feb 10 01:37:32 2026 +0800
+
+    add: pending awards in admin dash
+
+[33mcommit a1e042bb5cca6ddfe522b09919f63a6fc1c06dc3[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Mon Feb 9 01:10:26 2026 +0800
+
+    add: fetch per user publications
+
+[33mcommit ea97338aadf43ed14d48345025c08200b3f9abac[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sun Feb 8 21:15:22 2026 +0800
+
+    add downloading of signed form
+
+[33mcommit 947dfb0589550b49563d79192522711dbe9523b4[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sun Feb 8 21:04:42 2026 +0800
+
+    add viewing of signed forms
+
+[33mcommit 80152dc1f57b39596f941a2e5e1f1d0c2ed88591[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sun Feb 8 17:18:39 2026 +0800
+
+    add submission page for non-teaching
+
+[33mcommit 044adf264056577a83153d3b474673e19578da28[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sun Feb 8 13:27:23 2026 +0800
+
+    add api route for retrieving accepted awards
+
+[33mcommit 660d1ccc965b3078163a3a49c3675087ef1ad54a[m
+Merge: 09e2612 e07ffb4
+Author: marcovcantero <mvcantero1@up.edu.ph>
+Date:   Sun Feb 8 20:37:47 2026 +0800
+
+    test commit
+
+[33mcommit e07ffb479b4a0b69db38687399fcc89c0c87dc7f[m
+Author: Marco Cantero <100277740+marcovcantero@users.noreply.github.com>
+Date:   Sun Feb 8 20:32:26 2026 +0800
+
+    Rename :w file
+
+[33mcommit 09e2612af18d6a6a654419a210c173e725e5a42d[m
+Author: marcovcantero <mvcantero1@up.edu.ph>
+Date:   Sun Feb 8 19:38:25 2026 +0800
+
+    Added initial awards status table
+
+[33mcommit be35498ca24b67885924a6f09e3dda79abfe777a[m
+Merge: 1a209ed cb73e70
+Author: Cj <cjtb2005@gmail.com>
+Date:   Sun Feb 8 13:50:54 2026 +0800
+
+    add: temp
+
+[33mcommit 1a209ed7f739809b3636ccaed9fe75b471a18337[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Sun Feb 8 13:48:31 2026 +0800
+
+    add: temp push
+
+[33mcommit cb73e7023d5ce0630de603ae1bdae99c9292578d[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sun Feb 8 02:22:03 2026 +0800
+
+    minor-fixes
+
+[33mcommit 6805e3ed68c415e7b4b22c6309889273c308c2e6[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sun Feb 8 02:16:12 2026 +0800
+
+    add: mark accepted forms in database
+
+[33mcommit 23badfe6a0f22b86a7545dfed0bf8537ac5aa772[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sun Feb 8 02:12:48 2026 +0800
+
+    replaces file in database with signed one
+
+[33mcommit 2887474fce78faa45fbb651b6c6c72277dfe3ee5[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sat Feb 7 23:01:23 2026 +0800
+
+    adds signature to loaded pdf
+
+[33mcommit ee6abe62bdecc6ccdeb2d4d5ec4aa7c155763038[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sat Feb 7 22:25:15 2026 +0800
+
+    add route for signing
+
+[33mcommit e3a05886ebf6a761d10e11c7e93bb72323f538cb[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sat Feb 7 19:54:10 2026 +0800
+
+    created submission route
+
+[33mcommit a8060d4a82c6d391ddd055e8b5d4ec64eed79e3b[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Tue Feb 3 21:25:09 2026 +0800
+
+    add: role based access
+
+[33mcommit 0d04fd48c839ea317562fb93d55fc98f6981f502[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Mon Feb 2 21:55:32 2026 +0800
+
+    fix: login, accounts TODO: route protection
+
+[33mcommit e30ba9721ebc375669352307d3bfa47acfa3eb28[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Wed Jan 28 23:09:46 2026 +0800
+
+    add: login and signup page, not final
+
+[33mcommit 37f18e9ac6ccccb26a69023d7fdb0f8af648a9e2[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Wed Nov 26 11:32:30 2025 +0800
+
+    fix: awards showing up
+
+[33mcommit 5515583c0451b724935417031a0a55c7cc551ebd[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Wed Nov 26 09:28:14 2025 +0800
+
+    add: profiles
+
+[33mcommit 3c7b41283af6cedbe3fc779da295f9da1733fe17[m
+Author: Cj <cjtb2005@gmail.com>
+Date:   Wed Nov 26 09:09:32 2025 +0800
+
+    add: dashboard for all users
+
+[33mcommit 85a3736ccbee0012f06560b273298139e2023ad5[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Nov 5 14:04:12 2025 +0800
+
+    dcs record home button
+
+[33mcommit 71bafe8d2c5cbae8537d16e23dbecc9299a35b71[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Nov 5 13:58:39 2025 +0800
+
+    progress
+
+[33mcommit 6c83145c5574a33a4f4895eccc2126a6439e946d[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Nov 5 13:05:31 2025 +0800
+
+    progress
+
+[33mcommit cd60803feb301cb0b0260a0fb4d9787cc6ec6eb3[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Nov 5 08:51:44 2025 +0800
+
+    progress
+
+[33mcommit 68700c063604cb20e9eda20761751eb1318b1a98[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Nov 5 08:34:08 2025 +0800
+
+    submission
+
+[33mcommit 3ee6e08903bd6139624b620960f3310771131c25[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Nov 5 01:50:18 2025 +0800
+
+    progress
+
+[33mcommit 22dbad453cfc41a56929565d2b158c5cedece6e4[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Nov 5 01:19:36 2025 +0800
+
+    progress
+
+[33mcommit 15d45367add2355abad7f467e3512d33697d6cad[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Nov 4 21:43:23 2025 +0800
+
+    fix
+
+[33mcommit ea3ae475d4f70fde26670833dadedb07d0dc4ab8[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Nov 4 14:21:58 2025 +0800
+
+    progress
+
+[33mcommit 157cb0e9e11f856d431839927834a82cd63deb6f[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Nov 4 14:05:39 2025 +0800
+
+    progress
+
+[33mcommit 5b70eed57d1f28ea928d165a84756739a48ef03a[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Mon Nov 3 20:54:38 2025 +0800
+
+    progress
+
+[33mcommit 2186427483104ba27cae598c6289ea9036767b2c[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Mon Nov 3 02:12:52 2025 +0800
+
+    progress
+
+[33mcommit cf57099cd57e43258099e0974d81658c1e685a61[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Sun Nov 2 15:33:27 2025 +0800
+
+    progreess
+
+[33mcommit 37f1d3a0fe0a0e4e4d499c11cb72e07f64447f97[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Wed Oct 29 22:53:42 2025 +0800
+
+    some api routes working and some frontend
+
+[33mcommit e710c676b136c57daf02b8d59eeb4542594332e8[m
+Author: ervnmrcdo <ervinmercado31@gmail.com>
+Date:   Tue Oct 28 16:36:09 2025 +0800
+
+    Initial commit from Create Next App

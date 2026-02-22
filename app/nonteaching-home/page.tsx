@@ -8,6 +8,7 @@ import ReviewTab from "@/components/ReviewTab";
 import Publications from "@/components/Publications/Publications";
 import TeachingProfile from "@/components/Profile/TeachingProfile";
 import { useState, ReactNode } from "react";
+import { useAuth } from "@/context/AuthContext";
 import SubmissionsPage from "@/components/Submissions/SubmissionsPage";
 
 type NonTeachingPage =
@@ -20,6 +21,8 @@ type NonTeachingPage =
 export default function Page() {
   const [activeComponent, setActiveComponent] =
     useState<NonTeachingPage>("Home");
+  const { user } = useAuth();
+  const NONTEACHING_UUID = user?.id;
 
   const renderContent = (): ReactNode => {
     switch (activeComponent) {

@@ -26,7 +26,7 @@ const PublicationSelection: FC<PublicationSelectionProps> = ({
       <div className="space-y-4">
         {publications.map((pub) => (
           <div
-            key={pub.id}
+            key={pub.publication_id}
             onClick={() => handlePublicationSelect(pub)}
             className="flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 rounded-xl shadow-sm cursor-pointer transition"
           >
@@ -34,7 +34,7 @@ const PublicationSelection: FC<PublicationSelectionProps> = ({
               <h2 className="font-semibold text-gray-800">{pub.title}</h2>
               {/* <p className="text-sm text-gray-400">{pub.description}</p> */}
             </div>
-            <div className="text-sm text-gray-400">{pub.date}</div>
+            <div className="text-sm text-gray-400">{pub.date_published}</div>
             <ChevronRight className="text-gray-400" />
           </div>
         ))}

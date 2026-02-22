@@ -24,7 +24,7 @@ const FormEditing: FC<FormEditingProps> = ({
 
   const foo: RawData = {
     applicant: autoData,
-    authors: selectedPublication.authors,
+    authors: selectedPublication.publication_authors,
     selectedPublication: selectedPublication,
     selectedAward: selectedAward,
     shouldSubmit: false,
@@ -48,7 +48,7 @@ const FormEditing: FC<FormEditingProps> = ({
 
         <div className="text-gray-600 space-y-2">
           <p>
-            <strong>Applicant:</strong> {selectedPublication.authors[0].firstName + ' ' + selectedPublication.authors[0].lastName}
+            <strong>Applicant:</strong> {selectedPublication.publication_authors[0].firstName + ' ' + selectedPublication.publication_authors[0].lastName}
           </p>
           <p>
             <strong>Selected Award:</strong> {selectedAward?.title}
@@ -57,7 +57,7 @@ const FormEditing: FC<FormEditingProps> = ({
             <strong>Publication Title:</strong> {selectedPublication?.title}
           </p>
           <p>
-            <strong>Date of Publication:</strong> {selectedPublication?.date}
+            <strong>Date of Publication:</strong> {selectedPublication?.date_published}
           </p>
         </div>
         <div className="mt-6 border rounded-lg overflow-visible">

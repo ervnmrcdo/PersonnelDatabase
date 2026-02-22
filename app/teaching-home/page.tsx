@@ -7,6 +7,7 @@ import TeachingProfile from "@/components/Profile/TeachingProfile";
 import ReviewTab from "@/components/ReviewTab";
 import Publications from "@/components/Publications/Publications";
 import { useState, ReactNode } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 type TeachingPage =
   | "Home"
@@ -17,6 +18,8 @@ type TeachingPage =
 export default function Page() {
   const [activeComponent, setActiveComponent] =
     useState<TeachingPage>("Home");
+  const { user } = useAuth();
+  const TEACHING_UUID = user?.id;
 
   const renderContent = (): ReactNode => {
     console.log("hi");

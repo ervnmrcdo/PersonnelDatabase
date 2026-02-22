@@ -4,12 +4,12 @@ import { IPAFormData, RawData } from "@/lib/types"
 export function transformToIPAFormData(rawData: RawData): IPAFormData {
   const result = new initialIPAFormData({
     articleTitle: rawData.selectedPublication.title,
-    completeCitation: `${rawData.selectedPublication.title}, ${rawData.selectedPublication.journalName}, ${rawData.selectedPublication.volumeNumber}, ${rawData.selectedPublication.pageNumber}`,
+    completeCitation: `${rawData.selectedPublication.title}, ${rawData.selectedPublication.journal_name}, ${rawData.selectedPublication.volume_number}, ${rawData.selectedPublication.page_numbers}`,
     author1NameLastFirst: `${rawData.authors[0].lastName}, ${rawData.authors[0].firstName}, ${rawData.authors[0].middleName}`,
     author1UniversityAndDept: `${rawData.authors[0].university}/${rawData.authors[0].department}`,
     totalAuthorNumber: rawData.authors.length.toString(),
-    journalName: rawData.selectedPublication.journalName,
-    dateOfPublication: rawData.selectedPublication.date,
+    journalName: rawData.selectedPublication.journal_name,
+    dateOfPublication: rawData.selectedPublication.date_published,
     publisherName: rawData.selectedPublication.publisher,
     author1Name: `${rawData.authors[0].firstName} ${rawData.authors[0].middleName}, ${rawData.authors[0].lastName}`,
     author1University: rawData.authors[0].university,

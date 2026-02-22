@@ -6,7 +6,8 @@ import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
 import { Author, Award, Publication, PendingAward } from "@/lib/types";
 import { awards, tempPublicationsGenerated } from "@/lib/temp";
-
+import { AuthClient } from "@supabase/supabase-js";
+import { useAuth } from "@/context/AuthContext";
 
 
 const AwardsPage: FC = () => {
@@ -16,6 +17,7 @@ const AwardsPage: FC = () => {
   const [selectedAward, setSelectedAward] = useState<Award | null>(null);
   const [selectedPublication, setSelectedPublication] =
     useState<Publication | null>(null);
+  const [publications, setPublications] = useState<Publication[]>([]);
 
   const [pendingAwards, setPendingAwards] = useState<PendingAward[]>([]);
   const [isLoadingPending, setIsLoadingPending] = useState(true);
@@ -39,8 +41,10 @@ const AwardsPage: FC = () => {
     fetchPendingAwards();
   }, []);
 
+  const { user } = useAuth();
+  const ADMIN_UUID = user?.id;
   const payload = {
-    'id': '1',
+    'id': ADMIN_UUID,
     'submitterType': 'NONTEACHING'
   }
 
@@ -84,7 +88,7 @@ const AwardsPage: FC = () => {
               <PublicationSelection
                 handleBack={handleBack}
                 handlePublicationSelect={(pub) => handlePublicationSelect(pub)}
-                publications={tempPublicationsGenerated}
+                publications={publications}
               />
             </motion.div>
           )}
@@ -101,7 +105,7 @@ const AwardsPage: FC = () => {
                 handleBack={handleBack}
                 selectedAward={selectedAward!}
                 selectedPublication={selectedPublication!}
-                autoData={selectedPublication!.authors[0]}
+                autoData={selectedPublication!.publication_authors[0]}
               />
             </motion.div>
           )}

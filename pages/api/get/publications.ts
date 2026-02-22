@@ -1,8 +1,9 @@
 import { createPagesServerClient } from "@/lib/supabase/pager-server"
+import { Publication } from "@/lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function trial(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = await req.body
+  const { id } = JSON.parse(await req.body)
 
   console.log(id)
 
@@ -11,17 +12,32 @@ export default async function trial(req: NextApiRequest, res: NextApiResponse) {
     const supabase = createPagesServerClient(req, res);
 
     const { data, error } = await supabase
-      .from('users')
+      .from('publications')
       .select(`
         *,
-        publication_authors(author_rank, publications(*)) 
-        `).eq(`user_id`, `${id}`);
+        publication_authors!inner(*),
+        users!inner(*)
+        `).eq(`users.user_id`, `${id}`);
 
     if (error) {
       return res.status(400).json({ error: error.message });
     }
 
-    return res.status(200).json(data[0].publication_authors[0].publications);
+    const formatted: Publication[] = data.map((r: any) => ({
+      type: r.type,
+      publication_id: r.publication_id,
+      publication_authors: r.users,
+      title: r.title,
+      date_published: r.date_published,
+      journal_name: r.journal_name,
+      volume_number: r.volume_number,
+      page_numbers: r.page_numbers,
+      publisher: r.publisher,
+      issue_number: r.issue_number,
+      publication_status: r.publication_status,
+    }))
+
+    return res.status(200).json(data);
     // return res.status(200).json(data);
   } catch (e) {
     // Casting e as Error to access the message safely

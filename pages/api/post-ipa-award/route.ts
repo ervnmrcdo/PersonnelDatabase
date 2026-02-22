@@ -1,17 +1,22 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import sql from "@/config/db";
 import { SubmissionLog } from "@/lib/types";
+import { createPagesServerClient } from "@/lib/supabase/pager-server";
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (req.method !== "POST") {
       return res.status(405).send("Method Not Allowed");
     }
-    const data = JSON.parse(await req.body);
+    const payload = JSON.parse(await req.body);
     const {
+      submitter_id,
+      award_id,
+      publication_id,
       ipaData,
       buffer,
-    } = data;
+    } = payload;
+
 
     const foo = Buffer.from(buffer)
 
@@ -23,18 +28,45 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       }
     ]
 
-    const teachingId = null;
-    const nonTeachingId = 1;
+    const supabase = createPagesServerClient(req, res);
 
-    const result = await sql`
-        INSERT INTO PendingAwards 
-          (submitter_type, submitter_teaching_id, submitter_nonteaching_id, award_id, attached_files, status, date_submitted, pdf_json_data, logs)
-        VALUES 
-          ( ${"NONTEACHING"}, ${teachingId}, ${nonTeachingId}, 1, ${foo}, 'PENDING', CURRENT_DATE, ${JSON.stringify(ipaData)}, ${JSON.stringify(initialLog)})
-        RETURNING *;
-      `;
+    const { data, error } = await supabase
+      .from('submissions')
+      .insert([
+        {
+          submitter_id: submitter_id,
+          award_id: award_id,
+          publication_id: publication_id,
+          attached_files: foo,
+          status: 'PENDING',
+          pdf_json_data: ipaData,
+          logs: initialLog,
+        }
+      ])
+      .select();
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+    const submission_id = data[0].submission_id;
+    const { error: appError } = await supabase
+      .from('publication_award_applications')
+      .insert([
+        {
+          publication_id: publication_id,
+          award_id: award_id,
+          submission_id: submission_id,
+        }
+      ]);
+    if (appError) {
+      if (appError.code === '23505') {
+        return res.status(409).json({
+          error: 'This publication has already been applied for this award'
+        });
+      }
+      return res.status(400).json({ error: appError.message });
+    }
+    return res.status(200).json(data);
 
-    return res.status(200).json(result);
 
   } catch (err) {
     console.error(err);

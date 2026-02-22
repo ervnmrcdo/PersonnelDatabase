@@ -1,12 +1,12 @@
 export interface Author {
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
+  first_name?: string;
+  last_name?: string;
+  middle_name?: string;
   university?: string;
   college?: string;
   department?: string;
   position: string;
-  contactNo: string;
+  contact_no: string;
   emailAddress: string;
 }
 
@@ -17,14 +17,17 @@ export interface Award {
 }
 
 export interface Publication {
-  id: number;
-  authors: Author[];
+  type: string;
+  publication_id: number;
+  publication_authors: Author[];
   title: string;
-  date: string;
-  journalName: string;
-  volumeNumber: string;
-  pageNumber: string;
+  date_published: string;
+  journal_name: string;
+  volume_number: string;
+  page_numbers: string;
   publisher: string;
+  issue_number: string;
+  publication_status: string;
 }
 
 export interface SupabasePublication {
