@@ -10,7 +10,7 @@ export default function TeachingDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Teaching Dashboard</h1>
-          <p className="text-gray-400">Hello {profile?.full_name || user?.email || 'Faculty'}</p>
+          <p className="text-gray-400">Hello {profile?.first_name || user?.email || 'Faculty'}</p>
         </div>
 
         {/* some stats */}

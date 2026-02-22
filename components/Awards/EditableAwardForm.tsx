@@ -8,10 +8,12 @@ import { transformToIPAFormData } from "@/utils/transformRawData";
 export interface EditableAwardFormProps {
   initialData: IPAFormData;
   isResubmitting: boolean;
-  onSubmit: (data: any) => void;
+  onSubmit: (submitter_id: string, award_id: string, publication_id: string, data: any) => void;
   onResubmit: (data: any, submission_id: string, logs: SubmissionLog[]) => void;
   onDownload: (data: any) => void;
   submission_id: string;
+  submitter_id: string;
+  publication_id: string;
   logs: SubmissionLog[] | null;
 }
 
@@ -22,10 +24,11 @@ export default function EditableAwardForm({
   onResubmit,
   onDownload,
   submission_id,
+  submitter_id,
+  publication_id,
   logs
 }: EditableAwardFormProps) {
 
-  console.log(submission_id)
 
   const initialFormData: EditableAwardFormData = {
     ipaData: initialData,
@@ -72,7 +75,6 @@ export default function EditableAwardForm({
           break;
       }
 
-      console.log(updated)
       return updated;
     });
   };
@@ -128,7 +130,8 @@ export default function EditableAwardForm({
         <div className="flex">
           <button
             onClick={() => {
-              constraints(formData.ipaData) && onSubmit(formData);
+              constraints(formData.ipaData) && onSubmit(submitter_id, submission_id,
+                publication_id, formData);
             }}
             className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >

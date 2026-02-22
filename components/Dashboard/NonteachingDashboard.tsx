@@ -7,13 +7,8 @@ import { type User } from '@supabase/supabase-js'
 export default function NonteachingDashboard() {
   const [user, setUser] = useState<User | null>(null)
   const [fullname, setFullname] = useState<string | null>(null)
-  
-    useEffect(() => {
-      const supabase = createClient()
-      const getUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
-        setUser(user)
 
+<<<<<<< HEAD
         if (user) {
           const { data: profile } = await supabase
             .from('users')
@@ -24,10 +19,28 @@ export default function NonteachingDashboard() {
           if (profile) {
             setFullname(profile.full_name)
           }
+=======
+  useEffect(() => {
+    const supabase = createClient()
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('users')
+          .select('full_name')
+          .eq('id', user.id)
+          .single()
+
+        if (profile) {
+          setFullname(profile.full_name)
+>>>>>>> f81fcb0 (fix: migrating submission to supabase)
         }
       }
-      getUser()
-    }, [])
+    }
+    getUser()
+  }, [])
   return (
     <div className="flex-1 overflow-auto bg-[#0f1117] text-gray-300 p-8">
       <div className="max-w-6xl mx-auto">

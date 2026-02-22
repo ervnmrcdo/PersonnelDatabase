@@ -1,7 +1,8 @@
 import sql from "@/config/db";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handleSubmit(data: any) {
+
+export default async function handleSubmit(submitter_id: string, award_id: string, publication_id: string, data: any) {
   try {
 
     const pdf = await fetch('/api/generate-ipa-award/route', {
@@ -13,7 +14,11 @@ export default async function handleSubmit(data: any) {
     const buffer = Buffer.from(new Uint8Array(foo))
     const { ipaData } = data
 
+
     const payload = {
+      submitter_id,
+      award_id,
+      publication_id,
       ipaData,
       buffer
     }

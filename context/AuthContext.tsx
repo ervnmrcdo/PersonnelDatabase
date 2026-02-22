@@ -5,7 +5,9 @@ import { createClient } from '@/lib/supabase/client'
 import { type User } from '@supabase/supabase-js'
 
 interface Profile {
-  full_name?: string | null
+  first_name?: string | null
+  middle_name?: string | null
+  last_name?: string | null
   email?: string | null
   role?: string | null
 }
@@ -34,9 +36,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user ?? null)
 
       if (user) {
-        const { data, error } = await supabase.from('users').select('first_name, email, role').eq('id', user.id).single()
+        const { data, error } = await supabase.from('users').select('first_name, middle_name, last_name, email, role').eq('id', user.id).single()
         if (!error && data) {
-          setProfile({ full_name: data.first_name, email: data.email, role: data.role })
+          setProfile({ first_name: data.first_name, middle_name: data.middle_name, last_name: data.last_name, email: data.email, role: data.role })
         } else {
           setProfile(null)
         }

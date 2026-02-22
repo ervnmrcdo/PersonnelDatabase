@@ -21,7 +21,7 @@ export default function TeachingProfile() {
               {user?.email?.[0]?.toUpperCase() || 'A'}
             </div>
             <div className="ml-6">
-              <h2 className="text-2xl font-bold text-white">{profile?.full_name || user?.email}</h2>
+              <h2 className="text-2xl font-bold text-white">{profile?.first_name || user?.email}</h2>
               <p className="text-gray-400">Faculty Member</p>
             </div>
           </div>

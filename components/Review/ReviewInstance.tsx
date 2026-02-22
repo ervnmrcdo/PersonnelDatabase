@@ -60,7 +60,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
         pdfBytes: foo,
         // change admin id to correspond to uid of admin user
         admin_id: '1',
-        submission_id: data.id,
+        submission_id: data.application_id,
         newLogs
       }
 
@@ -98,7 +98,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
     try {
       const payload = {
         admin_id: '1',
-        submission_id: data.id,
+        submission_id: data.application_id,
         remarks: errorRemarks,
         logs: newLogs,
       }

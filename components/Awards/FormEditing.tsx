@@ -6,6 +6,7 @@ import { handleDownload } from "@/utils/handleDownload";
 import handleSubmit from "@/utils/handleSubmit";
 import handleResubmit from "@/utils/handleResubmit";
 import SubmissionLogs from "../SubmissionLogs";
+import { useAuth } from "@/context/AuthContext";
 
 interface FormEditingProps {
   handleBack: () => void;
@@ -24,11 +25,13 @@ const FormEditing: FC<FormEditingProps> = ({
 
   const foo: RawData = {
     applicant: autoData,
-    authors: selectedPublication.publication_authors,
+    authors: selectedPublication.users,
     selectedPublication: selectedPublication,
     selectedAward: selectedAward,
     shouldSubmit: false,
   }
+
+  console.log(foo.authors)
 
   return (
     <>
@@ -48,7 +51,7 @@ const FormEditing: FC<FormEditingProps> = ({
 
         <div className="text-gray-600 space-y-2">
           <p>
-            <strong>Applicant:</strong> {selectedPublication.publication_authors[0].firstName + ' ' + selectedPublication.publication_authors[0].lastName}
+            <strong>Applicant:</strong> {selectedPublication.users[0].first_name + ' ' + selectedPublication.users[0].last_name}
           </p>
           <p>
             <strong>Selected Award:</strong> {selectedAward?.title}
@@ -67,7 +70,9 @@ const FormEditing: FC<FormEditingProps> = ({
             onResubmit={handleResubmit}
             onDownload={handleDownload}
             isResubmitting={false}
-            submission_id=''
+            publication_id={foo.selectedPublication.publication_id}
+            submission_id='1'
+            submitter_id={useAuth().user!.id.toString()}
             logs={null}
           />
         </div>

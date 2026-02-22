@@ -5,19 +5,19 @@ export function transformToIPAFormData(rawData: RawData): IPAFormData {
   const result = new initialIPAFormData({
     articleTitle: rawData.selectedPublication.title,
     completeCitation: `${rawData.selectedPublication.title}, ${rawData.selectedPublication.journal_name}, ${rawData.selectedPublication.volume_number}, ${rawData.selectedPublication.page_numbers}`,
-    author1NameLastFirst: `${rawData.authors[0].lastName}, ${rawData.authors[0].firstName}, ${rawData.authors[0].middleName}`,
+    author1NameLastFirst: `${rawData.authors[0].last_name}, ${rawData.authors[0].first_name}, ${rawData.authors[0].middle_name}`,
     author1UniversityAndDept: `${rawData.authors[0].university}/${rawData.authors[0].department}`,
     totalAuthorNumber: rawData.authors.length.toString(),
     journalName: rawData.selectedPublication.journal_name,
     dateOfPublication: rawData.selectedPublication.date_published,
     publisherName: rawData.selectedPublication.publisher,
-    author1Name: `${rawData.authors[0].firstName} ${rawData.authors[0].middleName}, ${rawData.authors[0].lastName}`,
+    author1Name: `${rawData.authors[0].first_name} ${rawData.authors[0].middle_name}, ${rawData.authors[0].last_name}`,
     author1University: rawData.authors[0].university,
     author1College: rawData.authors[0].college,
     author1Department: rawData.authors[0].department,
-    author1Contact: rawData.authors[0].contactNo,
+    author1Contact: rawData.authors[0].contact_number,
     author1Position: rawData.authors[0].position,
-    author1EmailAddress: rawData.authors[0].emailAddress,
+    author1EmailAddress: rawData.authors[0].email_address,
   })
   return result
 }

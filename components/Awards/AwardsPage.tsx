@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
 import { Author, Award, Publication, PendingAward } from "@/lib/types";
-import { awards, tempPublicationsGenerated } from "@/lib/temp";
+import { awards, } from "@/lib/temp";
 import { AuthClient } from "@supabase/supabase-js";
 import { useAuth } from "@/context/AuthContext";
 
@@ -21,25 +21,6 @@ const AwardsPage: FC = () => {
 
   const [pendingAwards, setPendingAwards] = useState<PendingAward[]>([]);
   const [isLoadingPending, setIsLoadingPending] = useState(true);
-
-
-  useEffect(() => {
-    const fetchPendingAwards = async () => {
-      try {
-        const response = await fetch("/api/pendingAwards");
-        if (response.ok) {
-          const data = await response.json();
-          setPendingAwards(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch pending awards:", error);
-      } finally {
-        setIsLoadingPending(false);
-      }
-    };
-
-    fetchPendingAwards();
-  }, []);
 
   const { user } = useAuth();
   const ADMIN_UUID = user?.id;
@@ -105,7 +86,7 @@ const AwardsPage: FC = () => {
                 handleBack={handleBack}
                 selectedAward={selectedAward!}
                 selectedPublication={selectedPublication!}
-                autoData={selectedPublication!.publication_authors[0]}
+                autoData={selectedPublication!.users[0]}
               />
             </motion.div>
           )}
@@ -115,5 +96,4 @@ const AwardsPage: FC = () => {
     </>
   );
 };
-
-export default AwardsPage;
+export default AwardsPage

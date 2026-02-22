@@ -37,7 +37,7 @@ export default function ListedApplications({ onSelect }: Props) {
         <div className="space-y-4">
           {data.map((item) => (
             <div
-              key={item.id}
+              key={item.application_id}
               className="p-4 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer flex justify-between items-center transition"
               onClick={() => onSelect(item)}
             >

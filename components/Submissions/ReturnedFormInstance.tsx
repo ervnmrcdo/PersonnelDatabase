@@ -58,7 +58,13 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
             </div>
 
 
-            <EditableAwardForm initialData={foo} onSubmit={handleSubmit} onResubmit={handleResubmit} onDownload={handleDownload} isResubmitting={true}
+            <EditableAwardForm initialData={foo}
+                onSubmit={handleSubmit}
+                onResubmit={handleResubmit}
+                onDownload={handleDownload}
+                isResubmitting={true}
+                submitter_id=''
+                publication_id=''
                 submission_id={data.submission_id} logs={data.logs} />
         </div >
     )

@@ -17,8 +17,10 @@ export default async function trial(req: NextApiRequest, res: NextApiResponse) {
         *,
         publication_authors!inner(*),
         users!inner(*)
-        `).eq(`users.user_id`, `${id}`);
+        `)
+      .eq(`users.id`, `${id}`);
 
+    console.log(data)
     if (error) {
       return res.status(400).json({ error: error.message });
     }
@@ -26,7 +28,7 @@ export default async function trial(req: NextApiRequest, res: NextApiResponse) {
     const formatted: Publication[] = data.map((r: any) => ({
       type: r.type,
       publication_id: r.publication_id,
-      publication_authors: r.users,
+      users: r.users,
       title: r.title,
       date_published: r.date_published,
       journal_name: r.journal_name,

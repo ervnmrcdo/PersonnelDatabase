@@ -6,8 +6,8 @@ export interface Author {
   college?: string;
   department?: string;
   position: string;
-  contact_no: string;
-  emailAddress: string;
+  contact_number: string;
+  email_address: string;
 }
 
 export interface Award {
@@ -18,8 +18,8 @@ export interface Award {
 
 export interface Publication {
   type: string;
-  publication_id: number;
-  publication_authors: Author[];
+  publication_id: string;
+  users: Author[];
   title: string;
   date_published: string;
   journal_name: string;
@@ -43,7 +43,7 @@ export interface SupabasePublication {
 }
 
 export type Application = {
-  id: string;
+  application_id: string;
   name: string;
   role: "Student" | "Faculty";
   award: string;

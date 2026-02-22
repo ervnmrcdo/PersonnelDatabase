@@ -32,8 +32,6 @@ export async function login(formData: FormData) {
 
   revalidatePath('/', 'layout')
 
-  //checking to see profile details
-  console.log(profile, authData.user.id)
 
   // Redirect based on role
   if (profile?.role === 'admin') {

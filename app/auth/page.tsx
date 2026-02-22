@@ -41,7 +41,7 @@ export default function AuthPage() {
         });
 
         if (error) throw error;
-        
+
         // Update profile with selected role
         if (data.user) {
           await supabase
@@ -49,14 +49,14 @@ export default function AuthPage() {
             .update({ role })
             .eq('id', data.user.id);
         }
-        
+
         setSuccess("Signup successful! Check your email to confirm.");
         setEmail("");
         setPassword("");
       }
     } catch (err: any) {
       console.error("Auth error:", err);
-        setError(err.message || "Authentication failed");
+      setError(err.message || "Authentication failed");
     } finally {
       setLoading(false);
     }
@@ -81,11 +81,10 @@ export default function AuthPage() {
                 setError("");
                 setSuccess("");
               }}
-              className={`flex-1 py-2 rounded-lg font-semibold transition ${
-                isLogin
-                  ? "bg-blue-500/20 text-blue-400"
-                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-              }`}
+              className={`flex-1 py-2 rounded-lg font-semibold transition ${isLogin
+                ? "bg-blue-500/20 text-blue-400"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                }`}
             >
               Login
             </button>
@@ -95,11 +94,10 @@ export default function AuthPage() {
                 setError("");
                 setSuccess("");
               }}
-              className={`flex-1 py-2 rounded-lg font-semibold transition ${
-                !isLogin
-                  ? "bg-blue-500/20 text-blue-400"
-                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-              }`}
+              className={`flex-1 py-2 rounded-lg font-semibold transition ${!isLogin
+                ? "bg-blue-500/20 text-blue-400"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                }`}
             >
               Sign Up
             </button>
