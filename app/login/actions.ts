@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
 
   // Check user's role
   const { data: profile, error: profileError } = await supabase
-    .from('profiles')
+    .from('users')
     .select('role')
     .eq('id', authData.user.id)
     .single()

@@ -45,7 +45,7 @@ export default function AuthPage() {
         // Update profile with selected role
         if (data.user) {
           await supabase
-            .from('profiles')
+            .from('users')
             .update({ role })
             .eq('id', data.user.id);
         }

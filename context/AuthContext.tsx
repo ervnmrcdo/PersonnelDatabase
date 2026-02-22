@@ -34,9 +34,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user ?? null)
 
       if (user) {
-        const { data, error } = await supabase.from('profiles').select('full_name, email, role').eq('id', user.id).single()
+        const { data, error } = await supabase.from('users').select('first_name, email, role').eq('id', user.id).single()
         if (!error && data) {
-          setProfile({ full_name: data.full_name, email: data.email, role: data.role })
+          setProfile({ full_name: data.first_name, email: data.email, role: data.role })
         } else {
           setProfile(null)
         }

@@ -43,7 +43,7 @@ export default function SignupPage() {
 
     // 2. Insert profile row
     const { error: insertError } = await supabase
-      .from('profiles')
+      .from('users')
       .insert({
         id: user.id,
         email: user.email,

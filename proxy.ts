@@ -42,7 +42,7 @@ export async function proxy(request: NextRequest) {
     }
 
     const { data: profile, error: profileError } = await supabase
-      .from('profiles')
+      .from('users')
       .select('role')
       .eq('id', user.id)
       .single()

@@ -26,8 +26,8 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
       }
 
       const { data, error, status } = await supabase
-        .from('profiles')
-        .select(`full_name, email`)
+        .from('users')
+        .select(`first_name, email`)
         .eq('id', user?.id)
         .single()
 
@@ -37,7 +37,7 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
       }
 
       if (data) {
-        setFullname(data.full_name)
+        setFullname(data.first_name)
         setEmail(data.email)
       }
     } catch (error) {
@@ -57,9 +57,9 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
     try {
       setLoading(true)
 
-      const { error } = await supabase.from('profiles').upsert({
+      const { error } = await supabase.from('users').upsert({
         id: user?.id as string,
-        full_name: fullname,
+        first_name: fullname,
         email: user?.email,
       })
       if (error) {
