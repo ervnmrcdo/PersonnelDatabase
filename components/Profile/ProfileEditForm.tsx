@@ -12,7 +12,11 @@ interface ProfileEditFormProps {
 export default function ProfileEditForm({ user, onSuccess, compact = false }: ProfileEditFormProps) {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
-  const [fullname, setFullname] = useState<string | null>(null)
+
+  const [first_name, setFirstName] = useState<string | null>(null)
+  const [middle_name, setMiddleName] = useState<string | null>(null)
+  const [last_name, setLastName] = useState<string | null>(null)
+
   const [email, setEmail] = useState<string | null>(null)
   const [isEditing, setIsEditing] = useState(false)
 
@@ -27,7 +31,7 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
 
       const { data, error, status } = await supabase
         .from('users')
-        .select(`first_name, email`)
+        .select(`first_name, middle_name, last_name, email`)
         .eq('id', user?.id)
         .single()
 
@@ -37,7 +41,9 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
       }
 
       if (data) {
-        setFullname(data.first_name)
+        setFirstName(data.first_name)
+        setMiddleName(data.middle_name)
+        setLastName(data.last_name)
         setEmail(data.email)
       }
     } catch (error) {
@@ -59,7 +65,9 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
 
       const { error } = await supabase.from('users').upsert({
         id: user?.id as string,
-        first_name: fullname,
+        first_name: first_name,
+        middle_name: middle_name,
+        last_name: last_name,
         email: user?.email,
       })
       if (error) {
@@ -90,7 +98,9 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
             </div>
             <div>
               <label className="text-sm text-gray-500 uppercase">Full Name</label>
-              <p className="text-white font-semibold">{fullname || 'Not set'}</p>
+              <p className="text-white font-semibold">
+                {`${first_name || ''} ${last_name || ''}`.trim() || 'Not set'}
+              </p>
             </div>
             <button
               onClick={() => setIsEditing(true)}
@@ -115,13 +125,37 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
             </div>
             <div>
               <label htmlFor="fullName-compact" className="block text-sm text-gray-300 mb-2">
-                Full Name
+                First Name
               </label>
               <input
                 id="fullName-compact"
                 type="text"
-                value={fullname || ''}
-                onChange={(e) => setFullname(e.target.value)}
+                value={first_name || ''}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="fullName-compact" className="block text-sm text-gray-300 mb-2">
+                Middle Name
+              </label>
+              <input
+                id="fullName-compact"
+                type="text"
+                value={middle_name || ''}
+                onChange={(e) => setMiddleName(e.target.value)}
+                className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="fullName-compact" className="block text-sm text-gray-300 mb-2">
+                Last Name
+              </label>
+              <input
+                id="fullName-compact"
+                type="text"
+                value={last_name || ''}
+                onChange={(e) => setLastName(e.target.value)}
                 className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
               />
             </div>
@@ -164,13 +198,37 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
       </div>
       <div>
         <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">
-          Full Name
+          First Name
         </label>
         <input
           id="fullName"
           type="text"
-          value={fullname || ''}
-          onChange={(e) => setFullname(e.target.value)}
+          value={first_name || ''}
+          onChange={(e) => setFirstName(e.target.value)}
+          className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+        />
+      </div>
+      <div>
+        <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">
+          Middle Name
+        </label>
+        <input
+          id="fullName"
+          type="text"
+          value={middle_name || ''}
+          onChange={(e) => setMiddleName(e.target.value)}
+          className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+        />
+      </div>
+      <div>
+        <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">
+          Last Name
+        </label>
+        <input
+          id="fullName"
+          type="text"
+          value={last_name || ''}
+          onChange={(e) => setLastName(e.target.value)}
           className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
         />
       </div>
