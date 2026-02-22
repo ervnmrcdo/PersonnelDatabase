@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import Awards from "./Awards";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Loader2 } from "lucide-react";
 import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
 import { Author, Award, Publication, PendingAward } from "@/lib/types";
@@ -18,6 +18,7 @@ const AwardsPage: FC = () => {
   const [selectedPublication, setSelectedPublication] =
     useState<Publication | null>(null);
   const [publications, setPublications] = useState<Publication[]>([]);
+  const [isLoadingPublications, setIsLoadingPublications] = useState(false);
 
   const [pendingAwards, setPendingAwards] = useState<PendingAward[]>([]);
   const [isLoadingPending, setIsLoadingPending] = useState(true);
@@ -28,6 +29,27 @@ const AwardsPage: FC = () => {
     'id': ADMIN_UUID,
     'submitterType': 'NONTEACHING'
   }
+
+  useEffect(() => {
+    if (!user) return;
+
+    setIsLoadingPublications(true);
+    fetch("/api/get/publications", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setPublications(result);
+        setIsLoadingPublications(false);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch publications:', err);
+        setIsLoadingPublications(false);
+      });
+  }, [user]);
+
 
   const handleAwardSelect = (award: Award) => {
     setSelectedAward(award);
@@ -70,6 +92,7 @@ const AwardsPage: FC = () => {
                 handleBack={handleBack}
                 handlePublicationSelect={(pub) => handlePublicationSelect(pub)}
                 publications={publications}
+                isLoading={isLoadingPublications}
               />
             </motion.div>
           )}

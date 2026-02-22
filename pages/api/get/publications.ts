@@ -3,7 +3,7 @@ import { Publication } from "@/lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function trial(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = JSON.parse(await req.body)
+  const { id } = await req.body
 
   console.log(id)
 
@@ -14,18 +14,21 @@ export default async function trial(req: NextApiRequest, res: NextApiResponse) {
     const { data, error } = await supabase
       .from('publications')
       .select(`
-        *,
-        publication_authors!inner(*),
-        users!inner(*)
-        `)
-      .eq(`users.id`, `${id}`);
+    *,
+    publication_authors!inner(*),
+    users!inner(*),
+    publication_award_applications(*)
+  `)
+      .eq(`users.id`, `${id}`)
+    // Add filter after fetching (before mapping):
 
-    console.log(data)
+    const newdata = data?.filter(p => !p.publication_award_applications?.length)
+
     if (error) {
       return res.status(400).json({ error: error.message });
     }
 
-    const formatted: Publication[] = data.map((r: any) => ({
+    const formatted: Publication[] = newdata!.map((r: any) => ({
       type: r.type,
       publication_id: r.publication_id,
       users: r.users,
@@ -39,7 +42,7 @@ export default async function trial(req: NextApiRequest, res: NextApiResponse) {
       publication_status: r.publication_status,
     }))
 
-    return res.status(200).json(data);
+    return res.status(200).json(newdata);
     // return res.status(200).json(data);
   } catch (e) {
     // Casting e as Error to access the message safely

@@ -8,18 +8,6 @@ export default function NonteachingDashboard() {
   const [user, setUser] = useState<User | null>(null)
   const [fullname, setFullname] = useState<string | null>(null)
 
-<<<<<<< HEAD
-        if (user) {
-          const { data: profile } = await supabase
-            .from('users')
-            .select('full_name')
-            .eq('id', user.id)
-            .single()
-          
-          if (profile) {
-            setFullname(profile.full_name)
-          }
-=======
   useEffect(() => {
     const supabase = createClient()
     const getUser = async () => {
@@ -35,7 +23,6 @@ export default function NonteachingDashboard() {
 
         if (profile) {
           setFullname(profile.full_name)
->>>>>>> f81fcb0 (fix: migrating submission to supabase)
         }
       }
     }
