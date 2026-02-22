@@ -7,45 +7,7 @@ import FormEditing from "./FormEditing";
 import { Author, Award, Publication, PendingAward } from "@/lib/types";
 import { awards, tempPublicationsGenerated } from "@/lib/temp";
 
-//
-// interface ApiPublicationData {
-//   nonteaching_id: number;
-//   up_id: string;
-//   first_name: string;
-//   last_name: string;
-//   position_id: number;
-//   entry_date: string;
-//   publication_id: number;
-//   author_type: string;
-//   author_teaching_id: number | null;
-//   author_nonteaching_id: number | null;
-//   type: string;
-//   title: string;
-//   publisher: string;
-//   publication_status: string;
-//   date_published: string;
-//   page_number: string;
-//   issue_number: string;
-//   page_numbers: string;
-//   journal_publication: string;
-//   volume_number: string;
-//   total_authors: number;
-// }
-//
-// const applicant: ApplicantData = {
-//   applicantName: "",
-//   firstName: "Ervin",
-//   lastName: "Mercado",
-//   middleName: "Poblete",
-//   university: "University of the Philippines",
-//   college: "College of Engineering",
-//   department: "Computer Science",
-//   position: "Student",
-//   contactNo: "+1-555-0123",
-//   emailAddress: "epmercado2@up.edu.ph",
-// };
-//
-// applicant.applicantName = `${applicant.lastName}, ${applicant.firstName} ${applicant.middleName}`;
+
 
 const AwardsPage: FC = () => {
   const [step, setStep] = useState<"awards" | "publications" | "form">(
@@ -81,60 +43,6 @@ const AwardsPage: FC = () => {
     'id': '1',
     'submitterType': 'NONTEACHING'
   }
-
-  // useEffect(() => {
-  //   console.log('allo');
-  //
-  //   fetch('api/get/publications', {
-  //     method: "POST",
-  //     body: JSON.stringify(payload),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((result: PublicationData[]) => { // Assuming result is an array
-  //       // Transform the API response to match your Publication interface
-  //       const transformedPublications: Publication[] = result.map((item: PublicationData) => ({
-  //         id: item.publication_id,
-  //         title: item.title,
-  //         date: item.publication_date,
-  //         journalName: item.journal_publication,
-  //         volumeNumber: item.volume_number,
-  //         pageNumber: item.pag_number,
-  //         publisher: item.publisher // Fixed typo
-  //       }));
-  //
-  //       // Update state with the transformed array
-  //       setPublications(transformedPublications);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching publications:', error);
-  //     });
-  // }, []); // Make sure to include dependencies if needed
-
-  // const publications: Publication[] = []
-  // useEffect(() => {
-  //   console.log('allo')
-  //   fetch('api/get/publications', {
-  //     method: "POST",
-  //     body: JSON.stringify(payload),
-  //   }).then((res) => res.json())
-  //     .then((result) => {
-  //       publications.push(
-  //         result.map((item: any) => ({
-  //           id: item.publication_id,
-  //           title: item.title,
-  //           date: item.publication_date,
-  //           journalName: item.journal_publication,
-  //           volumeNumber: item.volume_number,
-  //           pageNumber: item.pag_number,
-  //           publishe: item.publisher
-  //         }))
-  //       )
-  //     })
-  // }, [])
-  //
-
-
-
 
   const handleAwardSelect = (award: Award) => {
     setSelectedAward(award);

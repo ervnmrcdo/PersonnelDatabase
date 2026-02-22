@@ -19,6 +19,7 @@ export default function Publications() {
   const [issueNumber, setIssueNumber] = useState('');
   const [pageNumbers, setPageNumbers] = useState('');
   const [volumeNumber, setVolumeNumber] = useState('');
+  const [journalName, setJournalName] = useState('');
 
   const supabase = createClient();
 
@@ -45,7 +46,8 @@ export default function Publications() {
             date_published,
             issue_number,
             page_numbers,
-            volume_number
+            volume_number, 
+            journal_name
           )
         `)
         .eq('user_id', user.id);
@@ -76,6 +78,7 @@ export default function Publications() {
           issue_number: issueNumber,
           page_numbers: pageNumbers,
           volume_number: volumeNumber,
+          journal_name: journalName,
         }
       ])
       .select();
@@ -112,6 +115,7 @@ export default function Publications() {
     setIssueNumber('');
     setPageNumbers('');
     setVolumeNumber('');
+    setJournalName('');
     setShowForm(false);
 
     await fetchPublications();
@@ -140,6 +144,7 @@ export default function Publications() {
               <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="Issue Number" className="w-full p-2 rounded text-black" />
               <input type="text" value={pageNumbers} onChange={(e) => setPageNumbers(e.target.value)} placeholder="Page Numbers" className="w-full p-2 rounded text-black" />
               <input type="text" value={volumeNumber} onChange={(e) => setVolumeNumber(e.target.value)} placeholder="Volume Number" className="w-full p-2 rounded text-black" />
+              <input type="text" value={journalName} onChange={(e) => setJournalName(e.target.value)} placeholder="Journal Name" className="w-full p-2 rounded text-black" />
               <button
                 onClick={addPublication}
                 className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mt-2"
