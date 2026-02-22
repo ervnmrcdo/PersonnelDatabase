@@ -16,6 +16,11 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
   const [first_name, setFirstName] = useState<string | null>(null)
   const [middle_name, setMiddleName] = useState<string | null>(null)
   const [last_name, setLastName] = useState<string | null>(null)
+  const [university, setUniversity] = useState<string | null>(null)
+  const [college, setCollege] = useState<string | null>(null)
+  const [department, setDepartment] = useState<string | null>(null)
+  const [contact_number, setContactNumber] = useState<string | null>(null)
+  const [position, setPosition] = useState<string | null>(null)
 
   const [email, setEmail] = useState<string | null>(null)
   const [isEditing, setIsEditing] = useState(false)
@@ -31,7 +36,7 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
 
       const { data, error, status } = await supabase
         .from('users')
-        .select(`first_name, middle_name, last_name, email`)
+        .select(`first_name, middle_name, last_name, email, university, college, department, contact_number, position`)
         .eq('id', user?.id)
         .single()
 
@@ -45,6 +50,11 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
         setMiddleName(data.middle_name)
         setLastName(data.last_name)
         setEmail(data.email)
+        setUniversity(data.university)
+        setCollege(data.college)
+        setDepartment(data.department)
+        setContactNumber(data.contact_number)
+        setPosition(data.position)
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : JSON.stringify(error)
@@ -69,6 +79,11 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
         middle_name: middle_name,
         last_name: last_name,
         email: user?.email,
+        university: university,
+        college: college,
+        department: department,
+        contact_number: contact_number,
+        position: position,
       })
       if (error) {
         console.error('Supabase error:', error)
@@ -101,6 +116,26 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
               <p className="text-white font-semibold">
                 {`${first_name || ''} ${last_name || ''}`.trim() || 'Not set'}
               </p>
+            </div>
+            <div>
+              <label className="text-sm text-gray-500 uppercase">University</label>
+              <p className="text-white font-semibold">{university}</p>
+            </div>
+            <div>
+              <label className="text-sm text-gray-500 uppercase">College</label>
+              <p className="text-white font-semibold">{college}</p>
+            </div>
+            <div>
+              <label className="text-sm text-gray-500 uppercase">Department</label>
+              <p className="text-white font-semibold">{department}</p>
+            </div>
+            <div>
+              <label className="text-sm text-gray-500 uppercase">Contact Number</label>
+              <p className="text-white font-semibold">{contact_number}</p>
+            </div>
+            <div>
+              <label className="text-sm text-gray-500 uppercase">Position</label>
+              <p className="text-white font-semibold">{position}</p>
             </div>
             <button
               onClick={() => setIsEditing(true)}
@@ -156,6 +191,66 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
                 type="text"
                 value={last_name || ''}
                 onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="fullName-compact" className="block text-sm text-gray-300 mb-2">
+                University
+              </label>
+              <input
+                id="fullName-compact"
+                type="text"
+                value={university || ''}
+                onChange={(e) => setUniversity(e.target.value)}
+                className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="fullName-compact" className="block text-sm text-gray-300 mb-2">
+                College
+              </label>
+              <input
+                id="fullName-compact"
+                type="text"
+                value={college || ''}
+                onChange={(e) => setCollege(e.target.value)}
+                className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="fullName-compact" className="block text-sm text-gray-300 mb-2">
+                Department
+              </label>
+              <input
+                id="fullName-compact"
+                type="text"
+                value={department || ''}
+                onChange={(e) => setDepartment(e.target.value)}
+                className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="fullName-compact" className="block text-sm text-gray-300 mb-2">
+                Contact Number
+              </label>
+              <input
+                id="fullName-compact"
+                type="text"
+                value={contact_number || ''}
+                onChange={(e) => setContactNumber(e.target.value)}
+                className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="fullName-compact" className="block text-sm text-gray-300 mb-2">
+                Position
+              </label>
+              <input
+                id="fullName-compact"
+                type="text"
+                value={position || ''}
+                onChange={(e) => setPosition(e.target.value)}
                 className="w-full px-4 py-2 bg-[#1b1e2b] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
               />
             </div>
