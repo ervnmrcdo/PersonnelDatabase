@@ -17,10 +17,9 @@ export default function ListedApplications({ onSelect }: Props) {
     fetch("/api/pendingAwards")
       .then((res) => res.json())
       .then((result) => {
-        console.log(result)
         setData(
           result.map((item: any) => ({
-            id: item.id,
+            application_id: item.id,
             name: item.name,
             role: item.submitterType,
             award: item.awardTitle,
