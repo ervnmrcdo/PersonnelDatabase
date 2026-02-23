@@ -1,9 +1,8 @@
-'use client';
-
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Application, SubmissionLog } from "@/lib/types";
+import { useAuth } from "@/context/AuthContext";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
@@ -18,14 +17,13 @@ type Props = {
 export default function ReviewInstance({ data, onBack }: Props) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [numPages, setNumPages] = useState<number>();
+  const { user } = useAuth()
 
   const [errorRemarks, setErrorRemarks] = useState<string>("");
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
 
   const acceptPDF = async () => {
-
     try {
-
       const verifiedLog: SubmissionLog = {
         action: 'VALIDATED',
         remarks: '',
@@ -97,7 +95,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
     try {
       const payload = {
-        admin_id: '1',
+        admin_id: user?.id,
         submission_id: data.application_id,
         remarks: errorRemarks,
         logs: newLogs,
