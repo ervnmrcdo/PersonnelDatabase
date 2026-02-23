@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import A from "../AllAwards";
 import AllAwards from "../AllAwards";
+import { createClient } from "@supabase/supabase-js";
 
 type Props = {
   onSelect: (data: Application) => void;
@@ -11,10 +12,12 @@ type Props = {
 export default function ListedApplications({ onSelect }: Props) {
   const [data, setData] = useState<Application[]>([]);
 
+
   useEffect(() => {
     fetch("/api/pendingAwards")
       .then((res) => res.json())
       .then((result) => {
+        console.log(result)
         setData(
           result.map((item: any) => ({
             id: item.id,
@@ -53,7 +56,7 @@ export default function ListedApplications({ onSelect }: Props) {
         </div>
 
       </div>
-      <AllAwards />
+      {/* <AllAwards /> */}
     </>
   );
 }

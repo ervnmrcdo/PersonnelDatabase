@@ -1,4 +1,5 @@
 import sql from "@/config/db";
+import { createPagesServerClient } from "@/lib/supabase/pager-server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 
@@ -7,29 +8,42 @@ export default async function PendingAwards(
   res: NextApiResponse,
 ) {
   try {
-    const rows = await sql`
-      SELECT * 
-      FROM PendingAwards pa INNER JOIN NonTeachingPersonnel ntp
-      ON  pa.submitter_nonteaching_id = ntp.nonteaching_id INNER JOIN 
-      Awards a ON pa.award_id = a.award_id
-      WHERE status = 'PENDING';
-    `;
 
-    const formatted = rows.map((r) => ({
-      name: `${r.first_name} ${r.last_name}`,
+    const supabase = createPagesServerClient(req, res);
+
+    const { data, error } = await supabase
+      .from('submissions')
+      .select(`
+        *,
+        authors:users!submitter_id(*),
+        awards:awards!award_id(*)
+        
+       `)
+      .eq('status', 'PENDING')
+
+
+    if (error) {
+      return res.status(400).json({ message: `Internal server error: ${error}` })
+    }
+
+
+    const formatted = data.map((r: any) => ({
       id: r.submission_id,
-      submitterType: r.submitter_type,
+      name: `${r.authors.first_name} ${r.authors.last_name}`,
       dateSubmitted: r.date_submitted,
       status: r.status,
-      awardId: r.award_id,
+      awardId: r.awards.award_id,
       pdfBase64: r.attached_files
         ? Buffer.from(r.attached_files).toString("base64")
         : null,
-      awardTitle: r.title,
+      awardTitle: r.awards.title,
       logs: r.logs,
     }));
 
+
+
     return res.status(200).json(formatted);
+
   } catch (error) {
     console.error("Error fetching pending awards:", error);
     return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
