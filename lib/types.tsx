@@ -64,8 +64,8 @@ export interface AcceptedForm {
 }
 
 export interface RejectedForm {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   submission_id: string;
   pdfBufferData: string;
   date_submitted: string;
