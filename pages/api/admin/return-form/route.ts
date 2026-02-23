@@ -18,7 +18,7 @@ export default async function ReturnAward(
 				status: 'RETURNED',
 				reviewed_by_admin_id: admin_id,
 				remarks: remarks,
-				logs: JSON.stringify(logs)
+				logs: logs
 			})
 			.eq('submission_id', submission_id)
 			.eq('status', 'PENDING')
@@ -29,12 +29,6 @@ export default async function ReturnAward(
 			return res.status(400).json({ message: error })
 		}
 
-		//
-		// const post = await sql`
-		// 	UPDATE pendingawards
-		// 	SET status = 'RETURNED', reviewed_by_admin_id = ${admin_id}, remarks = ${remarks}, logs = ${JSON.stringify(logs)}
-		// 	WHERE submission_id = ${submission_id} AND status = 'PENDING'
-		// 	`
 		return res.status(200).json(data);
 
 

@@ -17,7 +17,6 @@ export default async function PendingAwards(
         *,
         authors:users!submitter_id(*),
         awards:awards!award_id(*)
-        
        `)
       .eq('status', 'PENDING')
 
