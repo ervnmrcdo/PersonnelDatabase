@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { createClient } from '@/lib/supabase/client'
 import { type User } from '@supabase/supabase-js'
 
+
 export default function NonteachingDashboard() {
   const [user, setUser] = useState<User | null>(null)
-  const [fullname, setFullname] = useState<string | null>(null)
+  const [first_name, setFirstName] = useState<string | null>(null)
 
   useEffect(() => {
     const supabase = createClient()
@@ -17,12 +18,12 @@ export default function NonteachingDashboard() {
       if (user) {
         const { data: profile } = await supabase
           .from('users')
-          .select('full_name')
+          .select('first_name')
           .eq('id', user.id)
           .single()
 
         if (profile) {
-          setFullname(profile.full_name)
+          setFirstName(profile.first_name)
         }
       }
     }
@@ -34,7 +35,7 @@ export default function NonteachingDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Nonteaching Dashboard</h1>
-          <p className="text-gray-400">Hello {fullname || user?.email || 'Student'}</p>
+          <p className="text-gray-400">Hello {first_name || user?.email || 'Student'}</p>
         </div>
 
         {/* Stats */}

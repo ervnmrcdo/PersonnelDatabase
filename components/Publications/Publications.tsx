@@ -20,6 +20,8 @@ export default function Publications() {
   const [pageNumbers, setPageNumbers] = useState('');
   const [volumeNumber, setVolumeNumber] = useState('');
   const [journalName, setJournalName] = useState('');
+  
+  const [selectedPublication, setSelectedPublication] = useState<SupabasePublication | null>(null);
 
   const supabase = createClient();
 
@@ -163,7 +165,8 @@ export default function Publications() {
               {publications.map((pub) => (
                 <li
                   key={pub.publication_id}
-                  className="bg-[#23263a] p-4 rounded-lg border border-gray-600"
+                  onClick={() => setSelectedPublication(pub)}
+                  className="bg-[#23263a] p-4 rounded-lg border border-gray-600 cursor-pointer hover:border-blue-500 transition"
                 >
                   <div className="font-bold text-lg text-white">{pub.title}</div>
                   <div className="text-gray-400 text-sm">
@@ -178,6 +181,33 @@ export default function Publications() {
                 </li>
               ))}
             </ul>
+          )}
+
+          {selectedPublication && (
+            <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+            <div className="bg-[#1b1e2b] p-6 rounded-lg w-full max-w-lg border border-gray-700">
+              <h3 className="text-xl font-bold text-white mb-4">
+                {selectedPublication.title}
+              </h3>
+
+            <div className="space-y-2 text-gray-300 text-sm">
+            <p><span className="text-gray-400">Type:</span> {selectedPublication.type}</p>
+            <p><span className="text-gray-400">Publisher:</span> {selectedPublication.publisher}</p>
+            <p><span className="text-gray-400">Status:</span> {selectedPublication.publication_status}</p>
+            <p><span className="text-gray-400">Date Published:</span> {selectedPublication.date_published}</p>
+            <p><span className="text-gray-400">Issue:</span> {selectedPublication.issue_number}</p>
+            <p><span className="text-gray-400">Pages:</span> {selectedPublication.page_numbers}</p>
+            <p><span className="text-gray-400">Volume:</span> {selectedPublication.volume_number}</p>
+            <p><span className="text-gray-400">Journal:</span> {selectedPublication.journal_name}</p>
+          </div>
+
+            <button
+              onClick={() => setSelectedPublication(null)}
+              className="mt-6 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+              Close
+            </button>
+            </div>
+            </div>
           )}
         </div>
       </div>

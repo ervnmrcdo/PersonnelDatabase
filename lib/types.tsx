@@ -39,7 +39,8 @@ export interface SupabasePublication {
   date_published: string;
   issue_number: string;
   page_numbers: string;
-  volume_numer: string;
+  volume_number: string;
+  journal_name: string;
 }
 
 export type Application = {
