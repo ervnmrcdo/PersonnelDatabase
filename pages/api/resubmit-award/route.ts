@@ -19,10 +19,24 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const foo = Buffer.from(buffer)
     const supabase = createPagesServerClient(req, res);
 
+    // Upload new PDF to Supabase Storage bucket
+    const fileName = `${submission_id}.pdf`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('submissions-documents')
+      .upload(fileName, foo, {
+        contentType: 'application/pdf',
+        upsert: true
+      });
+
+    if (uploadError) {
+      return res.status(400).json({ error: uploadError.message });
+    }
+
+    // Update with new file path
     const { data, error } = await supabase
       .from('submissions')
       .update({
-        attached_files: foo,
+        attached_file_path: uploadData.path,
         pdf_json_data: JSON.stringify(ipaData),
         status: 'PENDING',
         logs: newLogs
@@ -30,6 +44,34 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       .eq('submission_id', submission_id)
       .eq('status', 'RETURNED')
       .select()
+
+    // === OLD CODE (commented out) ===
+    // const { data, error } = await supabase
+    //   .from('submissions')
+    //   .update({
+    //     attached_files: foo,
+    //     pdf_json_data: JSON.stringify(ipaData),
+    //     status: 'PENDING',
+    //     logs: newLogs
+    //   })
+    //   .eq('submission_id', submission_id)
+    //   .eq('status', 'RETURNED')
+    //   .select()
+
+    // const foo = Buffer.from(buffer)
+    // const supabase = createPagesServerClient(req, res);
+
+    // const { data, error } = await supabase
+    //   .from('submissions')
+    //   .update({
+    //     attached_files: foo,
+    //     pdf_json_data: JSON.stringify(ipaData),
+    //     status: 'PENDING',
+    //     logs: newLogs
+    //   })
+    //   .eq('submission_id', submission_id)
+    //   .eq('status', 'RETURNED')
+    //   .select()
 
     // const result = await sql`
     //  	UPDATE 
@@ -41,6 +83,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     //       submission_id = ${submission_id} AND status = 'RETURNED'
     //     RETURNING *;
     //   `;
+    // === END OLD CODE ===
 
     return res.status(200).json(data);
 

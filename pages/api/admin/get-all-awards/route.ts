@@ -6,6 +6,7 @@ interface SubmissionRow {
 	date_submitted: string;
 	status: string;
 	attached_files: Buffer | null;
+	attached_file_path: string | null;
 	users: { first_name: string; last_name: string }[];
 	awards: { award_id: number; title: string }[];
 }
@@ -22,7 +23,7 @@ export default async function RetrieveAllAwards(
 		const { data, error } = await supabase
 			.from('submissions')
 			.select(`
-				submission_id, date_submitted, status, attached_files,
+				submission_id, date_submitted, status, attached_files, attached_file_path,
 				users!submitter_id!inner(first_name, last_name),
 				awards!inner(award_id, title)
 			`);
@@ -31,17 +32,35 @@ export default async function RetrieveAllAwards(
 			return res.status(400).json({ error: error.message });
 		}
 
-		const formatted = data.map((r: SubmissionRow) => ({
-			first_name: `${r.users[0].first_name} `,
-			last_name: `${r.users[0].last_name}`,
-			id: r.submission_id,
-			dateSubmitted: r.date_submitted,
-			status: r.status,
-			awardId: r.awards[0].award_id,
-			pdfBase64: r.attached_files
-				? Buffer.from(r.attached_files).toString("base64")
-				: null,
-			awardTitle: r.awards[0].title,
+		const formatted = await Promise.all(data.map(async (r: SubmissionRow) => {
+			let pdfUrl = null;
+			
+			// NEW: Get signed URL from Supabase Storage
+			if (r.attached_file_path) {
+				const { data: signedUrlData } = await supabase.storage
+					.from('submissions-documents')
+					.createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
+				
+				pdfUrl = signedUrlData?.signedUrl || null;
+			}
+			
+			// === OLD CODE (commented out) ===
+			// pdfBase64: r.attached_files
+			// 	? Buffer.from(r.attached_files).toString("base64")
+			// 	: null,
+			// === END OLD CODE ===
+
+			return {
+				first_name: `${r.users[0].first_name} `,
+				last_name: `${r.users[0].last_name}`,
+				id: r.submission_id,
+				dateSubmitted: r.date_submitted,
+				status: r.status,
+				awardId: r.awards[0].award_id,
+				pdfUrl,
+				pdfBase64: null, // Deprecated, use pdfUrl instead
+				awardTitle: r.awards[0].title,
+			};
 		}));
 
 

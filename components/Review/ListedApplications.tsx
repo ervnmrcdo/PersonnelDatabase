@@ -24,7 +24,9 @@ export default function ListedApplications({ onSelect }: Props) {
             role: item.submitterType,
             award: item.awardTitle,
             dateSubmitted: item.dateSubmitted,
+            // NEW: Use pdfUrl from Supabase Storage
             pdfBase64: item.pdfBase64,
+            pdfUrl: item.pdfUrl,
             logs: item.logs as SubmissionLog,
           })),
         );

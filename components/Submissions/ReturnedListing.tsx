@@ -28,7 +28,8 @@ export default function ReturnedListing({ onSelect }: Props) {
             console.log(result)
             setReturnedData(result.map((item: any) => ({
                 submission_id: item.submission_id,
-                pdfBufferData: item.attached_files,
+                // NEW: Use pdfUrl from Supabase Storage instead of attached_files
+                pdfBufferData: item.pdfUrl || item.attached_files,
                 first_name: item.authors.first_name,
                 last_name: item.authors.last_name,
                 date_submitted: item.date_submitted,
