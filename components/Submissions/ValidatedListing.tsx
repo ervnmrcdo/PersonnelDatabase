@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { AcceptedForm } from "@/lib/types";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -14,10 +15,11 @@ export default function AcceptedListing({ onSelect }: Props) {
     // stores retrieved data
     const [acceptedData, setAcceptedData] = useState<AcceptedForm[]>([])
     // const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+    const { user } = useAuth()
 
-    //hard-coded id of sudent need to be changed
+
     const payload = {
-        id: '1',
+        id: user?.id,
         submitterType: 'NONTEACHING'
     }
 
