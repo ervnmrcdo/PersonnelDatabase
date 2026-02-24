@@ -9,7 +9,11 @@ export default function Publications() {
   const { user } = useAuth();
   const [publications, setPublications] = useState<SupabasePublication[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
+  // const [showForm, setShowForm] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false)
+
+  type Mode = "view" | "add" | "edit";
+  const [mode, setMode] = useState<Mode>("view");
 
   const [type, setType] = useState('');
   const [title, setTitle] = useState('');
@@ -64,6 +68,20 @@ export default function Publications() {
       setLoading(false);
     };
 
+
+  function resetForm() {
+    setType('')
+    setTitle('')
+    setPublisher('')
+    setPublicationStatus('')
+    setDatePublished('')
+    setIssueNumber('')
+    setPageNumbers('')
+    setVolumeNumber('')
+    setJournalName('')
+    setSelectedPublication(null)
+  }
+
   const addPublication = async () => {
     if (!title.trim() || !user) return;
 
@@ -109,20 +127,46 @@ export default function Publications() {
       return;
     }
 
-    setType('');
-    setTitle('');
-    setPublisher('');
-    setPublicationStatus('');
-    setDatePublished('');
-    setIssueNumber('');
-    setPageNumbers('');
-    setVolumeNumber('');
-    setJournalName('');
-    setShowForm(false);
-
     await fetchPublications();
+    resetForm();
+    setMode("view");
     setLoading(false);
   };
+
+  async function editPublication() {
+    if (!selectedPublication) return
+
+    try {
+      setLoading(true)
+
+      const { error } = await supabase
+        .from('publications')
+        .update({
+          type,
+          title,
+          publisher,
+          publication_status: publicationStatus,
+          date_published: datePublished,
+          issue_number: issueNumber,
+          page_numbers: pageNumbers,
+          volume_number: volumeNumber,
+          journal_name: journalName
+        })
+        .eq('publication_id', selectedPublication.publication_id)
+
+      if (error) throw error
+
+      await fetchPublications()
+      resetForm()
+      setMode("view")
+      alert('Publication updated!')
+    } catch (error) {
+      console.error(error)
+      alert('Error updating publication')
+    } finally {
+      setLoading(false)
+    }
+  } 
 
   return (
     <div className="flex-1 overflow-auto bg-[#0f1117] text-gray-300 p-8">
@@ -130,13 +174,17 @@ export default function Publications() {
         <div className="bg-[#1b1e2b] rounded-lg p-6 border border-gray-700 mt-8">
           <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-white mb-4">My Publications</h2>
-          <button onClick={() => setShowForm(!showForm)}
+          <button
+            onClick={() => {
+              resetForm()
+              setMode("add");
+            }}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-              {showForm ? 'Cancel' : 'Add Publication'}
+              Add Publication
             </button>
           </div>
 
-          {showForm && (
+          {(mode === "add" || mode === "edit") && (
             <div className="mb-6 grid gap-2 grid-cols-1 md:grid-cols-2">
               <input type="text" value={type} onChange={(e) => setType(e.target.value)} placeholder="Type" className="w-full p-2 rounded text-black" />
               <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 rounded text-black" />
@@ -148,11 +196,20 @@ export default function Publications() {
               <input type="text" value={volumeNumber} onChange={(e) => setVolumeNumber(e.target.value)} placeholder="Volume Number" className="w-full p-2 rounded text-black" />
               <input type="text" value={journalName} onChange={(e) => setJournalName(e.target.value)} placeholder="Journal Name" className="w-full p-2 rounded text-black" />
               <button
-                onClick={addPublication}
+                onClick={mode === "edit" ? editPublication : addPublication}
                 className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mt-2"
               >
                 Save
               </button>
+              <button
+                  onClick={() => {
+                    resetForm();
+                    setMode("view");
+                  }}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
             </div>
           )}
 
@@ -165,7 +222,20 @@ export default function Publications() {
               {publications.map((pub) => (
                 <li
                   key={pub.publication_id}
-                  onClick={() => setSelectedPublication(pub)}
+                  onClick={() => {
+                    setSelectedPublication(pub)
+                    setMode("view");
+
+                    setType(pub.type || '')
+                    setTitle(pub.title || '')
+                    setPublisher(pub.publisher || '')
+                    setPublicationStatus(pub.publication_status || '')
+                    setDatePublished(pub.date_published || '')
+                    setIssueNumber(pub.issue_number || '')
+                    setPageNumbers(pub.page_numbers || '')
+                    setVolumeNumber(pub.volume_number || '')
+                    setJournalName(pub.journal_name || '')
+                  }}
                   className="bg-[#23263a] p-4 rounded-lg border border-gray-600 cursor-pointer hover:border-blue-500 transition"
                 >
                   <div className="font-bold text-lg text-white">{pub.title}</div>
@@ -175,15 +245,12 @@ export default function Publications() {
                   <div className="text-gray-400 text-sm">
                     Publisher: {pub.publisher}
                   </div>
-                  <div className="text-gray-400 text-sm">
-                    Date Published: {pub.date_published}
-                  </div>
                 </li>
               ))}
             </ul>
           )}
 
-          {selectedPublication && (
+          {mode === "view" && selectedPublication && (
             <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
             <div className="bg-[#1b1e2b] p-6 rounded-lg w-full max-w-lg border border-gray-700">
               <h3 className="text-xl font-bold text-white mb-4">
@@ -200,10 +267,18 @@ export default function Publications() {
             <p><span className="text-gray-400">Volume:</span> {selectedPublication.volume_number}</p>
             <p><span className="text-gray-400">Journal:</span> {selectedPublication.journal_name}</p>
           </div>
-
             <button
-              onClick={() => setSelectedPublication(null)}
-              className="mt-6 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                    onClick={() => setMode("edit")}
+                    className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded"
+                  >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                setSelectedPublication(null);
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+            >
               Close
             </button>
             </div>
