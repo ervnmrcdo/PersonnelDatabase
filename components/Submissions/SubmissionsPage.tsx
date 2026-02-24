@@ -5,14 +5,12 @@ import { useState } from "react"
 import AcceptedListing from "./ValidatedListing"
 import PendingAwardsTable from "../PendingAwardsTable"
 import ReturnedListing from "./ReturnedListing"
-import ReturnedFormInstance from "./ReturnedFormInstance"
 import SubmissionLogs from "../SubmissionLogs"
-import { fileSubmissionLogs } from "@/lib/temp"
 import dynamic from 'next/dynamic'
 import { SubmissionsFlowProvider, useSubmissionsFlow } from "@/context/SubmissionsFlowContext"
 
 const AcceptedFormInstance = dynamic(() => import('./ValidatedInstance'), { ssr: false })
-const RejectedFormInstance = dynamic(() => import('./RejectedFormInstance'), { ssr: false })
+const ReturnedFormInstance = dynamic(() => import('./ReturnedFormInstance'), { ssr: false })
 
 
 

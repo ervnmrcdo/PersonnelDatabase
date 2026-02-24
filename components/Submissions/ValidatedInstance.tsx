@@ -1,3 +1,5 @@
+'use client'
+
 import { AcceptedForm } from "@/lib/types"
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";

@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";

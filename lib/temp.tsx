@@ -238,25 +238,25 @@ export const awards: Award[] = [
 ];
 
 
-export const fileSubmissionLogs: SubmissionLog[] = [
-  {
-    remarks: "Contract draft v1.pdf - Initial upload",
-    date: "2024-03-15T09:23:00",
-    action: "SUBMITTED"
-  },
-  {
-    remarks: "Missing signatures on page 3 and 4",
-    date: "2024-03-16T14:12:00",
-    action: "RETURNED"
-  },
-  {
-    remarks: "Contract draft v2.pdf - Signatures added",
-    date: "2024-03-17T11:45:00",
-    action: "RESUBMITTED"
-  },
-  {
-    remarks: "All signatures verified, document approved",
-    date: "2024-03-18T16:30:00",
-    action: "VALIDATED"
-  }
-];
+// export const fileSubmissionLogs: SubmissionLog[] = [
+//   {
+//     remarks: "Contract draft v1.pdf - Initial upload",
+//     date: "2024-03-15T09:23:00",
+//     action: "SUBMITTED"
+//   },
+//   {
+//     remarks: "Missing signatures on page 3 and 4",
+//     date: "2024-03-16T14:12:00",
+//     action: "RETURNED"
+//   },
+//   {
+//     remarks: "Contract draft v2.pdf - Signatures added",
+//     date: "2024-03-17T11:45:00",
+//     action: "RESUBMITTED"
+//   },
+//   {
+//     remarks: "All signatures verified, document approved",
+//     date: "2024-03-18T16:30:00",
+//     action: "VALIDATED"
+//   }
+// ];
