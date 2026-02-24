@@ -26,17 +26,40 @@ export default async function PendingAwards(
     }
 
 
-    const formatted = data.map((r: any) => ({
-      id: r.submission_id,
-      name: `${r.authors.first_name} ${r.authors.last_name}`,
-      dateSubmitted: r.date_submitted,
-      status: r.status,
-      awardId: r.awards.award_id,
-      pdfBase64: r.attached_files
-        ? Buffer.from(r.attached_files).toString("base64")
-        : null,
-      awardTitle: r.awards.title,
-      logs: r.logs,
+    const formatted = await Promise.all(data.map(async (r: any) => {
+      let pdfUrl = null;
+      
+      // NEW: Get signed URL from Supabase Storage
+      if (r.attached_file_path) {
+        const { data: urlData } = supabase.storage
+          .from('submissions-documents')
+          .getPublicUrl(r.attached_file_path);
+        
+        // For private buckets, use createSignedUrl instead
+        const { data: signedUrlData } = await supabase.storage
+          .from('submissions-documents')
+          .createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
+        
+        pdfUrl = signedUrlData?.signedUrl || null;
+      }
+      
+      // === OLD CODE (commented out) ===
+      // pdfBase64: r.attached_files
+      //   ? Buffer.from(r.attached_files).toString("base64")
+      //   : null,
+      // === END OLD CODE ===
+
+      return {
+        id: r.submission_id,
+        name: `${r.authors.first_name} ${r.authors.last_name}`,
+        dateSubmitted: r.date_submitted,
+        status: r.status,
+        awardId: r.awards.award_id,
+        pdfUrl,
+        pdfBase64: null, // Deprecated, use pdfUrl instead
+        awardTitle: r.awards.title,
+        logs: r.logs,
+      };
     }));
 
 

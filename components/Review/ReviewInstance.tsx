@@ -33,11 +33,23 @@ export default function ReviewInstance({ data, onBack }: Props) {
       const newLogs = [...data.logs]
       newLogs.push(verifiedLog)
 
+      // NEW: Handle both URL and Buffer data
+      let pdfBase64 = data.pdfBase64;
+      
+      // If we have a pdfUrl (signed URL), fetch the PDF and convert to base64
+      if (data.pdfUrl && !pdfBase64) {
+        const response = await fetch(data.pdfUrl);
+        const blob = await response.blob();
+        const arrayBuffer = await blob.arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+        pdfBase64 = Buffer.from(uint8Array).toString('base64');
+      }
+
       const signPDF = await fetch('/api/admin/sign-form/route', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          pdfBase64: data.pdfBase64,
+          pdfBase64: pdfBase64,
         })
       });
 
@@ -116,12 +128,19 @@ export default function ReviewInstance({ data, onBack }: Props) {
   }
 
   useEffect(() => {
-    if (data.pdfBase64) {
-      const blob = new Blob(
-        [Uint8Array.from(atob(data.pdfBase64), (c) => c.charCodeAt(0))],
-        { type: "application/pdf" },
-      );
-      setPdfUrl(URL.createObjectURL(blob));
+    if (data) {
+      // NEW: Handle both URL and Buffer data
+      if (data.pdfUrl) {
+        // It's a signed URL - use it directly
+        setPdfUrl(data.pdfUrl);
+      } else if (data.pdfBase64) {
+        // It's a Buffer (old format) - convert to blob
+        const blob = new Blob(
+          [Uint8Array.from(atob(data.pdfBase64), (c) => c.charCodeAt(0))],
+          { type: "application/pdf" },
+        );
+        setPdfUrl(URL.createObjectURL(blob));
+      }
     }
   }, [data]);
 

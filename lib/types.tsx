@@ -50,6 +50,7 @@ export type Application = {
   award: string;
   dateSubmitted: string;
   pdfBase64: string;
+  pdfUrl: string | null;
   logs: SubmissionLog[];
 };
 

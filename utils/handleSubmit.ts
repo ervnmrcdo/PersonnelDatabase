@@ -28,9 +28,11 @@ export default async function handleSubmit(submitter_id: string, award_id: strin
       body: JSON.stringify(payload)
     })
 
+
     if (temp.ok) {
       alert('Form Submitted')
     } else {
+      console.log(await temp.json())
       alert('Failed to submit form.')
     }
 
