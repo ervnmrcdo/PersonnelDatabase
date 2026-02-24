@@ -347,6 +347,7 @@ export default async function generateIPAPDF(
     const pdfBytes = await pdfDoc.save();
 
     return res.status(200).send(Buffer.from(pdfBytes))
+
   } catch (err) {
     return res.status(500).json(`Internal Server error: ${err}`)
   }
