@@ -106,6 +106,7 @@ const AwardsPage: FC = () => {
               transition={{ duration: 0.3 }}
             >
               <FormEditing
+                setStep={setStep}
                 handleBack={handleBack}
                 selectedAward={selectedAward!}
                 selectedPublication={selectedPublication!}

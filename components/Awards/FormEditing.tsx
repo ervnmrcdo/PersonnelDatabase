@@ -1,15 +1,15 @@
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import EditableAwardForm from "./EditableAwardForm";
 import { Author, Award, Publication, RawData } from "@/lib/types";
 import { transformToIPAFormData } from "@/utils/transformRawData";
 import { handleDownload } from "@/utils/handleDownload";
 import handleSubmit from "@/utils/handleSubmit";
 import handleResubmit from "@/utils/handleResubmit";
-import SubmissionLogs from "../SubmissionLogs";
 import { useAuth } from "@/context/AuthContext";
 
 interface FormEditingProps {
   handleBack: () => void;
+  setStep: (value: SetStateAction<"awards" | "publications" | "form">) => void;
   selectedAward: Award;
   selectedPublication: Publication;
   autoData: Author;
@@ -17,6 +17,7 @@ interface FormEditingProps {
 
 const FormEditing: FC<FormEditingProps> = ({
   handleBack,
+  setStep,
   selectedAward,
   selectedPublication,
   autoData,
@@ -31,7 +32,6 @@ const FormEditing: FC<FormEditingProps> = ({
     shouldSubmit: false,
   }
 
-  console.log(foo.authors)
 
   return (
     <>
@@ -65,6 +65,7 @@ const FormEditing: FC<FormEditingProps> = ({
         </div>
         <div className="mt-6 border rounded-lg overflow-visible">
           <EditableAwardForm
+            setStep={setStep}
             initialData={transformToIPAFormData(foo)}
             onSubmit={handleSubmit}
             onResubmit={handleResubmit}
