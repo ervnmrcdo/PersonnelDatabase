@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import IpaFormTemplate from "./IpaAwardTemplate";
 import { Author, Award, EditableAwardFormData, IPAFormData, Publication, RawData, SubmissionLog } from "@/lib/types";
 import { initialIPAFormData } from "@/lib/classes";
@@ -8,7 +8,10 @@ import { transformToIPAFormData } from "@/utils/transformRawData";
 export interface EditableAwardFormProps {
   initialData: IPAFormData;
   isResubmitting: boolean;
-  onSubmit: (submitter_id: string, award_id: string, publication_id: string, data: any) => void;
+  setStep: (value: SetStateAction<"awards" | "publications" | "form">) => void;
+  onSubmit: (submitter_id: string, award_id: string, publication_id: string, data: any,
+    setStep: (value: SetStateAction<"awards" | "publications" | "form">) => void
+  ) => void;
   onResubmit: (data: any, submission_id: string, logs: SubmissionLog[]) => void;
   onDownload: (data: any) => void;
   submission_id: string;
@@ -20,6 +23,7 @@ export interface EditableAwardFormProps {
 export default function EditableAwardForm({
   initialData,
   isResubmitting,
+  setStep,
   onSubmit,
   onResubmit,
   onDownload,
@@ -130,8 +134,7 @@ export default function EditableAwardForm({
         <div className="flex">
           <button
             onClick={() => {
-              constraints(formData.ipaData) && onSubmit(submitter_id, submission_id,
-                publication_id, formData);
+              constraints(formData.ipaData) && onSubmit(submitter_id, submission_id, publication_id, formData, setStep);
             }}
             className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
