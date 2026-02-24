@@ -17,31 +17,32 @@ export default async function RetrieveReturnedForms(
           authors:users!submitter_id(*),
           awards:awards!award_id(*)
            `)
-      .eq('submitter_id', id);
+      .eq('submitter_id', id)
+      .eq('status', 'RETURNED');
 
     console.log(data)
 
     // Add signed URL for each submission
-    const dataWithUrls = data 
+    const dataWithUrls = data
       ? await Promise.all(
-          data.map(async (r: any) => {
-            let pdfUrl = null;
-            
-            // NEW: Get signed URL from Supabase Storage
-            if (r.attached_file_path) {
-              const { data: signedUrlData } = await supabase.storage
-                .from('submissions-documents')
-                .createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
-              
-              pdfUrl = signedUrlData?.signedUrl || null;
-            }
+        data.map(async (r: any) => {
+          let pdfUrl = null;
 
-            return {
-              ...r,
-              pdfUrl,
-            };
-          })
-        )
+          // NEW: Get signed URL from Supabase Storage
+          if (r.attached_file_path) {
+            const { data: signedUrlData } = await supabase.storage
+              .from('submissions-documents')
+              .createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
+
+            pdfUrl = signedUrlData?.signedUrl || null;
+          }
+
+          return {
+            ...r,
+            pdfUrl,
+          };
+        })
+      )
       : [];
 
     // === OLD CODE (commented out) ===

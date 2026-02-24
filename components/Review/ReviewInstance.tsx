@@ -35,7 +35,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
       // NEW: Handle both URL and Buffer data
       let pdfBase64 = data.pdfBase64;
-      
+
       // If we have a pdfUrl (signed URL), fetch the PDF and convert to base64
       if (data.pdfUrl && !pdfBase64) {
         const response = await fetch(data.pdfUrl);
@@ -76,16 +76,16 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
       console.log(payload)
 
-      // const response = await fetch('api/admin/post-signed-award/route', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(payload),
-      // });
-      // if (response.ok) {
-      //   alert('Form Signed and Returned')
-      // } else {
-      //   alert('Failed to return signed form')
-      // }
+      const response = await fetch('api/admin/post-signed-award/route', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) {
+        alert('Form Signed and Returned')
+      } else {
+        alert('Failed to return signed form')
+      }
     } catch (err) {
       alert(err)
     }
