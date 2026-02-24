@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Application, SubmissionLog } from "@/lib/types";
 import { useAuth } from "@/context/AuthContext";
+import { useReviewFlow } from "@/context/ReviewFlowContext";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
@@ -15,12 +16,17 @@ type Props = {
 };
 
 export default function ReviewInstance({ data, onBack }: Props) {
+  const { setSelected } = useReviewFlow()
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [numPages, setNumPages] = useState<number>();
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
 
   const [errorRemarks, setErrorRemarks] = useState<string>("");
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
+
+  const getActorName = () => {
+    return profile ? `${profile.first_name} ${profile.last_name}` : 'Admin';
+  };
 
   const acceptPDF = async () => {
     try {
@@ -28,6 +34,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
         action: 'VALIDATED',
         remarks: '',
         date: Date().toLocaleString(),
+        actor_name: getActorName(),
       }
 
       const newLogs = [...data.logs]
@@ -83,6 +90,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
       });
       if (response.ok) {
         alert('Form Signed and Returned')
+        setSelected(null)
       } else {
         alert('Failed to return signed form')
       }
@@ -102,6 +110,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
       action: 'RETURNED',
       remarks: errorRemarks,
       date: new Date().toISOString(),
+      actor_name: getActorName(),
     }
 
     const newLogs = [...data.logs]
@@ -121,6 +130,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
       });
       if (rejectPdf.ok) {
         alert('Form returned.')
+        setSelected(null)
       }
     } catch (err) {
       alert(err)

@@ -9,20 +9,22 @@ import ReturnedFormInstance from "./ReturnedFormInstance"
 import SubmissionLogs from "../SubmissionLogs"
 import { fileSubmissionLogs } from "@/lib/temp"
 import dynamic from 'next/dynamic'
+import { SubmissionsFlowProvider, useSubmissionsFlow } from "@/context/SubmissionsFlowContext"
 
 const AcceptedFormInstance = dynamic(() => import('./ValidatedInstance'), { ssr: false })
 const RejectedFormInstance = dynamic(() => import('./RejectedFormInstance'), { ssr: false })
 
 
 
-export default function SubmissionsPage() {
-    const [selectedAccepted, setSelectedAccepted] = useState<AcceptedForm | null>(null)
-    const [selectedReturned, setSelectedReturned] = useState<RejectedForm | null>(null)
+function SubmissionsPageContent() {
+    const { selected, setSelected } = useSubmissionsFlow()
+    const selectedAccepted = selected as AcceptedForm | null
+    const selectedReturned = selected as RejectedForm | null
 
     return (
         <div className="p-6">
             <AnimatePresence mode="wait">
-                {(!selectedAccepted && !selectedReturned) && (
+                {!selected && (
                     <motion.div
                         key='list'
                         initial={{ x: 100, opacity: 0 }}
@@ -30,13 +32,13 @@ export default function SubmissionsPage() {
                         exit={{ x: -100, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <AcceptedListing onSelect={setSelectedAccepted} />
-                        <ReturnedListing onSelect={setSelectedReturned} />
+                        <AcceptedListing onSelect={setSelected} />
+                        <ReturnedListing onSelect={setSelected} />
                         <PendingAwardsTable />
                     </motion.div>
                 )}
 
-                {(selectedAccepted && !selectedReturned) && (
+                {selectedAccepted && (
                     <motion.div
                         key='list'
                         initial={{ x: 100, opacity: 0 }}
@@ -44,12 +46,12 @@ export default function SubmissionsPage() {
                         exit={{ x: -100, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <AcceptedFormInstance data={selectedAccepted} onBack={() => setSelectedAccepted(null)} />
+                        <AcceptedFormInstance data={selectedAccepted} onBack={() => setSelected(null)} />
                         <SubmissionLogs logs={selectedAccepted.logs} />
                     </motion.div>
                 )}
 
-                {(!selectedAccepted && selectedReturned) && (
+                {selectedReturned && (
                     <motion.div
                         key='list'
                         initial={{ x: 100, opacity: 0 }}
@@ -57,7 +59,7 @@ export default function SubmissionsPage() {
                         exit={{ x: -100, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <ReturnedFormInstance data={selectedReturned} onBack={() => setSelectedReturned(null)} />
+                        <ReturnedFormInstance data={selectedReturned} onBack={() => setSelected(null)} />
                         <SubmissionLogs logs={selectedReturned.logs} />
 
                     </motion.div>
@@ -66,5 +68,13 @@ export default function SubmissionsPage() {
             </AnimatePresence>
 
         </div>
+    )
+}
+
+export default function SubmissionsPage() {
+    return (
+        <SubmissionsFlowProvider>
+            <SubmissionsPageContent />
+        </SubmissionsFlowProvider>
     )
 }

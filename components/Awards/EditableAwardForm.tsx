@@ -1,18 +1,17 @@
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import IpaFormTemplate from "./IpaAwardTemplate";
 import { Author, Award, EditableAwardFormData, IPAFormData, Publication, RawData, SubmissionLog } from "@/lib/types";
 import { initialIPAFormData } from "@/lib/classes";
 import { transformToIPAFormData } from "@/utils/transformRawData";
+import { useAwardsFlow } from "@/context/AwardsFlowContext";
+import { useAuth } from "@/context/AuthContext";
 
 export interface EditableAwardFormProps {
   initialData: IPAFormData;
   isResubmitting: boolean;
-  setStep: (value: SetStateAction<"awards" | "publications" | "form">) => void;
-  onSubmit: (submitter_id: string, award_id: string, publication_id: string, data: any,
-    setStep: (value: SetStateAction<"awards" | "publications" | "form">) => void
-  ) => void;
-  onResubmit: (data: any, submission_id: string, logs: SubmissionLog[]) => void;
+  onSubmit: (submitter_id: string, award_id: string, publication_id: string, data: any, actor_name: string) => void;
+  onResubmit: (data: any, submission_id: string, logs: SubmissionLog[], actor_name: string) => void;
   onDownload: (data: any) => void;
   submission_id: string;
   submitter_id: string;
@@ -23,7 +22,6 @@ export interface EditableAwardFormProps {
 export default function EditableAwardForm({
   initialData,
   isResubmitting,
-  setStep,
   onSubmit,
   onResubmit,
   onDownload,
@@ -32,6 +30,9 @@ export default function EditableAwardForm({
   publication_id,
   logs
 }: EditableAwardFormProps) {
+
+  const { setStep } = useAwardsFlow();
+  const { profile } = useAuth();
 
 
   const initialFormData: EditableAwardFormData = {
@@ -122,9 +123,9 @@ export default function EditableAwardForm({
         <div className="flex">
           <button
             onClick={() => {
-              //need to fix submitting variables, too much ambiguity
+              const actor_name = profile ? `${profile.first_name} ${profile.last_name}` : 'Unknown';
               formData.isResubmitting = true;
-              constraints(formData.ipaData) && onResubmit(formData, submission_id, logs!);
+              constraints(formData.ipaData) && onResubmit(formData, submission_id, logs!, actor_name);
             }}
             className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
@@ -134,7 +135,11 @@ export default function EditableAwardForm({
         <div className="flex">
           <button
             onClick={() => {
-              constraints(formData.ipaData) && onSubmit(submitter_id, submission_id, publication_id, formData, setStep);
+              if (constraints(formData.ipaData)) {
+                const actor_name = profile ? `${profile.first_name} ${profile.last_name}` : 'Unknown';
+                onSubmit(submitter_id, submission_id, publication_id, formData, actor_name);
+                setStep('awards');
+              }
             }}
             className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >

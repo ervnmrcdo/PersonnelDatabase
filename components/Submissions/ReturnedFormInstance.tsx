@@ -7,6 +7,8 @@ import { transformToIPAFormData } from "@/utils/transformRawData";
 import { handleDownload } from "@/utils/handleDownload";
 import handleSubmit from "@/utils/handleSubmit";
 import handleResubmit from "@/utils/handleResubmit";
+import { useSubmissionsFlow } from "@/context/SubmissionsFlowContext";
+import { useAuth } from "@/context/AuthContext";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
@@ -19,6 +21,8 @@ type Props = {
 }
 
 export default function ReturnedFormInstance({ data, onBack }: Props) {
+    const { setSelected } = useSubmissionsFlow()
+    const { profile } = useAuth()
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [numPages, setNumPages] = useState<number>();
 
@@ -70,7 +74,11 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
 
             <EditableAwardForm initialData={foo}
                 onSubmit={handleSubmit}
-                onResubmit={handleResubmit}
+                onResubmit={async (formData, submissionId, logs) => {
+                    const actor_name = profile ? `${profile.first_name} ${profile.last_name}` : 'Unknown';
+                    await handleResubmit(formData, submissionId, logs, actor_name)
+                    setSelected(null)
+                }}
                 onDownload={handleDownload}
                 isResubmitting={true}
                 submitter_id=''
