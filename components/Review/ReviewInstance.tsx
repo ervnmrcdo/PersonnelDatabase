@@ -57,21 +57,23 @@ export default function ReviewInstance({ data, onBack }: Props) {
       const payload = {
         pdfBytes: foo,
         // change admin id to correspond to uid of admin user
-        admin_id: '1',
+        admin_id: user?.id,
         submission_id: data.application_id,
         newLogs
       }
 
-      const response = await fetch('api/admin/post-signed-award/route', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (response.ok) {
-        alert('Form Signed and Returned')
-      } else {
-        alert('Failed to return signed form')
-      }
+      console.log(payload)
+
+      // const response = await fetch('api/admin/post-signed-award/route', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(payload),
+      // });
+      // if (response.ok) {
+      //   alert('Form Signed and Returned')
+      // } else {
+      //   alert('Failed to return signed form')
+      // }
     } catch (err) {
       alert(err)
     }
