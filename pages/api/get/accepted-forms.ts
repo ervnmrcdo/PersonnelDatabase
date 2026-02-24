@@ -6,11 +6,14 @@ export default async function RetrieveAcceptedForms(
   req: NextApiRequest, res: NextApiResponse
 ) {
   // const { id, submitterType } = req.body // more correct need to fix later
-  const { id, submitterType } = JSON.parse(req.body)
+  // const { id } = JSON.parse(req.body)
+  const { id } = JSON.parse(req.body)
+
+  console.log(id)
 
   try {
     const supabase = createPagesServerClient(req, res);
-    
+
     // NEW: Use Supabase to query submissions with status VALIDATED
     const { data, error } = await supabase
       .from('submissions')
@@ -23,36 +26,37 @@ export default async function RetrieveAcceptedForms(
       .eq('status', 'VALIDATED');
 
     if (error) {
+      console.log(error)
       return res.status(400).json({ error: error.message });
     }
 
     // Add signed URL for each submission
-    const dataWithUrls = data 
+    const dataWithUrls = data
       ? await Promise.all(
-          data.map(async (r: any) => {
-            let pdfUrl = null;
-            
-            // NEW: Get signed URL from Supabase Storage
-            if (r.attached_file_path) {
-              const { data: signedUrlData } = await supabase.storage
-                .from('submissions-documents')
-                .createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
-              
-              pdfUrl = signedUrlData?.signedUrl || null;
-            }
+        data.map(async (r: any) => {
+          let pdfUrl = null;
 
-            return {
-              submission_id: r.submission_id,
-              first_name: r.authors?.first_name,
-              last_name: r.authors?.last_name,
-              date_submitted: r.date_submitted,
-              title: r.awards?.title,
-              logs: r.logs,
-              pdfUrl,
-              attached_files: r.attached_files, // Keep for backward compatibility
-            };
-          })
-        )
+          // NEW: Get signed URL from Supabase Storage
+          if (r.attached_file_path) {
+            const { data: signedUrlData } = await supabase.storage
+              .from('submissions-documents')
+              .createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
+
+            pdfUrl = signedUrlData?.signedUrl || null;
+          }
+
+          return {
+            submission_id: r.submission_id,
+            first_name: r.authors?.first_name,
+            last_name: r.authors?.last_name,
+            date_submitted: r.date_submitted,
+            title: r.awards?.title,
+            logs: r.logs,
+            pdfUrl,
+            attached_files: r.attached_files, // Keep for backward compatibility
+          };
+        })
+      )
       : [];
 
     // === OLD CODE (commented out) ===

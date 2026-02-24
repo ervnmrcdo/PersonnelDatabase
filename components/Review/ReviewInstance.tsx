@@ -76,7 +76,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
       console.log(payload)
 
-      const response = await fetch('api/admin/post-signed-award/route', {
+      const response = await fetch('/api/admin/post-signed-award/route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

@@ -7,7 +7,6 @@ export default async function RetrieveReturnedForms(
 ) {
   // const { id, submitterType } = await req.body // more correct need to fix later
   const { id } = JSON.parse(req.body)
-  console.log(id)
 
   try {
     const supabase = createPagesServerClient(req, res);
@@ -20,7 +19,6 @@ export default async function RetrieveReturnedForms(
       .eq('submitter_id', id)
       .eq('status', 'RETURNED');
 
-    console.log(data)
 
     // Add signed URL for each submission
     const dataWithUrls = data

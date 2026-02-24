@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function trial(req: NextApiRequest, res: NextApiResponse) {
   const { id } = await req.body
 
-  console.log(id)
 
   try {
 

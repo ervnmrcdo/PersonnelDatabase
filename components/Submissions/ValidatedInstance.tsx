@@ -1,5 +1,3 @@
-'use client';
-
 import { AcceptedForm } from "@/lib/types"
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -20,44 +18,15 @@ export default function AcceptedFormInstance({ data, onBack }: Props) {
     const [numPages, setNumPages] = useState<number>();
 
     async function download() {
-        // NEW: Handle both URL and Buffer data
-        if (data.pdfBufferData && data.pdfBufferData.startsWith('http')) {
-            // It's a signed URL - use it directly
-            const a = document.createElement("a");
-            a.href = data.pdfBufferData;
-            a.download = "ipc-award-form.pdf";
-            a.click();
-        } else {
-            // It's a Buffer (old format) - convert to blob
-            const foo = Buffer.from(data.pdfBufferData).toString('base64')
-            const blob = new Blob(
-                [Uint8Array.from(atob(foo), (c) => c.charCodeAt(0))],
-                { type: "application/pdf" },
-            );
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "ipc-award-form.pdf";
-            a.click();
-        }
+        const a = document.createElement("a");
+        a.href = data.pdfBufferData;
+        a.download = "ipc-award-form.pdf";
+        a.click();
     }
 
     useEffect(() => {
         if (data) {
-            // NEW: Handle both URL and Buffer data
-            if (data.pdfBufferData && data.pdfBufferData.startsWith('http')) {
-                // It's a signed URL - use it directly
-                setPdfUrl(data.pdfBufferData);
-            } else {
-                // It's a Buffer (old format) - convert to blob
-                const foo = Buffer.from(data.pdfBufferData).toString('base64')
-                const blob = new Blob(
-                    [Uint8Array.from(atob(foo), (c) => c.charCodeAt(0))],
-                    { type: "application/pdf" },
-                );
-                setPdfUrl(URL.createObjectURL(blob))
-            }
-            console.log(pdfUrl)
+            setPdfUrl(data.pdfBufferData);
         }
     }, [data])
 
