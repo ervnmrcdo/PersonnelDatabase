@@ -1,6 +1,6 @@
 import { EditableAwardFormData, IPAFormData, SubmissionLog } from "@/lib/types"
 
-export default async function handleResubmit(data: EditableAwardFormData, submission_id: string, logs: SubmissionLog[]) {
+export default async function handleResubmit(data: EditableAwardFormData, submission_id: string, logs: SubmissionLog[], actor_name: string) {
   try {
 
     const pdf = await fetch('/api/generate-ipa-award/route', {
@@ -15,7 +15,8 @@ export default async function handleResubmit(data: EditableAwardFormData, submis
     const resubmissionLog: SubmissionLog = {
       action: 'RESUBMITTED',
       remarks: '',
-      date: Date().toLocaleString()
+      date: Date().toLocaleString(),
+      actor_name: actor_name || 'Unknown',
     }
 
     const newLogs = [...logs]

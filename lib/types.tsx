@@ -102,6 +102,7 @@ export interface SubmissionLog {
   remarks: string;
   date: string;
   action: 'RETURNED' | 'SUBMITTED' | 'VALIDATED' | 'RESUBMITTED';
+  actor_name: string;
 }
 
 export interface IPAFormData {

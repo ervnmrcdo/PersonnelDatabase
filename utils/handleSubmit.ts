@@ -1,11 +1,8 @@
 import sql from "@/config/db";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Dispatch, SetStateAction } from "react";
 
 
-export default async function handleSubmit(submitter_id: string, award_id: string, publication_id: string, data: any,
-  setStep: (value: SetStateAction<"awards" | "publications" | "form">) => void
-) {
+export default async function handleSubmit(submitter_id: string, award_id: string, publication_id: string, data: any, actor_name: string) {
   try {
 
     const pdf = await fetch('/api/generate-ipa-award/route', {
@@ -23,7 +20,8 @@ export default async function handleSubmit(submitter_id: string, award_id: strin
       award_id,
       publication_id,
       ipaData,
-      buffer
+      buffer,
+      actor_name
     }
 
     const temp = await fetch('/api/post-ipa-award/route', {
@@ -34,7 +32,6 @@ export default async function handleSubmit(submitter_id: string, award_id: strin
 
     if (temp.ok) {
       alert('Form Submitted')
-      setStep('awards')
     } else {
       console.log(await temp.json())
       alert('Failed to submit form.')

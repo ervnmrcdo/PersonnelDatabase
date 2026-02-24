@@ -8,12 +8,11 @@ import { Author, Award, Publication, PendingAward } from "@/lib/types";
 import { awards, } from "@/lib/temp";
 import { AuthClient } from "@supabase/supabase-js";
 import { useAuth } from "@/context/AuthContext";
+import { AwardsFlowProvider, useAwardsFlow } from "@/context/AwardsFlowContext";
 
 
-const AwardsPage: FC = () => {
-  const [step, setStep] = useState<"awards" | "publications" | "form">(
-    "awards",
-  );
+const AwardsPageContent: FC = () => {
+  const { step, setStep } = useAwardsFlow();
   const [selectedAward, setSelectedAward] = useState<Award | null>(null);
   const [selectedPublication, setSelectedPublication] =
     useState<Publication | null>(null);
@@ -106,7 +105,6 @@ const AwardsPage: FC = () => {
               transition={{ duration: 0.3 }}
             >
               <FormEditing
-                setStep={setStep}
                 handleBack={handleBack}
                 selectedAward={selectedAward!}
                 selectedPublication={selectedPublication!}
@@ -120,4 +118,13 @@ const AwardsPage: FC = () => {
     </>
   );
 };
+
+const AwardsPage: FC = () => {
+  return (
+    <AwardsFlowProvider>
+      <AwardsPageContent />
+    </AwardsFlowProvider>
+  );
+};
+
 export default AwardsPage

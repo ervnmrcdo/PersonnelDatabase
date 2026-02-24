@@ -6,11 +6,12 @@ import { Application } from "@/lib/types";
 import ListedApplications from "@/components/Review/ListedApplications";
 import SubmissionLogs from "../SubmissionLogs";
 import dynamic from 'next/dynamic';
+import { ReviewFlowProvider, useReviewFlow } from "@/context/ReviewFlowContext";
 
 const ReviewInstance = dynamic(() => import('@/components/Review/ReviewInstance'), { ssr: false });
 
-export default function ReviewPage() {
-  const [selected, setSelected] = useState<Application | null>(null);
+function ReviewPageContent() {
+  const { selected, setSelected } = useReviewFlow()
 
   return (
     <div className="p-6">
@@ -40,4 +41,12 @@ export default function ReviewPage() {
       </AnimatePresence>
     </div>
   );
+}
+
+export default function ReviewPage() {
+  return (
+    <ReviewFlowProvider>
+      <ReviewPageContent />
+    </ReviewFlowProvider>
+  )
 }

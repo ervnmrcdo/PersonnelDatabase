@@ -52,6 +52,10 @@ function SubmissionLogs({ logs }: SubmissionLogsProps) {
                                     {formatDate(log.date)}
                                 </span>
                             </div>
+                            {log.actor_name && (
+                                <p className="text-gray-700 mt-2 ml-2">{log.actor_name}</p>
+                            )}
+
 
                             {log.remarks && (
                                 <p className="text-gray-700 mt-2">{log.remarks}</p>

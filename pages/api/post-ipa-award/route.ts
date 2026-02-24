@@ -15,6 +15,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       publication_id,
       ipaData,
       buffer,
+      actor_name,
     } = payload;
 
 
@@ -25,6 +26,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
         action: 'SUBMITTED',
         remarks: '',
         date: Date().toLocaleString(),
+        actor_name: actor_name || 'Unknown',
       }
     ]
 
