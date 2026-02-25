@@ -72,13 +72,9 @@ function SubmissionsPageContent() {
 export default function SubmissionsPage() {
     return (
         <SubmissionsFlowProvider>
-<<<<<<< HEAD
-    <SubmissionsPageContent />
-=======
             <AwardsFlowProvider>
                 <SubmissionsPageContent />
             </AwardsFlowProvider>
->>>>>>> slow-application
         </SubmissionsFlowProvider >
     )
 }
