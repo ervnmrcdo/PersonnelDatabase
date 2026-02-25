@@ -30,6 +30,7 @@ const FormEditing: FC<FormEditingProps> = ({
     shouldSubmit: false,
   }
 
+  console.log(foo)
 
   return (
     <>

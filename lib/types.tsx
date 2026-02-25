@@ -54,8 +54,8 @@ export type Application = {
 };
 
 export interface AcceptedForm {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   submission_id: string;
   pdfBufferData: string;
   date_submitted: string;

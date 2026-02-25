@@ -42,7 +42,7 @@ export default function AcceptedFormInstance({ data, onBack }: Props) {
             </button>
 
             <div className="p-4 bg-gray-100 rounded-lg">
-                <p className="font-bold text-lg">{data.firstName + ' ' + data.lastName}</p>
+                <p className="font-bold text-lg">{data.first_name + ' ' + data.last_name}</p>
                 <p className="text-sm">{data.award_title}</p>
                 <p className="text-xs text-gray-400">{data.date_submitted}</p>
             </div>

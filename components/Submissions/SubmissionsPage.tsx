@@ -5,21 +5,21 @@ import { useState } from "react"
 import AcceptedListing from "./ValidatedListing"
 import PendingAwardsTable from "../PendingAwardsTable"
 import ReturnedListing from "./ReturnedListing"
-import ReturnedFormInstance from "./ReturnedFormInstance"
 import SubmissionLogs from "../SubmissionLogs"
 import { fileSubmissionLogs } from "@/lib/temp"
 import dynamic from 'next/dynamic'
 import { SubmissionsFlowProvider, useSubmissionsFlow } from "@/context/SubmissionsFlowContext"
+import { AwardsFlowProvider } from "@/context/AwardsFlowContext"
 
 const AcceptedFormInstance = dynamic(() => import('./ValidatedInstance'), { ssr: false })
-const RejectedFormInstance = dynamic(() => import('./RejectedFormInstance'), { ssr: false })
+const ReturnedFormInstance = dynamic(() => import('./ReturnedFormInstance'), { ssr: false })
 
 
 
 function SubmissionsPageContent() {
     const { selected, setSelected } = useSubmissionsFlow()
-    const selectedAccepted = selected as AcceptedForm | null
-    const selectedReturned = selected as RejectedForm | null
+    const selectedAccepted = selected && !('pdf_json_data' in selected) ? selected as AcceptedForm : null
+    const selectedReturned = selected && 'pdf_json_data' in selected ? selected as RejectedForm : null
 
     return (
         <div className="p-6">
@@ -40,7 +40,7 @@ function SubmissionsPageContent() {
 
                 {selectedAccepted && (
                     <motion.div
-                        key='list'
+                        key='accepted'
                         initial={{ x: 100, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -100, opacity: 0 }}
@@ -53,7 +53,7 @@ function SubmissionsPageContent() {
 
                 {selectedReturned && (
                     <motion.div
-                        key='list'
+                        key='returned'
                         initial={{ x: 100, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -100, opacity: 0 }}
@@ -61,7 +61,6 @@ function SubmissionsPageContent() {
                     >
                         <ReturnedFormInstance data={selectedReturned} onBack={() => setSelected(null)} />
                         <SubmissionLogs logs={selectedReturned.logs} />
-
                     </motion.div>
                 )}
 
@@ -74,7 +73,9 @@ function SubmissionsPageContent() {
 export default function SubmissionsPage() {
     return (
         <SubmissionsFlowProvider>
-            <SubmissionsPageContent />
+            <AwardsFlowProvider>
+                <SubmissionsPageContent />
+            </AwardsFlowProvider>
         </SubmissionsFlowProvider>
     )
 }
