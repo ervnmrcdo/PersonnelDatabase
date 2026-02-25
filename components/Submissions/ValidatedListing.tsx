@@ -32,8 +32,8 @@ export default function AcceptedListing({ onSelect }: Props) {
                 submission_id: item.submission_id,
                 // NEW: Use pdfUrl from Supabase Storage instead of attached_files
                 pdfBufferData: item.pdfUrl || item.attached_files,
-                firstName: item.first_name,
-                lastName: item.last_name,
+                first_name: item.first_name,
+                last_name: item.last_name,
                 date_submitted: item.date_submitted,
                 award_title: item.title,
                 logs: item.logs
@@ -54,7 +54,7 @@ export default function AcceptedListing({ onSelect }: Props) {
                         onClick={() => { onSelect(item) }}
                     >
                         <div>
-                            <p className="font-semibold text-lg">{item.firstName + ' ' + item.lastName}</p>
+                            <p className="font-semibold text-lg">{item.first_name + ' ' + item.last_name}</p>
                             <p className="text-sm">{item.award_title}</p>
                             <p className="text-xs text-gray-400">{item.date_submitted}</p>
                         </div>

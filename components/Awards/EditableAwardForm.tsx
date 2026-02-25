@@ -41,6 +41,8 @@ export default function EditableAwardForm({
   }
   const [formData, setFormData] = useState<EditableAwardFormData>(initialFormData);
 
+  console.log(formData)
+
   const handleChange = (key: string, value: string | boolean) => {
     setFormData((prev) => {
       const updated = { ...prev };

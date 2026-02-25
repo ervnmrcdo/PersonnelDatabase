@@ -11,10 +11,15 @@ import { useSubmissionsFlow } from "@/context/SubmissionsFlowContext";
 import { useAuth } from "@/context/AuthContext";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
+    "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
     import.meta.url,
 ).toString();
 
+// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+//     "pdfjs-dist/build/pdf.worker.min.mjs", // or pdf.worker.min.js
+//     import.meta.url,
+// ).toString();
+//
 type Props = {
     data: RejectedForm;
     onBack: () => void;
@@ -49,7 +54,10 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
         }
     }
 
-    const foo = data.pdf_json_data as unknown as IPAFormData
+    const rawPdfJson = data.pdf_json_data;
+    const foo = typeof rawPdfJson === 'string'
+        ? JSON.parse(rawPdfJson) as unknown as IPAFormData
+        : rawPdfJson as unknown as IPAFormData;
 
     return (
         <div className="bg-white rounded-xl shadow p-6 space-y-4">
