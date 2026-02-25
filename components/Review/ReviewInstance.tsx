@@ -23,6 +23,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
   const [errorRemarks, setErrorRemarks] = useState<string>("");
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
+  const [showSignConfirmDialog, setShowSignConfirmDialog] = useState<boolean>(false);
 
   const getActorName = () => {
     return profile ? `${profile.first_name} ${profile.last_name}` : 'Admin';
@@ -171,7 +172,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
       </div>
 
       <div className="flex gap-3">
-        <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => acceptPDF()}>
+        <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => setShowSignConfirmDialog(true)}>
           Sign and Return
         </button>
         <button className="px-4 py-2 border rounded-md"
@@ -211,6 +212,35 @@ export default function ReviewInstance({ data, onBack }: Props) {
                 disabled={!errorRemarks.trim()}
               >
                 Submit Errors
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sign Confirmation Dialog */}
+      {showSignConfirmDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4">Confirm Sign Form</h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Are you sure you want to sign this form? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                className="px-4 py-2 border rounded-md hover:bg-gray-50"
+                onClick={() => setShowSignConfirmDialog(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                onClick={() => {
+                  setShowSignConfirmDialog(false);
+                  acceptPDF();
+                }}
+              >
+                Confirm Sign
               </button>
             </div>
           </div>
