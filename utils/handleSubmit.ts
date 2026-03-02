@@ -5,15 +5,19 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handleSubmit(submitter_id: string, award_id: string, publication_id: string, data: any, actor_name: string) {
   try {
 
+    const generateFormData = { data: data, submitter_id, isSubmitting: true }
+
+
     const pdf = await fetch('/api/generate-ipa-award/route', {
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify(generateFormData)
     })
+
+
 
     const foo = await pdf.arrayBuffer()
     const buffer = Buffer.from(new Uint8Array(foo))
     const { ipaData } = data
-
 
     const payload = {
       submitter_id,
@@ -40,6 +44,5 @@ export default async function handleSubmit(submitter_id: string, award_id: strin
 
   } catch (err) {
     console.log(err)
-    // return res.status(500).json(`Internal Server Error, ${err}`);
   }
 }

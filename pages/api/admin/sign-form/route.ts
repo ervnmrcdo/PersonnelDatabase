@@ -22,10 +22,9 @@ export default async function(
 			.eq('id', admin_id)
 			.single()
 
-		console.log(data)
 
 		if (data === null) {
-			return res.status(500).json({ message: 'no signature' })
+			return res.status(500).json({ message: 'No Uploaded Signature' })
 		}
 
 		const { data: signatureData, error: downloadError } = await supabase
