@@ -15,17 +15,17 @@ interface AwardsProps {
 const Awards: FC<AwardsProps> = ({ awards, onSelect }) => {
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Awards</h1>
+      <h1 className="text-2xl font-bold mb-6 text-white">Awards</h1>
 
       <div className="space-y-4">
         {awards.map((award) => (
           <div
             key={award.id}
             onClick={() => onSelect && onSelect(award)}
-            className="flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 rounded-xl shadow-sm cursor-pointer transition"
+            className="flex justify-between items-center p-4 bg-[#1a1e2b] hover:bg-gray-700 rounded-xl shadow-sm cursor-pointer transition"
           >
             <div>
-              <h2 className="font-semibold text-gray-800">{award.title}</h2>
+              <h2 className="font-semibold text-gray-200">{award.title}</h2>
               <p className="text-sm text-gray-400">
                 {award.description || "Description"}
               </p>

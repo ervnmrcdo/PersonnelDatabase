@@ -8,10 +8,10 @@ interface SubmissionLogsProps {
 function SubmissionLogs({ logs }: SubmissionLogsProps) {
     function getActionColor(action: SubmissionLog['action']) {
         const colors = {
-            RETURNED: 'bg-red-100 text-red-800',
-            SUBMITTED: 'bg-blue-100 text-blue-800',
-            VALIDATED: 'bg-green-100 text-green-800',
-            RESUBMITTED: 'bg-yellow-100 text-yellow-800'
+            RETURNED: 'bg-red-900/30 text-red-400',
+            SUBMITTED: 'bg-blue-900/30 text-blue-400',
+            VALIDATED: 'bg-green-900/30 text-green-400',
+            RESUBMITTED: 'bg-yellow-900/30 text-yellow-400'
         };
         return colors[action];
     }
@@ -23,15 +23,15 @@ function SubmissionLogs({ logs }: SubmissionLogsProps) {
 
     if (!logs) {
         return (
-            <div className="p-4 text-center text-gray-500">
+            <div className="p-4 text-center text-gray-400">
                 No submission logs available
             </div>
         );
     }
 
     return (
-        <div className="bg-white rounded-xl shadow p-6 space-y-4 mt-5">
-            <h2 className="text-xl font-bold mb-4">Submission History</h2>
+        <div className="bg-[#1b1e2b] rounded-xl shadow p-6 space-y-4 mt-5">
+            <h2 className="text-xl font-bold mb-4 text-white">Submission History</h2>
 
             <div className="space-y-3">
                 {logs.map(function(log, index) {
@@ -48,17 +48,17 @@ function SubmissionLogs({ logs }: SubmissionLogsProps) {
                                 >
                                     {log.action}
                                 </span>
-                                <span className="text-sm text-gray-500">
+                                <span className="text-sm text-gray-400">
                                     {formatDate(log.date)}
                                 </span>
                             </div>
                             {log.actor_name && (
-                                <p className="text-gray-700 mt-2 ml-2">{log.actor_name}</p>
+                                <p className="text-gray-300 mt-2 ml-2">{log.actor_name}</p>
                             )}
 
 
                             {log.remarks && (
-                                <p className="text-gray-700 mt-2">{log.remarks}</p>
+                                <p className="text-gray-300 mt-2">{log.remarks}</p>
                             )}
                         </div>
                     );

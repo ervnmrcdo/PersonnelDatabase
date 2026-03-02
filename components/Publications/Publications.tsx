@@ -25,7 +25,7 @@ export default function Publications() {
   const [pageNumbers, setPageNumbers] = useState('');
   const [volumeNumber, setVolumeNumber] = useState('');
   const [journalName, setJournalName] = useState('');
-  
+
   const [selectedPublication, setSelectedPublication] = useState<SupabasePublication | null>(null);
 
   const supabase = createClient();
@@ -35,14 +35,14 @@ export default function Publications() {
   }, [user]);
 
   const fetchPublications = async () => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
-      const { data, error } = await supabase
-        .from('publication_authors')
-        .select(`
+    const { data, error } = await supabase
+      .from('publication_authors')
+      .select(`
           publication_id,
           publications (
             publication_id,
@@ -57,17 +57,17 @@ export default function Publications() {
             journal_name
           )
         `)
-        .eq('user_id', user.id);
+      .eq('user_id', user.id);
 
-      if (!error && data) {
-        const pubs = data
-          .map((row: any) => row.publications)
-          .filter((pub: any) => !!pub);
-        setPublications(pubs);
-      }
+    if (!error && data) {
+      const pubs = data
+        .map((row: any) => row.publications)
+        .filter((pub: any) => !!pub);
+      setPublications(pubs);
+    }
 
-      setLoading(false);
-    };
+    setLoading(false);
+  };
 
 
   function resetForm() {
@@ -170,10 +170,10 @@ export default function Publications() {
       setLoading(false)
     }
   }
-  
+
   async function deletePublication() {
     if (!selectedPublication) return
-    
+
     const confirmed = window.confirm(
       "Are you sure you want to delete this publication? This publication will be deleted permanently."
     )
@@ -214,12 +214,12 @@ export default function Publications() {
       <div className="max-w-6xl mx-auto">
         <div className="bg-[#1b1e2b] rounded-lg p-6 border border-gray-700 mt-8">
           <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-white mb-4">My Publications</h2>
-          <button
-            onClick={() => {
-              resetForm()
-              setMode("add");
-            }}
+            <h2 className="text-xl font-semibold text-white mb-4">My Publications</h2>
+            <button
+              onClick={() => {
+                resetForm()
+                setMode("add");
+              }}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
               Add Publication
             </button>
@@ -232,30 +232,31 @@ export default function Publications() {
                 onChange={(e) => {
                   const value = Number(e.target.value)
                   setPublicationTypeId(value)
-                  setType(value === 1 ? "Journal" : "Book Chapter")}}
+                  setType(value === 1 ? "Journal" : "Book Chapter")
+                }}
                 className="w-full p-2 rounded text-black"
               >
                 <option value="">Select Type</option>
                 <option value={1}>Journal</option>
                 <option value={2}>Book Chapter</option>
               </select>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 rounded text-black" />
-              <input type="text" value={publisher} onChange={(e) => setPublisher(e.target.value)} placeholder="Publisher" className="w-full p-2 rounded text-black" />
-              <input type="text" value={publicationStatus} onChange={(e) => setPublicationStatus(e.target.value)} placeholder="Publication Status" className="w-full p-2 rounded text-black" />
-              <input type="date" value={datePublished} onChange={(e) => setDatePublished(e.target.value)} placeholder="Date Published" className="w-full p-2 rounded text-black" />
-              <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="Issue Number" className="w-full p-2 rounded text-black" />
-              <input type="text" value={pageNumbers} onChange={(e) => setPageNumbers(e.target.value)} placeholder="Page Numbers" className="w-full p-2 rounded text-black" />
-              <input type="text" value={volumeNumber} onChange={(e) => setVolumeNumber(e.target.value)} placeholder="Volume Number" className="w-full p-2 rounded text-black" />
-              <input type="text" value={journalName} onChange={(e) => setJournalName(e.target.value)} placeholder="Journal Name" className="w-full p-2 rounded text-black" />
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={publisher} onChange={(e) => setPublisher(e.target.value)} placeholder="Publisher" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={publicationStatus} onChange={(e) => setPublicationStatus(e.target.value)} placeholder="Publication Status" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="date" value={datePublished} onChange={(e) => setDatePublished(e.target.value)} placeholder="Date Published" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="Issue Number" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={pageNumbers} onChange={(e) => setPageNumbers(e.target.value)} placeholder="Page Numbers" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={volumeNumber} onChange={(e) => setVolumeNumber(e.target.value)} placeholder="Volume Number" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={journalName} onChange={(e) => setJournalName(e.target.value)} placeholder="Journal Name" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <div className="w-full p-2 rounded text-black"></div>
               <div>
-              <button
-                onClick={mode === "edit" ? editPublication : addPublication}
-                className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mt-2"
-              >
-                Save
-              </button>
-              <button
+                <button
+                  onClick={mode === "edit" ? editPublication : addPublication}
+                  className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mt-2"
+                >
+                  Save
+                </button>
+                <button
                   onClick={() => {
                     resetForm();
                     setMode("view");
@@ -264,7 +265,7 @@ export default function Publications() {
                 >
                   Cancel
                 </button>
-                </div>
+              </div>
             </div>
           )}
 
@@ -308,46 +309,46 @@ export default function Publications() {
 
           {mode === "view" && selectedPublication && (
             <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-            <div className="bg-[#1b1e2b] p-6 rounded-lg w-full max-w-lg border border-gray-700">
-              <h3 className="text-xl font-bold text-white mb-4">
-                {selectedPublication.title}
-              </h3>
+              <div className="bg-[#1b1e2b] p-6 rounded-lg w-full max-w-lg border border-gray-700">
+                <h3 className="text-xl font-bold text-white mb-4">
+                  {selectedPublication.title}
+                </h3>
 
-            <div className="space-y-2 text-gray-300 text-sm">
-            <p><span className="text-gray-400">Type:</span> {selectedPublication.type}</p>
-            <p><span className="text-gray-400">Publisher:</span> {selectedPublication.publisher}</p>
-            <p><span className="text-gray-400">Status:</span> {selectedPublication.publication_status}</p>
-            <p><span className="text-gray-400">Date Published:</span> {selectedPublication.date_published}</p>
-            <p><span className="text-gray-400">Issue:</span> {selectedPublication.issue_number}</p>
-            <p><span className="text-gray-400">Pages:</span> {selectedPublication.page_numbers}</p>
-            <p><span className="text-gray-400">Volume:</span> {selectedPublication.volume_number}</p>
-            <p><span className="text-gray-400">Journal:</span> {selectedPublication.journal_name}</p>
-          </div>
-          <div className="flex justify-between mt-6">
-            <div className="flex gap-3">
-            <button
-                    onClick={() => setMode("edit")}
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded"
+                <div className="space-y-2 text-gray-300 text-sm">
+                  <p><span className="text-gray-400">Type:</span> {selectedPublication.type}</p>
+                  <p><span className="text-gray-400">Publisher:</span> {selectedPublication.publisher}</p>
+                  <p><span className="text-gray-400">Status:</span> {selectedPublication.publication_status}</p>
+                  <p><span className="text-gray-400">Date Published:</span> {selectedPublication.date_published}</p>
+                  <p><span className="text-gray-400">Issue:</span> {selectedPublication.issue_number}</p>
+                  <p><span className="text-gray-400">Pages:</span> {selectedPublication.page_numbers}</p>
+                  <p><span className="text-gray-400">Volume:</span> {selectedPublication.volume_number}</p>
+                  <p><span className="text-gray-400">Journal:</span> {selectedPublication.journal_name}</p>
+                </div>
+                <div className="flex justify-between mt-6">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setMode("edit")}
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={deletePublication}
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setSelectedPublication(null);
+                    }}
+                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
                   >
-              Edit
-            </button>
-             <button
-                    onClick={deletePublication}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-                  >
-              Delete
-            </button>
-            </div>
-            <button
-              onClick={() => {
-                setSelectedPublication(null);
-              }}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
-            >
-              Close
-            </button>
-          </div>
-            </div>
+                    Close
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
