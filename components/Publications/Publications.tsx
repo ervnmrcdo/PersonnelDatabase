@@ -166,7 +166,45 @@ export default function Publications() {
     } finally {
       setLoading(false)
     }
-  } 
+  }
+  
+  async function deletePublication() {
+    if (!selectedPublication) return
+    
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this publication? This publication will be deleted permanently."
+    )
+
+    if (!confirmed) return
+
+    try {
+      setLoading(true)
+
+      const { error: linkError } = await supabase
+        .from('publication_authors')
+        .delete()
+        .eq('publication_id', selectedPublication.publication_id)
+        .eq('user_id', user?.id)
+
+      if (linkError) throw linkError
+
+      const { error: pubError } = await supabase
+        .from('publications')
+        .delete()
+        .eq('publication_id', selectedPublication.publication_id)
+
+      if (pubError) throw pubError
+
+      await fetchPublications()
+      setSelectedPublication(null)
+      alert('Publication deleted successfully!')
+    } catch (error) {
+      console.error(error)
+      alert('Error deleting publication')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="flex-1 overflow-auto bg-[#0f1117] text-gray-300 p-8">
@@ -267,20 +305,30 @@ export default function Publications() {
             <p><span className="text-gray-400">Volume:</span> {selectedPublication.volume_number}</p>
             <p><span className="text-gray-400">Journal:</span> {selectedPublication.journal_name}</p>
           </div>
+          <div className="flex justify-between mt-6">
+            <div className="flex gap-3">
             <button
                     onClick={() => setMode("edit")}
                     className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded"
                   >
               Edit
             </button>
+             <button
+                    onClick={deletePublication}
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+                  >
+              Delete
+            </button>
+            </div>
             <button
               onClick={() => {
                 setSelectedPublication(null);
               }}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
             >
               Close
             </button>
+          </div>
             </div>
             </div>
           )}
