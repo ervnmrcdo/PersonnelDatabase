@@ -5,6 +5,7 @@ import AdminDashboard from "@/components/Dashboard/AdminDashboard";
 import AdminProfile from "@/components/Profile/AdminProfile";
 import ReviewPage from "@/components/Review/ReviewPage";
 import ReviewTab from "@/components/ReviewTab";
+import PersonnelList from "@/components/Admin/PersonnelList";
 import { useState, ReactNode } from "react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -13,8 +14,8 @@ type Page =
   | "Profile"
   | "Account Settings"
   | "To Review"
-  | "Faculty"
-  | "Students"
+  | "Teaching"
+  | "NonTeaching"
   | "Forms"
   | "Crawler"
   | "Database";
@@ -32,10 +33,10 @@ export default function Page() {
         return <AdminProfile />;
       case "To Review":
         return <ReviewPage />;
-      case "Faculty":
-        return <>Faculty</>;
-      case "Students":
-        return <>Students</>;
+      case "Teaching":
+        return <PersonnelList role="teaching" />;
+      case "NonTeaching":
+        return <PersonnelList role="nonteaching" />;
       case "Forms":
         return <>Forms</>;
       case "Crawler":

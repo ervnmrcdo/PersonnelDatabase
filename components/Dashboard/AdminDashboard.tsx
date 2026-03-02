@@ -2,11 +2,15 @@
 
 import { useAuth } from '@/context/AuthContext'
 import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 export default function AdminDashboard() {
   const { user, profile } = useAuth()
+  const supabase = createClient()
 
   const [pendingCount, setPendingCount] = useState<number>(0);
+  const [teachingCount, setTeachingCount] = useState<number>(0);
+  const [nonTeachingCount, setNonTeachingCount] = useState<number>(0);
 
   useEffect(() => {
     fetch("/api/pendingAwards")
@@ -15,6 +19,25 @@ export default function AdminDashboard() {
         setPendingCount(result.length || 0);
       });
   }, []);
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const { count: teaching } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('role', 'teaching');
+      
+      const { count: nonTeaching } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('role', 'nonteaching');
+
+      setTeachingCount(teaching || 0);
+      setNonTeachingCount(nonTeaching || 0);
+    };
+
+    fetchCounts();
+  }, [supabase]);
 
   return (
     <div className="flex-1 overflow-auto bg-[#0f1117] text-gray-300 p-8">
@@ -28,12 +51,12 @@ export default function AdminDashboard() {
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-[#1b1e2b] rounded-lg p-6 border border-gray-700">
-            <h3 className="text-sm text-gray-400 mb-2">Total Faculty</h3>
-            <p className="text-3xl font-bold text-blue-400">--</p>
+            <h3 className="text-sm text-gray-400 mb-2">Total Teaching</h3>
+            <p className="text-3xl font-bold text-blue-400">{teachingCount}</p>
           </div>
           <div className="bg-[#1b1e2b] rounded-lg p-6 border border-gray-700">
-            <h3 className="text-sm text-gray-400 mb-2">Total Students</h3>
-            <p className="text-3xl font-bold text-green-400">--</p>
+            <h3 className="text-sm text-gray-400 mb-2">Total NonTeaching</h3>
+            <p className="text-3xl font-bold text-green-400">{nonTeachingCount}</p>
           </div>
           <div className="bg-[#1b1e2b] rounded-lg p-6 border border-gray-700">
             <h3 className="text-sm text-gray-400 mb-2">Pending Reviews</h3>
@@ -46,10 +69,10 @@ export default function AdminDashboard() {
           <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
-              Add Faculty
+              Add Teaching
             </button>
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
-              Add Students
+              Add NonTeaching
             </button>
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
               View Reviews
