@@ -47,12 +47,12 @@ export default function Page() {
   };
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex h-screen bg-[#0f1117]">
       <AdminSidebar
         setActiveComponent={setActiveComponent}
         active={activeComponent}
       />
-      <main className="flex-1 bg-white overflow-y-auto">{renderContent()}</main>
+      <main className="flex-1 bg-[#0f1117] overflow-y-auto">{renderContent()}</main>
     </div>
   );
 }
