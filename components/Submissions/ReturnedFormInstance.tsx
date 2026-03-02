@@ -61,23 +61,23 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
         : rawPdfJson as unknown as IPAFormData;
 
     return (
-        <div className="bg-white rounded-xl shadow p-6 space-y-4">
+        <div className="bg-[#1b1e2b] rounded-xl shadow p-6 space-y-4">
             <button
                 onClick={onBack}
-                className="flex items-center text-gray-600 hover:text-black mb-2"
+                className="flex items-center text-gray-400 hover:text-white mb-2"
             >
                 <ArrowLeft className="mr-2" /> Back
             </button>
 
-            <div className="p-4 bg-gray-100 rounded-lg">
-                <p className="font-bold text-lg">{data.first_name + ' ' + data.last_name}</p>
-                <p className="text-sm">{data.award_title}</p>
+            <div className="p-4 bg-[#252836] rounded-lg">
+                <p className="font-bold text-lg text-white">{data.first_name + ' ' + data.last_name}</p>
+                <p className="text-sm text-gray-300">{data.award_title}</p>
                 <p className="text-xs text-gray-400">{data.date_submitted}</p>
             </div>
 
-            <div className="p-4 bg-gray-100 rounded-lg">
-                <p className="font-bold text-med">{`Remarks:`}</p>
-                <p className="text-sm">{data.remarks ?? 'No remarks noted.'}</p>
+            <div className="p-4 bg-[#252836] rounded-lg">
+                <p className="font-bold text-med text-white">{`Remarks:`}</p>
+                <p className="text-sm text-gray-300">{data.remarks ?? 'No remarks noted.'}</p>
             </div>
 
 

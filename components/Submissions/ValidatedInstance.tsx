@@ -33,17 +33,17 @@ export default function AcceptedFormInstance({ data, onBack }: Props) {
 
     return (
 
-        <div className="bg-white rounded-xl shadow p-6 space-y-4">
+        <div className="bg-[#1b1e2b] rounded-xl shadow p-6 space-y-4">
             <button
                 onClick={onBack}
-                className="flex items-center text-gray-600 hover:text-black mb-2"
+                className="flex items-center text-gray-400 hover:text-white mb-2"
             >
                 <ArrowLeft className="mr-2" /> Back
             </button>
 
-            <div className="p-4 bg-gray-100 rounded-lg">
-                <p className="font-bold text-lg">{data.first_name + ' ' + data.last_name}</p>
-                <p className="text-sm">{data.award_title}</p>
+            <div className="p-4 bg-[#252836] rounded-lg">
+                <p className="font-bold text-lg text-white">{data.first_name + ' ' + data.last_name}</p>
+                <p className="text-sm text-gray-300">{data.award_title}</p>
                 <p className="text-xs text-gray-400">{data.date_submitted}</p>
             </div>
 
@@ -54,7 +54,7 @@ export default function AcceptedFormInstance({ data, onBack }: Props) {
             </div>
             {
                 pdfUrl ? (
-                    <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-gray-50">
+                    <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-[#1a1e2b]">
                         <Document
                             file={pdfUrl}
                             onLoadSuccess={({ numPages }) => setNumPages(numPages)}

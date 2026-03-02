@@ -42,20 +42,20 @@ export default function AcceptedListing({ onSelect }: Props) {
     }, [])
 
     return (<div>
-        <div className="bg-white rounded-xl shadow p-6 mt-5">
-            <h1 className="text-2xl font-bold mb-6">Validated</h1>
+        <div className="bg-[#1b1e2b] rounded-xl shadow p-6 mt-5">
+            <h1 className="text-2xl font-bold mb-6 text-white">Validated</h1>
 
 
             <div className="space-y-4">
                 {acceptedData.map((item) => (
                     <div
                         key={item.submission_id}
-                        className="p-4 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer flex justify-between items-center transition"
+                        className="p-4 rounded-lg bg-[#252836] hover:bg-gray-600 cursor-pointer flex justify-between items-center transition"
                         onClick={() => { onSelect(item) }}
                     >
                         <div>
-                            <p className="font-semibold text-lg">{item.first_name + ' ' + item.last_name}</p>
-                            <p className="text-sm">{item.award_title}</p>
+                            <p className="font-semibold text-lg text-white">{item.first_name + ' ' + item.last_name}</p>
+                            <p className="text-sm text-gray-300">{item.award_title}</p>
                             <p className="text-xs text-gray-400">{item.date_submitted}</p>
                         </div>
                         <ChevronRight className="text-gray-400" />

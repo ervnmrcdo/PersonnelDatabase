@@ -186,15 +186,15 @@ export default function Publications() {
 
           {(mode === "add" || mode === "edit") && (
             <div className="mb-6 grid gap-2 grid-cols-1 md:grid-cols-2">
-              <input type="text" value={type} onChange={(e) => setType(e.target.value)} placeholder="Type" className="w-full p-2 rounded text-black" />
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 rounded text-black" />
-              <input type="text" value={publisher} onChange={(e) => setPublisher(e.target.value)} placeholder="Publisher" className="w-full p-2 rounded text-black" />
-              <input type="text" value={publicationStatus} onChange={(e) => setPublicationStatus(e.target.value)} placeholder="Publication Status" className="w-full p-2 rounded text-black" />
-              <input type="date" value={datePublished} onChange={(e) => setDatePublished(e.target.value)} placeholder="Date Published" className="w-full p-2 rounded text-black" />
-              <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="Issue Number" className="w-full p-2 rounded text-black" />
-              <input type="text" value={pageNumbers} onChange={(e) => setPageNumbers(e.target.value)} placeholder="Page Numbers" className="w-full p-2 rounded text-black" />
-              <input type="text" value={volumeNumber} onChange={(e) => setVolumeNumber(e.target.value)} placeholder="Volume Number" className="w-full p-2 rounded text-black" />
-              <input type="text" value={journalName} onChange={(e) => setJournalName(e.target.value)} placeholder="Journal Name" className="w-full p-2 rounded text-black" />
+              <input type="text" value={type} onChange={(e) => setType(e.target.value)} placeholder="Type" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={publisher} onChange={(e) => setPublisher(e.target.value)} placeholder="Publisher" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={publicationStatus} onChange={(e) => setPublicationStatus(e.target.value)} placeholder="Publication Status" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="date" value={datePublished} onChange={(e) => setDatePublished(e.target.value)} placeholder="Date Published" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="Issue Number" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={pageNumbers} onChange={(e) => setPageNumbers(e.target.value)} placeholder="Page Numbers" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={volumeNumber} onChange={(e) => setVolumeNumber(e.target.value)} placeholder="Volume Number" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={journalName} onChange={(e) => setJournalName(e.target.value)} placeholder="Journal Name" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <button
                 onClick={mode === "edit" ? editPublication : addPublication}
                 className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mt-2"

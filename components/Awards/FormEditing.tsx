@@ -39,15 +39,15 @@ const FormEditing: FC<FormEditingProps> = ({
       >
         ← Back to Publications
       </button>
-      <h1 className="text-2xl font-bold mb-6">
+      <h1 className="text-2xl font-bold mb-6 text-white">
         {selectedAward?.title} Application
       </h1>
 
       {/* Placeholder for the auto-filled form */}
-      <div className="bg-white shadow-md rounded-xl p-6">
+      <div className="bg-[#1b1e2b] shadow-md rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Auto-filled Award Form</h2>
 
-        <div className="text-gray-600 space-y-2">
+        <div className="text-gray-400 space-y-2">
           <p>
             <strong>Applicant:</strong> {selectedPublication.users[0].first_name + ' ' + selectedPublication.users[0].last_name}
           </p>

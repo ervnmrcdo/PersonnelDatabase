@@ -156,17 +156,17 @@ export default function ReviewInstance({ data, onBack }: Props) {
   }, [data]);
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 space-y-4">
+    <div className="bg-[#1b1e2b] rounded-xl shadow p-6 space-y-4">
       <button
         onClick={onBack}
-        className="flex items-center text-gray-600 hover:text-black mb-2"
+        className="flex items-center text-gray-400 hover:text-white mb-2"
       >
         <ArrowLeft className="mr-2" /> Back
       </button>
 
-      <div className="p-4 bg-gray-100 rounded-lg">
-        <p className="font-bold text-lg">{data.name}</p>
-        <p className="text-sm text-gray-500">{data.role}</p>
+      <div className="p-4 bg-[#252836] rounded-lg">
+        <p className="font-bold text-lg text-white">{data.name}</p>
+                <p className="text-sm text-gray-400">{data.role}</p>
         <p className="text-sm">{data.award}</p>
         <p className="text-xs text-gray-400">{data.dateSubmitted}</p>
       </div>
@@ -184,9 +184,9 @@ export default function ReviewInstance({ data, onBack }: Props) {
       {/* Error Remarks Dialog */}
       {showErrorDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Return with Errors</h3>
-            <p className="text-sm text-gray-600 mb-2">
+          <div className="bg-[#1b1e2b] rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4 text-white">Return with Errors</h3>
+            <p className="text-sm text-gray-300 mb-2">
               Please specify the errors or issues found in this submission:
             </p>
             <textarea
@@ -198,7 +198,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
             />
             <div className="flex justify-end gap-3 mt-4">
               <button
-                className="px-4 py-2 border rounded-md hover:bg-gray-50"
+                className="px-4 py-2 border rounded-md hover:bg-gray-700"
                 onClick={() => {
                   setErrorRemarks("");
                   setShowErrorDialog(false);
@@ -221,14 +221,14 @@ export default function ReviewInstance({ data, onBack }: Props) {
       {/* Sign Confirmation Dialog */}
       {showSignConfirmDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Confirm Sign Form</h3>
-            <p className="text-sm text-gray-600 mb-6">
+          <div className="bg-[#1b1e2b] rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4 text-white">Confirm Sign Form</h3>
+            <p className="text-sm text-gray-300 mb-6">
               Are you sure you want to sign this form? This action cannot be undone.
             </p>
             <div className="flex justify-end gap-3">
               <button
-                className="px-4 py-2 border rounded-md hover:bg-gray-50"
+                className="px-4 py-2 border rounded-md hover:bg-gray-700"
                 onClick={() => setShowSignConfirmDialog(false)}
               >
                 Cancel
@@ -249,7 +249,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
       {
         pdfUrl ? (
-          <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-gray-50">
+          <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-[#1a1e2b]">
             <Document
               file={pdfUrl}
               onLoadSuccess={({ numPages }) => setNumPages(numPages)}
