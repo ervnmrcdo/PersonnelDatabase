@@ -10,6 +10,8 @@ export default async function generateIPAPDF(
 ) {
   const { data, submitter_id, isSubmitting } = JSON.parse(await req.body)
 
+  // console.log(data, submitter_id, isSubmitting)
+
   const ipaData = data.ipaData
 
 
