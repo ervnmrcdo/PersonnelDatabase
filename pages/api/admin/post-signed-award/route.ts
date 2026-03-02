@@ -3,14 +3,14 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { createPagesServerClient } from "@/lib/supabase/pager-server"
 
 export default async function ValidateAward(
- 	req: NextApiRequest,
- 	res: NextApiResponse
- ) {
- 	const data = await req.body;
- 	const { admin_id, submission_id, pdfBytes, newLogs } = data
- 	const pdf = Buffer.from(pdfBytes)
- 	console.log(newLogs)
- 	try {
+	req: NextApiRequest,
+	res: NextApiResponse
+) {
+	const data = await req.body;
+	const { admin_id, submission_id, pdfBytes, newLogs } = data
+	const pdf = Buffer.from(pdfBytes)
+	console.log(newLogs)
+	try {
 
 		const supabase = createPagesServerClient(req, res);
 
@@ -57,9 +57,9 @@ export default async function ValidateAward(
 		return res.status(200).json(updateData);
 
 
- 	} catch (err) {
- 		console.log("Error sending signed award", err)
- 		return res.status(500).json(`Error submitting award', ${err}`)
+	} catch (err) {
+		console.log("Error sending signed award", err)
+		return res.status(500).json(`Error submitting award', ${err}`)
 
- 	}
- }
+	}
+}

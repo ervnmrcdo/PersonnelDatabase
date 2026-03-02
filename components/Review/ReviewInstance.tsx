@@ -57,15 +57,9 @@ export default function ReviewInstance({ data, onBack }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           pdfBase64: pdfBase64,
+          admin_id: user?.id,
         })
       });
-
-      // const blob = await signPDF.blob()
-      // const url = window.URL.createObjectURL(blob);
-      // const a = document.createElement("a");
-      // a.href = url;
-      // a.download = "ipc-award-form.pdf";
-      // a.click();
 
 
       const { pdfInBytes } = await signPDF.json()
