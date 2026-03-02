@@ -69,7 +69,7 @@ export default async function(
 
 		// return res.status(200).send(Buffer.from(pdfInBytes)) //temp fix to try downloading
 
-		return res.status(200).json({ pdfInBytes: pdfInBytes, }); //  correct
+		return res.status(200).json({ pdfInBytes: Buffer.from(pdfInBytes).toString('base64') }); //  correct
 
 	} catch (err) {
 		return res.status(500).json(`Internal Server error: ${err}`)

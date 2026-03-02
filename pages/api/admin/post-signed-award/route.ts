@@ -8,7 +8,7 @@ export default async function ValidateAward(
 ) {
 	const data = await req.body;
 	const { admin_id, submission_id, pdfBytes, newLogs } = data
-	const pdf = Buffer.from(pdfBytes)
+	const pdf = Buffer.from(pdfBytes, 'base64')
 	console.log(newLogs)
 	try {
 

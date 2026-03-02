@@ -60,15 +60,21 @@ export default function ReviewInstance({ data, onBack }: Props) {
           admin_id: user?.id,
         })
       });
-
+      //
+      // const blob = await signPDF.blob()
+      // const url = window.URL.createObjectURL(blob);
+      // const a = document.createElement("a");
+      // a.href = url;
+      // a.download = "ipc-award-form.pdf";
+      // a.click();
+      //
 
       const { pdfInBytes } = await signPDF.json()
 
-      const pdfUInt8 = new Uint8Array(Object.values(pdfInBytes));
-      const foo = Buffer.from(pdfUInt8)
+      const foo = Buffer.from(pdfInBytes, 'base64')
 
       const payload = {
-        pdfBytes: foo,
+        pdfBytes: foo.toString('base64'),
         // change admin id to correspond to uid of admin user
         admin_id: user?.id,
         submission_id: data.application_id,
