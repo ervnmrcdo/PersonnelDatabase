@@ -22,7 +22,6 @@ export default function Page() {
   const TEACHING_UUID = user?.id;
 
   const renderContent = (): ReactNode => {
-    console.log("hi");
     switch (activeComponent) {
       case "Home":
         return <TeachingDashboard />;
@@ -31,19 +30,19 @@ export default function Page() {
       case "Awards":
         return <AwardsPage />;
       case "Publications":
-        return <Publications/>;
+        return <Publications />;
       case "Documents":
         return <>Documents</>;
     }
   };
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex h-screen bg-[#0f1117]">
       <TeachingSidebar
         setActiveComponent={setActiveComponent}
         active={activeComponent}
       />
-      <main className="flex-1 bg-white overflow-y-auto">{renderContent()}</main>
+      <main className="flex-1 bg-[#0f1117] overflow-y-auto">{renderContent()}</main>
     </div>
   );
 }
