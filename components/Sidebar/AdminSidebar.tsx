@@ -7,8 +7,8 @@ type Page =
   | "Profile"
   | "Account Settings"
   | "To Review"
-  | "Faculty"
-  | "Students"
+  | "Teaching"
+  | "NonTeaching"
   | "Forms"
   | "Crawler"
   | "Database";
@@ -77,16 +77,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <h2 className="text-xs uppercase text-gray-500 mb-2">Personnel</h2>
         <ul className="space-y-1">
           <li
-            onClick={() => setActiveComponent("Faculty")}
-            className={buttonStyle("Faculty")}
+            onClick={() => setActiveComponent("Teaching")}
+            className={buttonStyle("Teaching")}
           >
-            <span>Faculty</span>
+            <span>Teaching</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Students")}
-            className={buttonStyle("Students")}
+            onClick={() => setActiveComponent("NonTeaching")}
+            className={buttonStyle("NonTeaching")}
           >
-            <span>Students</span>
+            <span>NonTeaching</span>
           </li>
         </ul>
       </div>

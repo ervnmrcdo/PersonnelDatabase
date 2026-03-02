@@ -1,12 +1,22 @@
 import { EditableAwardFormData, IPAFormData, SubmissionLog } from "@/lib/types"
 
-export default async function handleResubmit(data: EditableAwardFormData, submission_id: string, logs: SubmissionLog[], actor_name: string) {
+export default async function handleResubmit(data: EditableAwardFormData, submission_id: string, logs: SubmissionLog[], actor_name: string, submitter_id: string) {
   try {
+
+    const generateFormData = { data: data, submitter_id, isSubmitting: true }
+
+    console.log(submitter_id)
 
     const pdf = await fetch('/api/generate-ipa-award/route', {
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify(generateFormData)
     })
+    // const blob = await pdf.blob()
+    // const url = window.URL.createObjectURL(blob);
+    // const a = document.createElement("a");
+    // a.href = url;
+    // a.download = "ipc-award-form.pdf";
+    // a.click();
 
     const foo = await pdf.arrayBuffer()
     const buffer = Buffer.from(new Uint8Array(foo))

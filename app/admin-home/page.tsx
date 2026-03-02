@@ -5,6 +5,7 @@ import AdminDashboard from "@/components/Dashboard/AdminDashboard";
 import AdminProfile from "@/components/Profile/AdminProfile";
 import ReviewPage from "@/components/Review/ReviewPage";
 import ReviewTab from "@/components/ReviewTab";
+import PersonnelList from "@/components/Admin/PersonnelList";
 import { useState, ReactNode } from "react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -13,8 +14,8 @@ type Page =
   | "Profile"
   | "Account Settings"
   | "To Review"
-  | "Faculty"
-  | "Students"
+  | "Teaching"
+  | "NonTeaching"
   | "Forms"
   | "Crawler"
   | "Database";
@@ -32,10 +33,10 @@ export default function Page() {
         return <AdminProfile />;
       case "To Review":
         return <ReviewPage />;
-      case "Faculty":
-        return <>Faculty</>;
-      case "Students":
-        return <>Students</>;
+      case "Teaching":
+        return <PersonnelList role="teaching" />;
+      case "NonTeaching":
+        return <PersonnelList role="nonteaching" />;
       case "Forms":
         return <>Forms</>;
       case "Crawler":
@@ -46,12 +47,12 @@ export default function Page() {
   };
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex h-screen bg-[#0f1117]">
       <AdminSidebar
         setActiveComponent={setActiveComponent}
         active={activeComponent}
       />
-      <main className="flex-1 bg-white overflow-y-auto">{renderContent()}</main>
+      <main className="flex-1 bg-[#0f1117] overflow-y-auto">{renderContent()}</main>
     </div>
   );
 }

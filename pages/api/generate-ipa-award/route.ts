@@ -3,13 +3,19 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
+import { createPagesServerClient } from "@/lib/supabase/pager-server";
 
 export default async function generateIPAPDF(
   req: NextApiRequest, res: NextApiResponse
 ) {
-  const { ipaData } = JSON.parse(await req.body)
-  try {
+  const { data, submitter_id, isSubmitting } = JSON.parse(await req.body)
 
+  // console.log(data, submitter_id, isSubmitting)
+
+  const ipaData = data.ipaData
+
+
+  try {
     const templatePath = path.join(process.cwd(), "public/ipc-template.pdf");
     const templateBytes = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(templateBytes);
@@ -22,6 +28,7 @@ export default async function generateIPAPDF(
     const page4 = pages[4];
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const { height } = page0.getSize();
+
 
     page0.drawText(ipaData.articleTitle || "", {
       x: 130,
@@ -343,6 +350,42 @@ export default async function generateIPAPDF(
       size: 11,
       font,
     });
+
+    if (isSubmitting) {
+
+      const supabase = createPagesServerClient(req, res);
+
+      const { data, error, status } = await supabase
+        .from('users')
+        .select(`signature_path`)
+        .eq('id', submitter_id)
+        .single()
+
+
+      if (data === null) {
+        return res.status(500).json({ message: 'no signature uploaded' })
+      }
+
+      const { data: signatureData, error: downloadError } = await supabase
+        .storage
+        .from('signatures')
+        .download(data.signature_path)
+      if (downloadError || !signatureData) {
+        return res.status(500).json({ message: 'Failed to download signature' })
+      }
+
+      const signatureBuffer = await signatureData.arrayBuffer()
+      const signature = await pdfDoc.embedPng(Buffer.from(signatureBuffer))
+      const signatureDims = signature.scale(0.1)
+
+
+      page2.drawImage(signature, {
+        x: 150,
+        y: height - 510,
+        height: signatureDims.height,
+        width: signatureDims.width,
+      })
+    }
 
     const pdfBytes = await pdfDoc.save();
 

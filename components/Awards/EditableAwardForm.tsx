@@ -11,7 +11,7 @@ export interface EditableAwardFormProps {
   initialData: IPAFormData;
   isResubmitting: boolean;
   onSubmit: (submitter_id: string, award_id: string, publication_id: string, data: any, actor_name: string) => void;
-  onResubmit: (data: any, submission_id: string, logs: SubmissionLog[], actor_name: string) => void;
+  onResubmit: (data: any, submission_id: string, logs: SubmissionLog[], actor_name: string, submitter_id: string) => void;
   onDownload: (data: any) => void;
   submission_id: string;
   submitter_id: string;
@@ -41,7 +41,6 @@ export default function EditableAwardForm({
   }
   const [formData, setFormData] = useState<EditableAwardFormData>(initialFormData);
 
-  console.log(formData)
 
   const handleChange = (key: string, value: string | boolean) => {
     setFormData((prev) => {
@@ -127,7 +126,7 @@ export default function EditableAwardForm({
             onClick={() => {
               const actor_name = profile ? `${profile.first_name} ${profile.last_name}` : 'Unknown';
               formData.isResubmitting = true;
-              constraints(formData.ipaData) && onResubmit(formData, submission_id, logs!, actor_name);
+              constraints(formData.ipaData) && onResubmit(formData, submission_id, logs!, actor_name, submitter_id);
             }}
             className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
@@ -139,8 +138,8 @@ export default function EditableAwardForm({
             onClick={() => {
               if (constraints(formData.ipaData)) {
                 const actor_name = profile ? `${profile.first_name} ${profile.last_name}` : 'Unknown';
-                onSubmit(submitter_id, submission_id, publication_id, formData, actor_name);
-                setStep('awards');
+                onSubmit(submitter_id, submission_id, publication_id, formData, actor_name)
+                setStep('awards')
               }
             }}
             className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"

@@ -30,6 +30,7 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
     const { profile } = useAuth()
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [numPages, setNumPages] = useState<number>();
+    const submitter_id = useAuth().user!.id.toString()
 
     async function download() {
         // NEW: Handle both URL and Buffer data
@@ -84,7 +85,7 @@ export default function ReturnedFormInstance({ data, onBack }: Props) {
                 onSubmit={handleSubmit}
                 onResubmit={async (formData, submissionId, logs) => {
                     const actor_name = profile ? `${profile.first_name} ${profile.last_name}` : 'Unknown';
-                    await handleResubmit(formData, submissionId, logs, actor_name)
+                    await handleResubmit(formData, submissionId, logs, actor_name, submitter_id)
                     setSelected(null)
                 }}
                 onDownload={handleDownload}
