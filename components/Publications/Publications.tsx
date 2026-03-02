@@ -16,6 +16,7 @@ export default function Publications() {
   const [mode, setMode] = useState<Mode>("view");
 
   const [type, setType] = useState('');
+  const [publicationTypeId, setPublicationTypeId] = useState<number | null>(null)
   const [title, setTitle] = useState('');
   const [publisher, setPublisher] = useState('');
   const [publicationStatus, setPublicationStatus] = useState('');
@@ -91,6 +92,7 @@ export default function Publications() {
       .insert([
         {
           type,
+          publication_type_id: publicationTypeId,
           title,
           publisher,
           publication_status: publicationStatus,
@@ -143,6 +145,7 @@ export default function Publications() {
         .from('publications')
         .update({
           type,
+          publication_type_id: publicationTypeId,
           title,
           publisher,
           publication_status: publicationStatus,
@@ -225,13 +228,16 @@ export default function Publications() {
           {(mode === "add" || mode === "edit") && (
             <div className="mb-6 grid gap-2 grid-cols-1 md:grid-cols-2">
               <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
+                value={publicationTypeId ?? ''}
+                onChange={(e) => {
+                  const value = Number(e.target.value)
+                  setPublicationTypeId(value)
+                  setType(value === 1 ? "Journal" : "Book Chapter")}}
                 className="w-full p-2 rounded text-black"
               >
                 <option value="">Select Type</option>
-                <option value="Journal">Journal</option>
-                <option value="Book Chapter">Book Chapter</option>
+                <option value={1}>Journal</option>
+                <option value={2}>Book Chapter</option>
               </select>
               <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 rounded text-black" />
               <input type="text" value={publisher} onChange={(e) => setPublisher(e.target.value)} placeholder="Publisher" className="w-full p-2 rounded text-black" />
@@ -276,6 +282,7 @@ export default function Publications() {
                     setMode("view");
 
                     setType(pub.type || '')
+                    setPublicationTypeId(pub.publication_type_id || null)
                     setTitle(pub.title || '')
                     setPublisher(pub.publisher || '')
                     setPublicationStatus(pub.publication_status || '')

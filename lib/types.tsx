@@ -33,6 +33,7 @@ export interface Publication {
 export interface SupabasePublication {
   publication_id: number;
   type: string;
+  publication_type_id: number;
   title: string;
   publisher: string;
   publication_status: string;
