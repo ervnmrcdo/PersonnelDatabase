@@ -18,7 +18,7 @@ export default async function(
 
 		const { data, error, status } = await supabase
 			.from('users')
-			.select(`signature_path`)
+			.select(`first_name, middle_name, last_name,signature_path`)
 			.eq('id', admin_id)
 			.single()
 
@@ -46,12 +46,20 @@ export default async function(
 
 		const lastPage = pdf.getPages()[pdf.getPages().length - 1]
 		const height = lastPage.getSize().height
+		const fullName = data.first_name + ' ' + data.middle_name + ' ' + data.last_name
+
 
 		lastPage.drawImage(signature, {
-			x: 230,
+			x: 250,
 			y: 680,
 			height: signatureDims.height,
 			width: signatureDims.width,
+		})
+
+		lastPage.drawText(fullName, {
+			x: 250,
+			y: 680,
+			size: 10,
 		})
 
 		lastPage.drawText(new Date().toLocaleDateString('en-US', {

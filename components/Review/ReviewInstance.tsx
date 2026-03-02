@@ -61,7 +61,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
           admin_id: user?.id,
         })
       });
-      //
+
       // const blob = await signPDF.blob()
       // const url = window.URL.createObjectURL(blob);
       // const a = document.createElement("a");
@@ -166,7 +166,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
       <div className="p-4 bg-[#252836] rounded-lg">
         <p className="font-bold text-lg text-white">{data.name}</p>
-                <p className="text-sm text-gray-400">{data.role}</p>
+        <p className="text-sm text-gray-400">{data.role}</p>
         <p className="text-sm">{data.award}</p>
         <p className="text-xs text-gray-400">{data.dateSubmitted}</p>
       </div>

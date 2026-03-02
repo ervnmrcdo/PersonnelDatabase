@@ -185,7 +185,7 @@ export default function EditableAwardForm({
         type="text"
         value={formData.ipaData.author1UniversityAndDept || ""}
         onChange={(e) => handleChange("author1UniversityAndDept", e.target.value)}
-        className="absolute left-[350px] top-[790px] h-[20px] w-[400px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[350px] top-[790px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="University and Department"
       />
 
