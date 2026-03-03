@@ -167,7 +167,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
       <div className="p-4 bg-[#252836] rounded-lg">
         <p className="font-bold text-lg text-white">{data.name}</p>
         <p className="text-sm text-gray-400">{data.role}</p>
-        <p className="text-sm">{data.award}</p>
+        <p className="text-sm text-white">{data.award}</p>
         <p className="text-xs text-gray-400">{data.dateSubmitted}</p>
       </div>
 
@@ -198,7 +198,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
             />
             <div className="flex justify-end gap-3 mt-4">
               <button
-                className="px-4 py-2 border rounded-md hover:bg-gray-700"
+                className="px-4 py-2 border rounded-md hover:bg-gray-700 text-white"
                 onClick={() => {
                   setErrorRemarks("");
                   setShowErrorDialog(false);
@@ -228,7 +228,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
             </p>
             <div className="flex justify-end gap-3">
               <button
-                className="px-4 py-2 border rounded-md hover:bg-gray-700"
+                className="text-white px-4 py-2 border rounded-md hover:bg-gray-700 "
                 onClick={() => setShowSignConfirmDialog(false)}
               >
                 Cancel

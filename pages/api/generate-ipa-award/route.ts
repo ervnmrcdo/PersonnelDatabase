@@ -226,9 +226,10 @@ export default async function generateIPAPDF(
       font,
     });
     page2.drawText(ipaData.author1Contact || "", {
-      x: 430,
-      y: height - 175,
+      x: 410,
+      y: height - 181,
       size: 11,
+      maxWidth: 300,
       font,
     });
     page2.drawText(ipaData.author1Position || "", {

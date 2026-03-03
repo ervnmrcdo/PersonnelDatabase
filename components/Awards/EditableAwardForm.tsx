@@ -352,7 +352,7 @@ export default function EditableAwardForm({
         type="text"
         value={`${formData.ipaData.author1Contact}` || ""}
         onChange={(e) => handleChange("author1Contact", e.target.value)}
-        className="absolute left-[500px] top-[2250px] h-[20px] w-[150px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[480px] top-[2250px] h-[20px] w-[160px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
 
