@@ -25,6 +25,7 @@ export default function Publications() {
   const [pageNumbers, setPageNumbers] = useState('');
   const [volumeNumber, setVolumeNumber] = useState('');
   const [journalName, setJournalName] = useState('');
+  const [doi, setDOI] = useState('');
 
   const [selectedPublication, setSelectedPublication] = useState<SupabasePublication | null>(null);
 
@@ -54,7 +55,8 @@ export default function Publications() {
             issue_number,
             page_numbers,
             volume_number, 
-            journal_name
+            journal_name,
+            doi
           )
         `)
       .eq('user_id', user.id);
@@ -80,6 +82,7 @@ export default function Publications() {
     setPageNumbers('')
     setVolumeNumber('')
     setJournalName('')
+    setDOI('')
     setSelectedPublication(null)
   }
 
@@ -101,6 +104,7 @@ export default function Publications() {
           page_numbers: pageNumbers,
           volume_number: volumeNumber,
           journal_name: journalName,
+          doi: doi
         }
       ])
       .select();
@@ -153,7 +157,8 @@ export default function Publications() {
           issue_number: issueNumber,
           page_numbers: pageNumbers,
           volume_number: volumeNumber,
-          journal_name: journalName
+          journal_name: journalName,
+          doi: doi
         })
         .eq('publication_id', selectedPublication.publication_id)
 
@@ -242,7 +247,7 @@ export default function Publications() {
               </select>
               <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="text" value={publisher} onChange={(e) => setPublisher(e.target.value)} placeholder="Publisher" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
-              <input type="text" value={publicationStatus} onChange={(e) => setPublicationStatus(e.target.value)} placeholder="Publication Status" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
+              <input type="text" value={doi} onChange={(e) => setDOI(e.target.value)} placeholder="DOI" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="date" value={datePublished} onChange={(e) => setDatePublished(e.target.value)} placeholder="Date Published" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="Issue Number" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="text" value={pageNumbers} onChange={(e) => setPageNumbers(e.target.value)} placeholder="Page Numbers" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
@@ -286,7 +291,7 @@ export default function Publications() {
                     setPublicationTypeId(pub.publication_type_id || null)
                     setTitle(pub.title || '')
                     setPublisher(pub.publisher || '')
-                    setPublicationStatus(pub.publication_status || '')
+                    setDOI(pub.doi || '')
                     setDatePublished(pub.date_published || '')
                     setIssueNumber(pub.issue_number || '')
                     setPageNumbers(pub.page_numbers || '')
@@ -317,7 +322,6 @@ export default function Publications() {
                 <div className="space-y-2 text-gray-300 text-sm">
                   <p><span className="text-gray-400">Type:</span> {selectedPublication.type}</p>
                   <p><span className="text-gray-400">Publisher:</span> {selectedPublication.publisher}</p>
-                  <p><span className="text-gray-400">Status:</span> {selectedPublication.publication_status}</p>
                   <p><span className="text-gray-400">Date Published:</span> {selectedPublication.date_published}</p>
                   <p><span className="text-gray-400">Issue:</span> {selectedPublication.issue_number}</p>
                   <p><span className="text-gray-400">Pages:</span> {selectedPublication.page_numbers}</p>
@@ -348,11 +352,12 @@ export default function Publications() {
                     Close
                   </button>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+              </div >
+            </div >
+          )
+          }
+        </div >
+      </div >
+    </div >
   );
 }

@@ -42,6 +42,7 @@ export interface SupabasePublication {
   page_numbers: string;
   volume_number: string;
   journal_name: string;
+  doi: string;
 }
 
 export type Application = {
