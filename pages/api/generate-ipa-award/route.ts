@@ -31,7 +31,7 @@ export default async function generateIPAPDF(
 
 
     page0.drawText(ipaData.articleTitle || "", {
-      x: 130,
+      x: 70,
       y: height - 530,
       size: 11,
       font,
@@ -39,8 +39,10 @@ export default async function generateIPAPDF(
     });
 
     page0.drawText(ipaData.completeCitation || "", {
-      x: 100,
-      y: height - 570,
+      x: 70,
+      y: height - 560,
+      maxWidth: 500,
+      lineHeight: 10,
       size: 11,
       font,
     });

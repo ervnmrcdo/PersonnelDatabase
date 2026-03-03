@@ -234,7 +234,7 @@ export default function Publications() {
                   setPublicationTypeId(value)
                   setType(value === 1 ? "Journal" : "Book Chapter")
                 }}
-                className="w-full p-2 rounded text-black"
+                className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600"
               >
                 <option value="">Select Type</option>
                 <option value={1}>Journal</option>
@@ -248,7 +248,7 @@ export default function Publications() {
               <input type="text" value={pageNumbers} onChange={(e) => setPageNumbers(e.target.value)} placeholder="Page Numbers" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="text" value={volumeNumber} onChange={(e) => setVolumeNumber(e.target.value)} placeholder="Volume Number" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="text" value={journalName} onChange={(e) => setJournalName(e.target.value)} placeholder="Journal Name" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
-              <div className="w-full p-2 rounded text-black"></div>
+              <div className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600"></div>
               <div>
                 <button
                   onClick={mode === "edit" ? editPublication : addPublication}

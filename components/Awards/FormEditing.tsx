@@ -35,7 +35,7 @@ const FormEditing: FC<FormEditingProps> = ({
     <>
       <button
         onClick={handleBack}
-        className="text-sm text-blue-600 mb-4 hover:underline"
+        className="bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 px-3 py-1 rounded transition text-sm mb-4"
       >
         ← Back to Publications
       </button>
@@ -45,7 +45,7 @@ const FormEditing: FC<FormEditingProps> = ({
 
       {/* Placeholder for the auto-filled form */}
       <div className="bg-[#1b1e2b] shadow-md rounded-xl p-6">
-        <h2 className="text-lg font-semibold mb-4">Auto-filled Award Form</h2>
+        <h2 className="text-lg text-white font-semibold mb-4">Auto-filled Award Form</h2>
 
         <div className="text-gray-400 space-y-2">
           <p>

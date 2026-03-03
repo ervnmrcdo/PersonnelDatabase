@@ -48,7 +48,7 @@ export default function AcceptedFormInstance({ data, onBack }: Props) {
             </div>
 
             <div className="flex gap-3">
-                <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={download}>
+                <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition" onClick={download}>
                     Download for Printing
                 </button>
             </div>

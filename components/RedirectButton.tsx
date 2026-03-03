@@ -12,5 +12,8 @@ export default function RedirectButton({
   directTo,
 }: ButtonProps) {
   const router = useRouter();
-  return <button onClick={() => router.push(`/${directTo}`)}>{label}</button>;
+  const buttonStyles = color === 'red' 
+    ? "bg-red-600 hover:bg-red-700 text-white" 
+    : "bg-blue-600 hover:bg-blue-700 text-white";
+  return <button onClick={() => router.push(`/${directTo}`)} className={`${buttonStyles} px-4 py-2 rounded-lg transition font-semibold`}>{label}</button>;
 }

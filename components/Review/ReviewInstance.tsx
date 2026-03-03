@@ -172,10 +172,10 @@ export default function ReviewInstance({ data, onBack }: Props) {
       </div>
 
       <div className="flex gap-3">
-        <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => setShowSignConfirmDialog(true)}>
+        <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition" onClick={() => setShowSignConfirmDialog(true)}>
           Sign and Return
         </button>
-        <button className="px-4 py-2 border rounded-md"
+        <button className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md hover:bg-gray-700 hover:text-white transition"
           onClick={() => setShowErrorDialog(true)}
         >Return with Errors</button>
       </div>

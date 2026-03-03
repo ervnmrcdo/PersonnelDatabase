@@ -128,7 +128,7 @@ export default function EditableAwardForm({
               formData.isResubmitting = true;
               constraints(formData.ipaData) && onResubmit(formData, submission_id, logs!, actor_name, submitter_id);
             }}
-            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
           >
             Resubmit
           </button>
@@ -142,13 +142,13 @@ export default function EditableAwardForm({
                 setStep('awards')
               }
             }}
-            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
           >
             Submit Application
           </button>
           <button
             onClick={() => constraints(formData.ipaData) && onDownload(formData)}
-            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
           >
             Download Filled PDF
           </button>
