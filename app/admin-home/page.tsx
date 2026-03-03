@@ -6,6 +6,7 @@ import AdminProfile from "@/components/Profile/AdminProfile";
 import ReviewPage from "@/components/Review/ReviewPage";
 import ReviewTab from "@/components/ReviewTab";
 import PersonnelList from "@/components/Admin/PersonnelList";
+import SignedFormsPage from "@/components/Admin/SignedFormsPage";
 import { useState, ReactNode } from "react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -14,6 +15,7 @@ type Page =
   | "Profile"
   | "Account Settings"
   | "To Review"
+  | "Signed Forms"
   | "Teaching"
   | "NonTeaching"
   | "Forms"
@@ -33,6 +35,8 @@ export default function Page() {
         return <AdminProfile />;
       case "To Review":
         return <ReviewPage />;
+      case "Signed Forms":
+        return <SignedFormsPage />;
       case "Teaching":
         return <PersonnelList role="teaching" />;
       case "NonTeaching":

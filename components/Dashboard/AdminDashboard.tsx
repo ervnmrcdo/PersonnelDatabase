@@ -65,7 +65,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-[#1b1e2b] rounded-lg p-6 border border-gray-700">
+        <div className="bg-[#1b1e2b] rounded-lg p-6 border border-gray-700 mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">

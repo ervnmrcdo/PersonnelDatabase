@@ -7,6 +7,7 @@ type Page =
   | "Profile"
   | "Account Settings"
   | "To Review"
+  | "Signed Forms"
   | "Teaching"
   | "NonTeaching"
   | "Forms"
@@ -70,6 +71,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             className={buttonStyle("To Review")}
           >
             <span>To Review</span>
+          </li>
+          <li
+            onClick={() => setActiveComponent("Signed Forms")}
+            className={buttonStyle("Signed Forms")}
+          >
+            <span>Signed Forms</span>
           </li>
         </ul>
       </div>
