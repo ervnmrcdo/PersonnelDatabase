@@ -10,6 +10,20 @@ export interface Author {
   email_address: string;
 }
 
+export interface PublicationType {
+  id: number;
+  name: string;
+  award_id: number;
+  publications: Publication[];
+}
+
+export interface AwardWithPublications {
+  award_id: number;
+  title: string;
+  description: string | null;
+  publication_per_award: PublicationType[];
+}
+
 export interface Award {
   id: number;
   title: string;
@@ -28,6 +42,8 @@ export interface Publication {
   publisher: string;
   issue_number: string;
   publication_status: string;
+  publication_type_id?: number;
+  doi?: string | null;
 }
 
 export interface SupabasePublication {

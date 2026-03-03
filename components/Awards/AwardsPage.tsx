@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Loader2 } from "lucide-react";
 import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
-import { Author, Award, Publication, PendingAward } from "@/lib/types";
-import { awards } from "@/lib/temp";
+import { Author, Award, Publication, AwardWithPublications, PublicationType } from "@/lib/types";
 import { AuthClient } from "@supabase/supabase-js";
 import { useAuth } from "@/context/AuthContext";
 import { AwardsFlowProvider, useAwardsFlow } from "@/context/AwardsFlowContext";
@@ -18,43 +17,66 @@ const AwardsPageContent: FC = () => {
   const [publications, setPublications] = useState<Publication[]>([]);
   const [isLoadingPublications, setIsLoadingPublications] = useState(false);
 
-  const [pendingAwards, setPendingAwards] = useState<PendingAward[]>([]);
-  const [isLoadingPending, setIsLoadingPending] = useState(true);
+  const [awardsWithPublications, setAwardsWithPublications] = useState<AwardWithPublications[]>([]);
+  const [isLoadingAwards, setIsLoadingAwards] = useState(true);
 
   const { user } = useAuth();
   const ADMIN_UUID = user?.id;
-  const payload = {
-    id: ADMIN_UUID,
-    submitterType: "NONTEACHING",
-  };
 
   useEffect(() => {
     if (!user) return;
 
-    setIsLoadingPublications(true);
+    setIsLoadingAwards(true);
 
-    //  fetch publications
-    fetch("/api/get/publications", {
+    fetch("/api/get/forms-with-publications", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ id: ADMIN_UUID }),
     })
       .then((res) => res.json())
       .then((result) => {
-        setPublications(result);
+        setAwardsWithPublications(result);
+        setIsLoadingAwards(false);
       })
       .catch((err) => {
-        console.error("Failed to fetch publications:", err);
-        setIsLoadingPublications(false);
+        console.error("Failed to fetch awards with publications:", err);
+        setIsLoadingAwards(false);
       });
-
-
-    setIsLoadingPublications(false);
-
   }, [user]);
 
   const handleAwardSelect = (award: Award) => {
     setSelectedAward(award);
+    
+    const awardData = awardsWithPublications.find(
+      (awp) => awp.award_id === award.id
+    );
+    
+    if (awardData) {
+      const allPublications: Publication[] = [];
+      
+      awardData.publication_per_award.forEach((pt: PublicationType) => {
+        pt.publications.forEach((pub) => {
+          allPublications.push({
+            type: pub.type,
+            publication_id: String(pub.publication_id),
+            users: [],
+            title: pub.title,
+            date_published: pub.date_published,
+            journal_name: pub.journal_name,
+            volume_number: pub.volume_number,
+            page_numbers: pub.page_numbers,
+            publisher: pub.publisher,
+            issue_number: pub.issue_number,
+            publication_status: pub.publication_status,
+            publication_type_id: pub.publication_type_id,
+            doi: pub.doi,
+          });
+        });
+      });
+      
+      setPublications(allPublications);
+    }
+    
     setStep("publications");
   };
 
@@ -67,6 +89,13 @@ const AwardsPageContent: FC = () => {
     if (step === "form") setStep("publications");
     else if (step === "publications") setStep("awards");
   };
+
+  const awards: Award[] = awardsWithPublications.map((awp) => ({
+    id: awp.award_id,
+    title: awp.title,
+    description: awp.description || "",
+  }));
+
   return (
     <>
       <div className="relative overflow-hidden p-6">
@@ -78,7 +107,14 @@ const AwardsPageContent: FC = () => {
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Awards awards={awards} onSelect={handleAwardSelect} />
+              {isLoadingAwards ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                  <span className="ml-3 text-gray-400">Loading awards...</span>
+                </div>
+              ) : (
+                <Awards awards={awards} onSelect={handleAwardSelect} />
+              )}
             </motion.div>
           )}
 
