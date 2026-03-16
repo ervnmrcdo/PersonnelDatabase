@@ -5,7 +5,12 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/lib/supabase/server'
 
-export async function login(formData: FormData) {
+export type LoginState = {
+  error?: string;
+  successPath?: string;
+}
+
+export async function login(_prevState: LoginState, formData: FormData): Promise<LoginState> {
   const supabase = await createClient()
 
   const data = {
@@ -16,33 +21,31 @@ export async function login(formData: FormData) {
   const { data: authData, error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    redirect('/error')
+    return { error: error.message }
   }
 
-  // Check user's role
   const { data: profile, error: profileError } = await supabase
     .from('users')
     .select('role')
     .eq('id', authData.user.id)
     .single()
 
-  if (profileError) {
-    redirect('/error')
+  if (profileError || !profile) {
+    return { error: 'Failed to get user profile' }
   }
 
   revalidatePath('/', 'layout')
 
-
-  // Redirect based on role
-  if (profile?.role === 'admin') {
-    redirect('/admin/home')
-  } else if (profile?.role === 'teaching') {
-    redirect('/teaching/home')
-  } else if (profile?.role === 'nonteaching') {
-    redirect('/nonteaching/home')
+  let successPath = '/account'
+  if (profile.role === 'admin') {
+    successPath = '/admin/home'
+  } else if (profile.role === 'teaching') {
+    successPath = '/teaching/home'
+  } else if (profile.role === 'nonteaching') {
+    successPath = '/nonteaching/home'
   }
 
-  redirect('/account')
+  return { successPath }
 }
 
 export async function signup(formData: FormData) {

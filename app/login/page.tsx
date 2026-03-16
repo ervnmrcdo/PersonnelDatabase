@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from "@supabase/supabase-js";
-import { login, signup } from './actions'
+import { login, LoginState, signup } from './actions'
 
 
 const supabase = createClient(
@@ -13,6 +13,20 @@ const supabase = createClient(
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+
+  const handleLogin = async (formData: FormData) => {
+    setIsLoading(true)
+    const result: LoginState = await login({ error: undefined }, formData)
+    
+    if (result.successPath) {
+      window.location.reload()
+      router.push(result.successPath)
+    } else if (result.error) {
+      alert(result.error)
+    }
+    setIsLoading(false)
+  }
 
   return (
     <div className="min-h-screen bg-[#0f1117] text-gray-300 flex items-center justify-center p-4">
@@ -59,7 +73,7 @@ export default function LoginPage() {
             {/* Buttons */}
             <div className="space-y-3 pt-4">
               <button
-                formAction={login}
+                formAction={handleLogin}
                 disabled={isLoading}
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-semibold py-2 rounded-lg transition duration-200"
               >
