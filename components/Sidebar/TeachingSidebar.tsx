@@ -25,7 +25,9 @@ const TeachingSidebar: React.FC<TeachingSidebarProps> = ({
   const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut()
+    await signOut();
+    router.push("/login");
+    router.refresh();
   }
 
   return (
