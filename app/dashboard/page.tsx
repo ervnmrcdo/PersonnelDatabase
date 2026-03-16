@@ -7,17 +7,17 @@ export default function Dashboard() {
       <RedirectButton
         label={"Admin"}
         color={"green"}
-        directTo={"admin-home"}
+        directTo={"admin/home"}
       ></RedirectButton>
       <RedirectButton
         label={"Teaching"}
         color={"green"}
-        directTo={"teaching-home"}
+        directTo={"teaching/home"}
       ></RedirectButton>
       <RedirectButton
         label={"NonTeaching"}
         color={"green"}
-        directTo={"nonteaching-home"}
+        directTo={"nonteaching/home"}
       ></RedirectButton>
     </div>
   );

@@ -33,7 +33,7 @@ export default function AuthPage() {
         });
         if (error) throw error;
         setSuccess("Login successful! Redirecting...");
-        setTimeout(() => router.push("/admin-home"), 1500);
+        setTimeout(() => router.push("/admin/home"), 1500);
       } else {
         const { data, error } = await supabase.auth.signUp({
           email,

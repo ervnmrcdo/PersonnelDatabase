@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { signOut } from "@/app/actions/auth";
 import "../../app/globals.css";
 
@@ -9,21 +9,29 @@ type NonTeachingPage =
   | "Awards"
   | "Submissions"
   | "Documents";
-interface NonTeachingSidebarProps {
-  setActiveComponent: React.Dispatch<React.SetStateAction<NonTeachingPage>>;
-  active: NonTeachingPage;
-}
 
-const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
-  setActiveComponent,
-  active,
-}) => {
+const NonTeachingSidebar: React.FC = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const getActivePage = (): NonTeachingPage => {
+    const path = pathname?.split("/").pop() || "home";
+    if (path === "home") return "Home";
+    if (path === "profile") return "Profile";
+    if (path === "publications") return "Publications";
+    if (path === "awards") return "Awards";
+    if (path === "submissions") return "Submissions";
+    if (path === "documents") return "Documents";
+    return "Home";
+  };
+
+  const active = getActivePage();
+
   const buttonStyle = (label: NonTeachingPage): string =>
     `m-[5px] flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition ${active === label
       ? "bg-blue-500/20 text-blue-400"
       : "hover:bg-gray-700 text-gray-300"
     }`;
-  const router = useRouter();
 
   const handleLogout = async () => {
     await signOut();
@@ -35,8 +43,8 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
     <aside className="h-screen w-18 bg-[#1b1e2b] flex flex-col p-8">
       <div className="flex items-center space-x-2 mb-8">
         <span
-          className="font-semibold text-lg text-gray-400"
-          onClick={() => router.push("/nonteaching-home")}
+          className="font-semibold text-lg text-gray-400 cursor-pointer"
+          onClick={() => router.push("/nonteaching/home")}
         >
           DCS Records
         </span>
@@ -46,37 +54,37 @@ const NonTeachingSidebar: React.FC<NonTeachingSidebarProps> = ({
         <h2 className="text-xs uppercase text-gray-500 mb-2">Personal</h2>
         <ul className="space-y-1">
           <li
-            onClick={() => setActiveComponent("Home")}
+            onClick={() => router.push("/nonteaching/home")}
             className={buttonStyle("Home")}
           >
             <span>Home</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Profile")}
+            onClick={() => router.push("/nonteaching/profile")}
             className={buttonStyle("Profile")}
           >
             <span>Profile</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Publications")}
+            onClick={() => router.push("/nonteaching/publications")}
             className={buttonStyle("Publications")}
           >
             <span>Publications</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Awards")}
+            onClick={() => router.push("/nonteaching/awards")}
             className={buttonStyle("Awards")}
           >
             <span>Awards</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Submissions")}
+            onClick={() => router.push("/nonteaching/submissions")}
             className={buttonStyle("Submissions")}
           >
             <span>Submissions</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Documents")}
+            onClick={() => router.push("/nonteaching/documents")}
             className={buttonStyle("Documents")}
           >
             <span>Documents</span>

@@ -35,11 +35,11 @@ export async function login(formData: FormData) {
 
   // Redirect based on role
   if (profile?.role === 'admin') {
-    redirect('/admin-home')
+    redirect('/admin/home')
   } else if (profile?.role === 'teaching') {
-    redirect('/teaching-home')
+    redirect('/teaching/home')
   } else if (profile?.role === 'nonteaching') {
-    redirect('/nonteaching-home')
+    redirect('/nonteaching/home')
   }
 
   redirect('/account')

@@ -9,9 +9,9 @@ export async function proxy(request: NextRequest) {
 
   // role-protected route mapping
   const roleMap: { path: string; role: string }[] = [
-    { path: '/admin-home', role: 'admin' },
-    { path: '/teaching-home', role: 'teaching' },
-    { path: '/nonteaching-home', role: 'nonteaching' },
+    { path: '/admin', role: 'admin' },
+    { path: '/teaching', role: 'teaching' },
+    { path: '/nonteaching', role: 'nonteaching' },
   ]
 
   const match = roleMap.find(r => pathname === r.path || pathname.startsWith(r.path + '/'))
@@ -54,7 +54,7 @@ export async function proxy(request: NextRequest) {
     }
 
     if (!profile || profile.role !== match.role) {
-      const fallback = profile?.role === 'admin' ? '/admin-home' : profile?.role === 'teaching' ? '/teaching-home' : profile?.role === 'nonteaching' ? '/nonteaching-home' : '/account'
+      const fallback = profile?.role === 'admin' ? '/admin/home' : profile?.role === 'teaching' ? '/teaching/home' : profile?.role === 'nonteaching' ? '/nonteaching/home' : '/account'
       const url = request.nextUrl.clone()
       url.pathname = fallback
       return NextResponse.redirect(url)
