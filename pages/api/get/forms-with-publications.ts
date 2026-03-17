@@ -20,6 +20,9 @@ interface PublicationRow {
   publication_id: number;
   publication_status: string;
   publication_type_id: number;
+  publication_authors?: any[];
+  users?: any[];
+  publication_award_applications?: any[];
 }
 
 export default async function func(req: NextApiRequest, res: NextApiResponse) {
@@ -53,7 +56,7 @@ export default async function func(req: NextApiRequest, res: NextApiResponse) {
       .from("publications")
       .select(`
         *,
-        publication_authors!inner(*),
+        publication_authors!inner(*, users!inner(*)),
         users!inner(*),
         publication_award_applications(*)
       `)
@@ -67,7 +70,6 @@ export default async function func(req: NextApiRequest, res: NextApiResponse) {
     const filteredPublications = publicationsData?.filter(
       (p: any) => !p.publication_award_applications?.length
     ) || [];
-    console.log(publicationsData)
 
     const result = awardsData.map((award: any) => {
       const awardPublicationTypes = publicationTypesData.filter(
@@ -78,31 +80,40 @@ export default async function func(req: NextApiRequest, res: NextApiResponse) {
         (pt: PublicationTypeRow) => {
           const userPubsOfType = filteredPublications
             .filter((p: PublicationRow) => p.publication_type_id === pt.publication_type_id)
-            .map((p: PublicationRow) => ({
-              doi: p.doi,
-              type: p.type,
-              title: p.title,
-              publisher: p.publisher,
-              issue_number: p.issue_number,
-              journal_name: p.journal_name,
-              page_numbers: p.page_numbers,
-              volume_number: p.volume_number,
-              date_published: p.date_published,
-              publication_id: p.publication_id,
-              publication_status: p.publication_status,
-              publication_type_id: p.publication_type_id,
-            }));
+            .map((p: PublicationRow) => {
+              const authors = p.publication_authors?.map((pa: any) => ({
+                first_name: pa.first_name || pa.users?.first_name || "",
+                last_name: pa.last_name || pa.users?.last_name || "",
+                middle_name: pa.middle_name || pa.users?.middle_name || "",
+                university: pa.university || pa.users?.university || "",
+                college: pa.college || pa.users?.college || "",
+                department: pa.department || pa.users?.department || "",
+                position: pa.position || pa.users?.position || "",
+                contact_number: pa.contact_number || pa.users?.contact_number || "",
+                email_address: pa.email_address || pa.users?.email_address || "",
+              })) || [];
+
+              return {
+                doi: p.doi,
+                type: p.type,
+                title: p.title,
+                publisher: p.publisher,
+                issue_number: p.issue_number,
+                journal_name: p.journal_name,
+                page_numbers: p.page_numbers,
+                volume_number: p.volume_number,
+                date_published: p.date_published,
+                publication_id: p.publication_id,
+                publication_status: p.publication_status,
+                publication_type_id: p.publication_type_id,
+                authors,
+              };
+            });
 
 
-          // return {
-          //   id: pt.id,
-          //   name: pt.name,
-          //   award_id: pt.publication_type_id,
-          //   publications: userPubsOfType,
-          // };
-          return userPubsOfType[0]
+          return userPubsOfType
         }
-      );
+      ).flat().filter(Boolean);
 
 
 

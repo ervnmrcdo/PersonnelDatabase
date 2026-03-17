@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Loader2 } from "lucide-react";
 import PublicationSelection from "./PublicationSelection";
 import FormEditing from "./FormEditing";
-import { Author, Award, Publication, AwardWithPublications, PublicationType } from "@/lib/types";
+import { Author, Award, Publication, AwardWithPublications } from "@/lib/types";
 import { AuthClient } from "@supabase/supabase-js";
 import { useAuth } from "@/context/AuthContext";
 import { AwardsFlowProvider, useAwardsFlow } from "@/context/AwardsFlowContext";
@@ -56,23 +56,21 @@ const AwardsPageContent: FC = () => {
     if (awardData) {
       const allPublications: Publication[] = [];
 
-      awardData.publication_per_award.forEach((pt: PublicationType) => {
-        pt.publications.forEach((pub) => {
-          allPublications.push({
-            type: pub.type,
-            publication_id: String(pub.publication_id),
-            users: [],
-            title: pub.title,
-            date_published: pub.date_published,
-            journal_name: pub.journal_name,
-            volume_number: pub.volume_number,
-            page_numbers: pub.page_numbers,
-            publisher: pub.publisher,
-            issue_number: pub.issue_number,
-            publication_status: pub.publication_status,
-            publication_type_id: pub.publication_type_id,
-            doi: pub.doi,
-          });
+      awardData.publication_per_award.forEach((pub: any) => {
+        allPublications.push({
+          type: pub.type,
+          publication_id: String(pub.publication_id),
+          users: pub.authors || [],
+          title: pub.title,
+          date_published: pub.date_published,
+          journal_name: pub.journal_name,
+          volume_number: pub.volume_number,
+          page_numbers: pub.page_numbers,
+          publisher: pub.publisher,
+          issue_number: pub.issue_number,
+          publication_status: pub.publication_status,
+          publication_type_id: pub.publication_type_id,
+          doi: pub.doi,
         });
       });
 
