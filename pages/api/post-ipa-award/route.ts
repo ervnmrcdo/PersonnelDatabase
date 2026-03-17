@@ -16,6 +16,9 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       ipaData,
       buffer,
       actor_name,
+      form42,
+      form43,
+      form44,
     } = payload;
 
 
@@ -40,7 +43,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
           submitter_id: submitter_id,
           award_id: award_id,
           publication_id: publication_id,
-          // NEW: Upload to Supabase Storage bucket
           status: 'PENDING',
           pdf_json_data: ipaData,
           logs: initialLog,
@@ -64,12 +66,11 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       });
 
     if (uploadError) {
-      // Rollback submission if upload fails
       await supabase.from('submissions').delete().eq('submission_id', submission_id);
       return res.status(400).json({ error2: uploadError.message });
     }
 
-    // Update submission with file path
+    // Update submission with PDF file path
     const { error: updateError } = await supabase
       .from('submissions')
       .update({ attached_file_path: uploadData.path })
@@ -79,26 +80,65 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ error3: updateError.message });
     }
 
-    // === OLD CODE ( ===
-    // constcommented out) { data, error } = await supabase
-    //   .from('submissions')
-    //   .insert([
-    //     {
-    //       submitter_id: submitter_id,
-    //       award_id: award_id,
-    //       publication_id: publication_id,
-    //       attached_files: foo,
-    //       status: 'PENDING',
-    //       pdf_json_data: ipaData,
-    //       logs: initialLog,
-    //     }
-    //   ])
-    //   .select();
-    // if (error) {
-    //   return res.status(400).json({ error: error.message });
-    // }
-    // const submission_id = data[0].submission_id;
-    // === END OLD CODE ===
+    // Upload DOCX files if present
+    const docxPaths: { form42_path?: string; form43_path?: string; form44_path?: string } = {};
+
+    if (form42) {
+      const form42Buffer = Buffer.from(await form42.arrayBuffer());
+      const form42FileName = `${submission_id}_form42.docx`;
+      const { data: form42Upload, error: form42Error } = await supabase.storage
+        .from('submissions-documents')
+        .upload(form42FileName, form42Buffer, {
+          contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          upsert: true
+        });
+      
+      if (!form42Error && form42Upload) {
+        docxPaths.form42_path = form42Upload.path;
+      }
+    }
+
+    if (form43) {
+      const form43Buffer = Buffer.from(await form43.arrayBuffer());
+      const form43FileName = `${submission_id}_form43.docx`;
+      const { data: form43Upload, error: form43Error } = await supabase.storage
+        .from('submissions-documents')
+        .upload(form43FileName, form43Buffer, {
+          contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          upsert: true
+        });
+      
+      if (!form43Error && form43Upload) {
+        docxPaths.form43_path = form43Upload.path;
+      }
+    }
+
+    if (form44) {
+      const form44Buffer = Buffer.from(await form44.arrayBuffer());
+      const form44FileName = `${submission_id}_form44.docx`;
+      const { data: form44Upload, error: form44Error } = await supabase.storage
+        .from('submissions-documents')
+        .upload(form44FileName, form44Buffer, {
+          contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          upsert: true
+        });
+      
+      if (!form44Error && form44Upload) {
+        docxPaths.form44_path = form44Upload.path;
+      }
+    }
+
+    // Update submission with DOCX file paths if any
+    if (Object.keys(docxPaths).length > 0) {
+      const { error: docxUpdateError } = await supabase
+        .from('submissions')
+        .update(docxPaths)
+        .eq('submission_id', submission_id);
+
+      if (docxUpdateError) {
+        console.error('Failed to update DOCX paths:', docxUpdateError);
+      }
+    }
 
     const { error: appError } = await supabase
       .from('publication_award_applications')

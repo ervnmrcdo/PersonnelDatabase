@@ -47,7 +47,6 @@ const AwardsPageContent: FC = () => {
   const handleAwardSelect = (award: Award) => {
     setSelectedAward(award);
 
-    console.log(award)
     const awardData = awardsWithPublications.find(
       (awp) => awp.award_id === award.id
     );
