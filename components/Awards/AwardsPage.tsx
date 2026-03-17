@@ -26,6 +26,8 @@ const AwardsPageContent: FC = () => {
   useEffect(() => {
     if (!user) return;
 
+    console.log(ADMIN_UUID)
+
     setIsLoadingAwards(true);
 
     fetch("/api/get/forms-with-publications", {
@@ -46,14 +48,14 @@ const AwardsPageContent: FC = () => {
 
   const handleAwardSelect = (award: Award) => {
     setSelectedAward(award);
-    
+
     const awardData = awardsWithPublications.find(
       (awp) => awp.award_id === award.id
     );
-    
+
     if (awardData) {
       const allPublications: Publication[] = [];
-      
+
       awardData.publication_per_award.forEach((pt: PublicationType) => {
         pt.publications.forEach((pub) => {
           allPublications.push({
@@ -73,10 +75,10 @@ const AwardsPageContent: FC = () => {
           });
         });
       });
-      
+
       setPublications(allPublications);
     }
-    
+
     setStep("publications");
   };
 

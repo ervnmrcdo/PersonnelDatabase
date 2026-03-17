@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 interface PublicationTypeRow {
   id: number;
   name: string;
-  award_id: number;
+  publication_type_id: number;
 }
 
 interface PublicationRow {
@@ -67,16 +67,17 @@ export default async function func(req: NextApiRequest, res: NextApiResponse) {
     const filteredPublications = publicationsData?.filter(
       (p: any) => !p.publication_award_applications?.length
     ) || [];
+    console.log(publicationsData)
 
     const result = awardsData.map((award: any) => {
       const awardPublicationTypes = publicationTypesData.filter(
-        (pt: PublicationTypeRow) => pt.award_id === award.id
+        (pt: PublicationTypeRow) => pt.publication_type_id === award.award_id
       );
 
       const publicationTypesWithPublications = awardPublicationTypes.map(
         (pt: PublicationTypeRow) => {
           const userPubsOfType = filteredPublications
-            .filter((p: PublicationRow) => p.publication_type_id === pt.id)
+            .filter((p: PublicationRow) => p.publication_type_id === pt.publication_type_id)
             .map((p: PublicationRow) => ({
               doi: p.doi,
               type: p.type,
@@ -92,14 +93,18 @@ export default async function func(req: NextApiRequest, res: NextApiResponse) {
               publication_type_id: p.publication_type_id,
             }));
 
-          return {
-            id: pt.id,
-            name: pt.name,
-            award_id: pt.award_id,
-            publications: userPubsOfType,
-          };
+
+          // return {
+          //   id: pt.id,
+          //   name: pt.name,
+          //   award_id: pt.publication_type_id,
+          //   publications: userPubsOfType,
+          // };
+          return userPubsOfType[0]
         }
       );
+
+
 
       return {
         award_id: award.id,
