@@ -26,8 +26,6 @@ const AwardsPageContent: FC = () => {
   useEffect(() => {
     if (!user) return;
 
-    console.log(ADMIN_UUID)
-
     setIsLoadingAwards(true);
 
     fetch("/api/get/forms-with-publications", {
@@ -49,6 +47,7 @@ const AwardsPageContent: FC = () => {
   const handleAwardSelect = (award: Award) => {
     setSelectedAward(award);
 
+    console.log(award)
     const awardData = awardsWithPublications.find(
       (awp) => awp.award_id === award.id
     );

@@ -43,6 +43,7 @@ export default async function func(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ error: awardsError.message });
     }
 
+
     const { data: publicationTypesData, error: ptError } = await supabase
       .from("publication_per_award")
       .select("*");
@@ -118,7 +119,7 @@ export default async function func(req: NextApiRequest, res: NextApiResponse) {
 
 
       return {
-        award_id: award.id,
+        award_id: award.award_id,
         title: award.title,
         description: award.description,
         publication_per_award: publicationTypesWithPublications,

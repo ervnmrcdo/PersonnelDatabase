@@ -1,9 +1,6 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import IpaFormTemplate from "./IpaAwardTemplate";
-import { Author, Award, EditableAwardFormData, IPAFormData, Publication, RawData, SubmissionLog } from "@/lib/types";
-import { initialIPAFormData } from "@/lib/classes";
-import { transformToIPAFormData } from "@/utils/transformRawData";
+import { EditableAwardFormData, IPAFormData, Publication, RawData, SubmissionLog } from "@/lib/types";
 import { useAwardsFlow } from "@/context/AwardsFlowContext";
 import { useAuth } from "@/context/AuthContext";
 
