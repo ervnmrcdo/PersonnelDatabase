@@ -28,6 +28,7 @@ export default function Publications() {
   const [doi, setDOI] = useState('');
 
   const [selectedPublication, setSelectedPublication] = useState<SupabasePublication | null>(null);
+  const [highlightedPubId, setHighlightedPubId] = useState<number | null>(null)
 
   const supabase = createClient();
 
@@ -48,6 +49,7 @@ export default function Publications() {
           publications (
             publication_id,
             type,
+            publication_type_id,
             title,
             publisher,
             publication_status,
@@ -87,7 +89,7 @@ export default function Publications() {
   }
 
   const addPublication = async () => {
-    if (!title.trim() || !user) return;
+    if (!title.trim() || !publicationTypeId || !user) return;
 
     setLoading(true);
     const { data: pubData, error: pubError } = await supabase
@@ -134,6 +136,11 @@ export default function Publications() {
     }
 
     await fetchPublications();
+    setHighlightedPubId(newPub.publication_id);
+
+    setTimeout(() => {
+      setHighlightedPubId(null)
+    }, 10000);
     resetForm();
     setMode("view");
     setLoading(false);
@@ -165,6 +172,11 @@ export default function Publications() {
       if (error) throw error
 
       await fetchPublications()
+      setHighlightedPubId(selectedPublication.publication_id)
+
+      setTimeout(() => {
+        setHighlightedPubId(null)
+      }, 10000)
       resetForm()
       setMode("view")
       alert('Publication updated!')
@@ -220,6 +232,7 @@ export default function Publications() {
         <div className="bg-[#1b1e2b] rounded-lg p-6 border border-gray-700 mt-8">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-white mb-4">My Publications</h2>
+            <div className="flex gap-2">
             <button
               onClick={() => {
                 resetForm()
@@ -228,6 +241,15 @@ export default function Publications() {
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
               Add Publication
             </button>
+
+            <button
+              onClick={() => {
+                console.log("refreshed") // to add crawler functionality here
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+              Reload
+            </button>
+            </div>
           </div>
 
           {(mode === "add" || mode === "edit") && (
@@ -253,11 +275,10 @@ export default function Publications() {
               <input type="text" value={pageNumbers} onChange={(e) => setPageNumbers(e.target.value)} placeholder="Page Numbers" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="text" value={volumeNumber} onChange={(e) => setVolumeNumber(e.target.value)} placeholder="Volume Number" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="text" value={journalName} onChange={(e) => setJournalName(e.target.value)} placeholder="Journal Name" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
-              <div className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600"></div>
-              <div>
+              <div className="md:col-span-2 flex gap-3">
                 <button
                   onClick={mode === "edit" ? editPublication : addPublication}
-                  className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mt-2"
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
                 >
                   Save
                 </button>
@@ -298,7 +319,13 @@ export default function Publications() {
                     setVolumeNumber(pub.volume_number || '')
                     setJournalName(pub.journal_name || '')
                   }}
-                  className="bg-[#23263a] p-4 rounded-lg border border-gray-600 cursor-pointer hover:border-blue-500 transition"
+                  className={`p-4 rounded-lg border cursor-pointer transition
+                    ${
+                      highlightedPubId === pub.publication_id
+                        ? "bg-green-900 border-green-500"
+                        : "bg-[#23263a] border-gray-600 hover:border-blue-500"
+                    }
+                  `}
                 >
                   <div className="font-bold text-lg text-white">{pub.title}</div>
                   <div className="text-gray-400 text-sm">
@@ -331,11 +358,24 @@ export default function Publications() {
                 <div className="flex justify-between mt-6">
                   <div className="flex gap-3">
                     <button
-                      onClick={() => setMode("edit")}
+                      onClick={() => {
+                        if (!selectedPublication) return
+                        setMode("edit")
+                      }}
                       className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded"
                     >
                       Edit
                     </button>
+
+                    <button
+                      onClick={() => {
+                        console.log("refreshed") // to add crawler functionality here
+                      }}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                    >
+                      Update
+                    </button>
+                    
                     <button
                       onClick={deletePublication}
                       className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
