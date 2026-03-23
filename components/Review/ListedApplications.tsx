@@ -24,10 +24,12 @@ export default function ListedApplications({ onSelect }: Props) {
             role: item.submitterType,
             award: item.awardTitle,
             dateSubmitted: item.dateSubmitted,
-            // NEW: Use pdfUrl from Supabase Storage
             pdfBase64: item.pdfBase64,
             pdfUrl: item.pdfUrl,
             logs: item.logs as SubmissionLog,
+            form42Url: item.form42Url || null,
+            form43Url: item.form43Url || null,
+            form44Url: item.form44Url || null,
           })),
         );
       });

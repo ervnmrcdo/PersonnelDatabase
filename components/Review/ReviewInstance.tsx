@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronRight } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Application, SubmissionLog } from "@/lib/types";
 import { useAuth } from "@/context/AuthContext";
 import { useReviewFlow } from "@/context/ReviewFlowContext";
+import { DocxEditor, type DocxEditorRef } from '@eigenpal/docx-js-editor';
+import '@eigenpal/docx-js-editor/styles.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
@@ -24,6 +26,15 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const [errorRemarks, setErrorRemarks] = useState<string>("");
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
   const [showSignConfirmDialog, setShowSignConfirmDialog] = useState<boolean>(false);
+
+  const [expandedPdf, setExpandedPdf] = useState<boolean>(false);
+  const [expandedDocx, setExpandedDocx] = useState<boolean>(false);
+  const [docxBuffers, setDocxBuffers] = useState<{
+    form42?: ArrayBuffer;
+    form43?: ArrayBuffer;
+    form44?: ArrayBuffer;
+  }>({});
+  const [activeDocxTab, setActiveDocxTab] = useState<'form42' | 'form43' | 'form44'>('form42');
 
   const getActorName = () => {
     return profile ? `${profile.first_name} ${profile.last_name}` : 'Admin';
@@ -140,12 +151,9 @@ export default function ReviewInstance({ data, onBack }: Props) {
 
   useEffect(() => {
     if (data) {
-      // NEW: Handle both URL and Buffer data
       if (data.pdfUrl) {
-        // It's a signed URL - use it directly
         setPdfUrl(data.pdfUrl);
       } else if (data.pdfBase64) {
-        // It's a Buffer (old format) - convert to blob
         const blob = new Blob(
           [Uint8Array.from(atob(data.pdfBase64), (c) => c.charCodeAt(0))],
           { type: "application/pdf" },
@@ -154,6 +162,49 @@ export default function ReviewInstance({ data, onBack }: Props) {
       }
     }
   }, [data]);
+
+  useEffect(() => {
+    const fetchDocx = async () => {
+      const buffers: typeof docxBuffers = {};
+      
+      if (data.form42Url) {
+        try {
+          const res = await fetch(data.form42Url);
+          buffers.form42 = await res.arrayBuffer();
+        } catch (err) {
+          console.error('Failed to fetch Form 4.2:', err);
+        }
+      }
+      if (data.form43Url) {
+        try {
+          const res = await fetch(data.form43Url);
+          buffers.form43 = await res.arrayBuffer();
+        } catch (err) {
+          console.error('Failed to fetch Form 4.3:', err);
+        }
+      }
+      if (data.form44Url) {
+        try {
+          const res = await fetch(data.form44Url);
+          buffers.form44 = await res.arrayBuffer();
+        } catch (err) {
+          console.error('Failed to fetch Form 4.4:', err);
+        }
+      }
+      
+      setDocxBuffers(buffers);
+      if (buffers.form42) setActiveDocxTab('form42');
+      else if (buffers.form44) setActiveDocxTab('form44');
+      else if (buffers.form43) setActiveDocxTab('form43');
+    };
+    
+    if (data) fetchDocx();
+  }, [data]);
+
+  const hasForm42 = !!docxBuffers.form42;
+  const hasForm43 = !!docxBuffers.form43;
+  const hasForm44 = !!docxBuffers.form44;
+  const hasAnyDocx = hasForm42 || hasForm43 || hasForm44;
 
   return (
     <div className="bg-[#1b1e2b] rounded-xl shadow p-6 space-y-4">
@@ -179,6 +230,110 @@ export default function ReviewInstance({ data, onBack }: Props) {
           onClick={() => setShowErrorDialog(true)}
         >Return with Errors</button>
       </div>
+
+      {/* Expandable PDF Section */}
+      <div className="border rounded-lg overflow-hidden">
+        <button
+          onClick={() => setExpandedPdf(!expandedPdf)}
+          className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
+        >
+          <span>Form 4.1 - IPA Form (PDF)</span>
+          {expandedPdf ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+        </button>
+        
+        {expandedPdf && (
+          <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-[#1a1e2b]">
+            {pdfUrl ? (
+              <Document
+                file={pdfUrl}
+                onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+              >
+                {Array.from(new Array(numPages), (_, i) => (
+                  <Page
+                    key={i}
+                    pageNumber={i + 1}
+                    renderTextLayer={false}
+                    renderAnnotationLayer={false}
+                    className="mb-4 shadow"
+                  />
+                ))}
+              </Document>
+            ) : (
+              <p className="text-gray-400">No PDF attached.</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Expandable DOCX Section */}
+      {hasAnyDocx && (
+        <div className="border rounded-lg overflow-hidden">
+          <button
+            onClick={() => setExpandedDocx(!expandedDocx)}
+            className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
+          >
+            <span>Form 4.2 and Form 4.4 Documents</span>
+            {expandedDocx ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+          </button>
+          
+          {expandedDocx && (
+            <div className="p-4 bg-[#1a1e2b]">
+              {/* Tab Navigation */}
+              <div className="flex gap-2 mb-4">
+                {hasForm42 && (
+                  <button
+                    onClick={() => setActiveDocxTab('form42')}
+                    className={`px-4 py-2 rounded ${activeDocxTab === 'form42' ? 'bg-blue-600' : 'bg-gray-600'}`}
+                  >
+                    Form 4.2
+                  </button>
+                )}
+                {hasForm44 && (
+                  <button
+                    onClick={() => setActiveDocxTab('form44')}
+                    className={`px-4 py-2 rounded ${activeDocxTab === 'form44' ? 'bg-blue-600' : 'bg-gray-600'}`}
+                  >
+                    Form 4.4
+                  </button>
+                )}
+                {hasForm43 && (
+                  <button
+                    onClick={() => setActiveDocxTab('form43')}
+                    className={`px-4 py-2 rounded ${activeDocxTab === 'form43' ? 'bg-blue-600' : 'bg-gray-600'}`}
+                  >
+                    Form 4.3
+                  </button>
+                )}
+              </div>
+              
+              {/* DOCX Viewer */}
+              <div style={{ height: '600px' }} className="overflow-hidden rounded-lg">
+                {activeDocxTab === 'form42' && docxBuffers.form42 && (
+                  <DocxEditor
+                    documentBuffer={docxBuffers.form42}
+                    mode="viewing"
+                    onChange={() => {}}
+                  />
+                )}
+                {activeDocxTab === 'form43' && docxBuffers.form43 && (
+                  <DocxEditor
+                    documentBuffer={docxBuffers.form43}
+                    mode="viewing"
+                    onChange={() => {}}
+                  />
+                )}
+                {activeDocxTab === 'form44' && docxBuffers.form44 && (
+                  <DocxEditor
+                    documentBuffer={docxBuffers.form44}
+                    mode="viewing"
+                    onChange={() => {}}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
 
       {/* Error Remarks Dialog */}
@@ -246,29 +401,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
           </div>
         </div>
       )}
-
-      {
-        pdfUrl ? (
-          <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-[#1a1e2b]">
-            <Document
-              file={pdfUrl}
-              onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-            >
-              {Array.from(new Array(numPages), (_, i) => (
-                <Page
-                  key={i}
-                  pageNumber={i + 1}
-                  renderTextLayer={false}
-                  renderAnnotationLayer={false}
-                  className="mb-4 shadow"
-                />
-              ))}
-            </Document>
-          </div>
-        ) : (
-          <p>No PDF attached.</p>
-        )
-      }
     </div >
   );
 }

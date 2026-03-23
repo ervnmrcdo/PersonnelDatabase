@@ -1,143 +1,36 @@
-import { FC, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import EditableAwardForm from "./EditableAwardForm";
+import Form41Editor from "./Form41Editor";
 import Form42Editor from "./Form42Editor";
 import Form43Editor from "./Form43Editor";
 import Form44Editor from "./Form44Editor";
 import FormReview from "./FormReview";
-import { Author, Award, Publication, RawData, IPAFormData } from "@/lib/types";
-import { transformToIPAFormData } from "@/utils/transformRawData";
-import { handleDownload } from "@/utils/handleDownload";
-import handleSubmit from "@/utils/handleSubmit";
-import handleResubmit from "@/utils/handleResubmit";
-import { useAuth } from "@/context/AuthContext";
+import { Award, Publication } from "@/lib/types";
 import { useAwardsFlow } from "@/context/AwardsFlowContext";
 
 interface FormEditingProps {
   handleBack: () => void;
   selectedAward: Award;
   selectedPublication: Publication;
-  autoData: Author;
 }
 
-interface MultiFormData {
-  form41: IPAFormData;
-  form42: File | null;
-  form43: File | null;
-  form44: File | null;
-}
-
-const FormEditing: FC<FormEditingProps> = ({
-  handleBack,
-  selectedAward,
-  selectedPublication,
-  autoData,
-}) => {
-  const { formStep, setFormStep, isJournal, setIsJournal } = useAwardsFlow();
-  const { user } = useAuth();
+export default function FormEditing({ handleBack, selectedAward, selectedPublication }: FormEditingProps) {
+  const { formStep, setFormStep, setIsJournal } = useAwardsFlow();
 
   const isJournalType = selectedAward.id === 1;
   const isBookType = selectedAward.id === 2;
-
-  const foo: RawData = {
-    applicant: autoData,
-    authors: selectedPublication.users,
-    selectedPublication: selectedPublication,
-    selectedAward: selectedAward,
-    shouldSubmit: false,
-  };
-
-  const [multiFormData, setMultiFormData] = useState<MultiFormData>({
-    form41: transformToIPAFormData(foo),
-    form42: null,
-    form43: null,
-    form44: null,
-  });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setIsJournal(isJournalType);
-    
+
     if (isBookType) {
       setFormStep('form44');
     } else {
       setFormStep('form41');
     }
   }, [selectedAward.id, isJournalType, isBookType, setFormStep, setIsJournal]);
-
-  const handleForm41Submit = (
-    submitter_id: string,
-    submission_id: string,
-    publication_id: string,
-    data: { ipaData: IPAFormData; isResubmitting: boolean },
-    actor_name: string
-  ) => {
-    setMultiFormData(prev => ({
-      ...prev,
-      form41: data.ipaData,
-    }));
-
-    setFormStep('form42');
-  };
-
-  const handleForm42Next = (file: File) => {
-    setMultiFormData(prev => ({
-      ...prev,
-      form42: file,
-    }));
-    setFormStep('form43');
-  };
-
-  const handleForm44Next = (file: File) => {
-    setMultiFormData(prev => ({
-      ...prev,
-      form44: file,
-    }));
-    setFormStep('form43');
-  };
-
-  const handleForm43Next = (file: File) => {
-    setMultiFormData(prev => ({
-      ...prev,
-      form43: file,
-    }));
-  };
-
-  const handleFinalSubmit = async () => {
-    setIsSubmitting(true);
-    try {
-      const actor_name = user ? `${user.email}` : 'Unknown';
-      await handleSubmit(
-        user!.id.toString(),
-        selectedAward.id.toString(),
-        selectedPublication.publication_id,
-        {
-          ipaData: multiFormData.form41,
-          isResubmitting: false,
-          form42: multiFormData.form42,
-          form43: multiFormData.form43,
-          form44: multiFormData.form44,
-        },
-        actor_name
-      );
-      
-      if (isBookType) {
-        setFormStep('form44');
-      } else {
-        setFormStep('form41');
-      }
-      handleBack();
-    } catch (error) {
-      console.error('Failed to submit:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleBackFromForm = () => {
-    // Navigation handled by the formStep context
-  };
 
   const getAnimationKey = () => {
     if (isJournalType) {
@@ -148,6 +41,12 @@ const FormEditing: FC<FormEditingProps> = ({
       return formStep;
     }
     return formStep;
+  };
+
+  const handleFinalSubmit = async () => {
+    setIsSubmitting(true);
+    // TODO: implement submission
+    setIsSubmitting(false);
   };
 
   return (
@@ -194,17 +93,15 @@ const FormEditing: FC<FormEditingProps> = ({
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <EditableAwardForm
-                initialData={multiFormData.form41}
-                onSubmit={handleForm41Submit}
-                onResubmit={handleResubmit}
-                onDownload={handleDownload}
-                isResubmitting={false}
-                publication_id={selectedPublication.publication_id}
-                submission_id="1"
-                submitter_id={user?.id?.toString() || ''}
-                logs={null}
-              />
+              <Form41Editor publicationId={selectedPublication.publication_id} />
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={() => setFormStep('form42')}
+                  className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Next →
+                </button>
+              </div>
             </motion.div>
           )}
 
@@ -216,10 +113,15 @@ const FormEditing: FC<FormEditingProps> = ({
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form42Editor
-                onNext={handleForm42Next}
-                onBack={handleBackFromForm}
-              />
+              <Form42Editor publicationId={selectedPublication.publication_id} />
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={() => setFormStep('form43')}
+                  className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Next →
+                </button>
+              </div>
             </motion.div>
           )}
 
@@ -231,10 +133,15 @@ const FormEditing: FC<FormEditingProps> = ({
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form44Editor
-                onNext={handleForm44Next}
-                onBack={handleBackFromForm}
-              />
+              <Form44Editor publicationId={selectedPublication.publication_id} />
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={() => setFormStep('form43')}
+                  className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Next →
+                </button>
+              </div>
             </motion.div>
           )}
 
@@ -246,11 +153,15 @@ const FormEditing: FC<FormEditingProps> = ({
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form43Editor
-                onNext={handleForm43Next}
-                onBack={handleBackFromForm}
-                isJournal={isJournalType}
-              />
+              <Form43Editor publicationId={selectedPublication.publication_id} />
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={() => setFormStep('review')}
+                  className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Next →
+                </button>
+              </div>
             </motion.div>
           )}
 
@@ -264,7 +175,7 @@ const FormEditing: FC<FormEditingProps> = ({
             >
               <FormReview
                 onSubmit={handleFinalSubmit}
-                onBack={handleBackFromForm}
+                onBack={() => setFormStep('form43')}
                 isJournal={isJournalType}
                 isSubmitting={isSubmitting}
               />
@@ -276,4 +187,3 @@ const FormEditing: FC<FormEditingProps> = ({
   );
 };
 
-export default FormEditing;

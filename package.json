@@ -11,11 +11,15 @@
   "dependencies": {
     "@eigenpal/docx-js-editor": "^0.0.27",
     "@neondatabase/serverless": "^1.0.2",
+    "@onlyoffice/document-editor-react": "^2.1.1",
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.96.0",
     "drizzle-orm": "^0.45.1",
+    "formidable": "^3.5.4",
     "framer-motion": "^12.23.24",
+    "jose": "^6.2.2",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.552.0",
     "next": "^16.1.5",
     "pdf-lib": "^1.17.1",
@@ -25,6 +29,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/formidable": "^3.5.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

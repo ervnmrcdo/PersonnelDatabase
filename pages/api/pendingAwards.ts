@@ -28,14 +28,12 @@ export default async function PendingAwards(
 
     const formatted = await Promise.all(data.map(async (r: any) => {
       let pdfUrl = null;
+      let form42Url = null;
+      let form43Url = null;
+      let form44Url = null;
       
-      // NEW: Get signed URL from Supabase Storage
+      // Get signed URL for PDF from Supabase Storage
       if (r.attached_file_path) {
-        const { data: urlData } = supabase.storage
-          .from('submissions-documents')
-          .getPublicUrl(r.attached_file_path);
-        
-        // For private buckets, use createSignedUrl instead
         const { data: signedUrlData } = await supabase.storage
           .from('submissions-documents')
           .createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
@@ -43,11 +41,27 @@ export default async function PendingAwards(
         pdfUrl = signedUrlData?.signedUrl || null;
       }
       
-      // === OLD CODE (commented out) ===
-      // pdfBase64: r.attached_files
-      //   ? Buffer.from(r.attached_files).toString("base64")
-      //   : null,
-      // === END OLD CODE ===
+      // Get signed URLs for DOCX files
+      if (r.form42_path) {
+        const { data: form42SignedUrl } = await supabase.storage
+          .from('submissions-documents')
+          .createSignedUrl(r.form42_path, 3600);
+        form42Url = form42SignedUrl?.signedUrl || null;
+      }
+      
+      if (r.form43_path) {
+        const { data: form43SignedUrl } = await supabase.storage
+          .from('submissions-documents')
+          .createSignedUrl(r.form43_path, 3600);
+        form43Url = form43SignedUrl?.signedUrl || null;
+      }
+      
+      if (r.form44_path) {
+        const { data: form44SignedUrl } = await supabase.storage
+          .from('submissions-documents')
+          .createSignedUrl(r.form44_path, 3600);
+        form44Url = form44SignedUrl?.signedUrl || null;
+      }
 
       return {
         id: r.submission_id,
@@ -56,9 +70,12 @@ export default async function PendingAwards(
         status: r.status,
         awardId: r.awards.award_id,
         pdfUrl,
-        pdfBase64: null, // Deprecated, use pdfUrl instead
+        pdfBase64: null,
         awardTitle: r.awards.title,
         logs: r.logs,
+        form42Url,
+        form43Url,
+        form44Url,
       };
     }));
 

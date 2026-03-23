@@ -3,6 +3,7 @@ import IpaFormTemplate from "./IpaAwardTemplate";
 import { EditableAwardFormData, IPAFormData, Publication, RawData, SubmissionLog } from "@/lib/types";
 import { useAwardsFlow } from "@/context/AwardsFlowContext";
 import { useAuth } from "@/context/AuthContext";
+import { ChevronRight } from "lucide-react";
 
 export interface EditableAwardFormProps {
   initialData: IPAFormData;
@@ -129,28 +130,8 @@ export default function EditableAwardForm({
           >
             Resubmit
           </button>
-        </div>) : (
-        <div className="flex">
-          <button
-            onClick={() => {
-              if (constraints(formData.ipaData)) {
-                const actor_name = profile ? `${profile.first_name} ${profile.last_name}` : 'Unknown';
-                onSubmit(submitter_id, submission_id, publication_id, formData, actor_name)
-                setStep('awards')
-              }
-            }}
-            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Submit Application
-          </button>
-          <button
-            onClick={() => constraints(formData.ipaData) && onDownload(formData)}
-            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Download Filled PDF
-          </button>
-        </div>)
-      }
+        </div>
+      ) : null}
 
       <IpaFormTemplate />
 
@@ -158,7 +139,7 @@ export default function EditableAwardForm({
         type="text"
         value={formData.ipaData.articleTitle || ""}
         onChange={(e) => handleChange("articleTitle", e.target.value)}
-        className="absolute left-[100px] top-[670px] w-[500px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[100px] top-[600px] w-[500px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Publication Title"
       />
 
@@ -166,7 +147,7 @@ export default function EditableAwardForm({
         type="text"
         value={formData.ipaData.completeCitation || ''}
         onChange={(e) => handleChange("completeCitation", e.target.value)}
-        className="absolute left-[100px] top-[720px] h-[20px] w-[500px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[100px] top-[650px] h-[20px] w-[500px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
 
@@ -174,7 +155,7 @@ export default function EditableAwardForm({
         type="text"
         value={formData.ipaData.author1NameLastFirst || ""}
         onChange={(e) => handleChange("author1NameLastFirst", e.target.value)}
-        className="absolute left-[100px] top-[790px] h-[20px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[100px] top-[720px] h-[20px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
 
@@ -182,7 +163,7 @@ export default function EditableAwardForm({
         type="text"
         value={formData.ipaData.author1UniversityAndDept || ""}
         onChange={(e) => handleChange("author1UniversityAndDept", e.target.value)}
-        className="absolute left-[350px] top-[790px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[350px] top-[720px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="University and Department"
       />
 
@@ -190,7 +171,7 @@ export default function EditableAwardForm({
         type="text"
         value={formData.ipaData.totalAuthorNumber || ""}
         onChange={(e) => handleChange("totalAuthorNumber", e.target.value)}
-        className="absolute left-[300px] top-[905px] h-[20px] w-[100px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[300px] top-[830px] h-[20px] w-[100px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
 
@@ -198,7 +179,7 @@ export default function EditableAwardForm({
         type="text"
         value={formData.ipaData.journalName || ""}
         onChange={(e) => handleChange("journalName", e.target.value)}
-        className="absolute left-[150px] top-[930px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[150px] top-[860px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
 
@@ -206,21 +187,21 @@ export default function EditableAwardForm({
         type='checkbox'
         checked={formData.ipaData.WSCC}
         onChange={(e) => handleChange("WSCC", e.target.checked)}
-        className="absolute left-[-30px] top-[1180px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[-30px] top-[1110px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
       />
 
       <input
         type='checkbox'
         checked={formData.ipaData.AHCI}
         onChange={(e) => handleChange("AHCI", e.target.checked)}
-        className="absolute left-[-14px] top-[1193px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[-14px] top-[1123px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
       />
 
       <input
         type='checkbox'
         checked={formData.ipaData.SCIE}
         onChange={(e) => handleChange("SCIE", e.target.checked)}
-        className="absolute left-[-14px] top-[1208px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[-14px] top-[1050px] w-[200px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
       />
 
       <input
@@ -453,6 +434,24 @@ export default function EditableAwardForm({
         className="absolute left-[150px] top-[2590px] h-[20px] w-[300px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
+
+      {!isResubmitting && (
+        <div className="flex justify-end mt-6">
+          <button
+            onClick={() => {
+              if (constraints(formData.ipaData)) {
+                const actor_name = profile ? `${profile.first_name} ${profile.last_name}` : 'Unknown';
+                onSubmit(submitter_id, submission_id, publication_id, formData, actor_name)
+                setStep('awards')
+              }
+            }}
+            className="flex items-center px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Next: Form 4.2
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </button>
+        </div>
+      )}
 
     </div>
   );

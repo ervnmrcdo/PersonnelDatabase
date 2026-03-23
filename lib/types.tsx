@@ -69,6 +69,9 @@ export type Application = {
   pdfBase64: string;
   pdfUrl: string | null;
   logs: SubmissionLog[];
+  form42Url?: string | null;
+  form43Url?: string | null;
+  form44Url?: string | null;
 };
 
 export interface AcceptedForm {

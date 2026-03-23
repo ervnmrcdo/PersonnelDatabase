@@ -1,31 +1,47 @@
-import { createPagesServerClient } from "@/lib/supabase/pager-server"
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { PDFDocument } from 'pdf-lib';
+import fs from 'fs';
+import path from 'path';
 
-export default async function trial(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = await req.body
-
-  console.log(id)
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // ONLYOFFICE usually makes a GET request to fetch the file
+  if (req.method !== 'GET') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
 
   try {
+    // 1. Path to your template in the public folder
+    const filePath = path.join(process.cwd(), 'public', '4.1-template-new.pdf');
+    const buffer = fs.readFileSync(filePath);
 
-    const supabase = createPagesServerClient(req, res);
+    // 2. Load the PDF and Get the Form
+    const pdfDoc = await PDFDocument.load(buffer);
+    const form = pdfDoc.getForm();
 
-    const { data, error } = await supabase
-      .from('users')
-      .select(`
-        *,
-        publication_authors(author_rank, publications(*, publication_authors(*, users(*))))
-        `).eq(`user_id`, `${id}`);
+    // 3. Fill the fields (Using the keys you found in your previous log test)
+    // Wrap in try-catch if you aren't sure a field exists to prevent 500 errors
+    try {
+      form.getTextField('article-title').setText('Ervin Mercado');
+      form.getTextField('complete-citation').setText('UP Diliman - CS Project');
 
-    if (error) {
-      return res.status(400).json({ error: error.message });
+      // Example: If you have checkboxes or radio buttons
+      // form.getCheckBox('check-box-name').check();
+    } catch (fieldError) {
+      console.warn("One or more fields were not found in the PDF:", fieldError);
     }
 
-    return res.status(200).json(data[0].publication_authors[0].publications);
-    // return res.status(200).json(data);
-  } catch (e) {
-    // Casting e as Error to access the message safely
-    const errorMessage = e instanceof Error ? e.message : 'Unknown error';
-    return res.status(500).json({ error: `Server Error: ${errorMessage}` });
+    // 4. Serialize the PDF to bytes
+    const pdfBytes = await pdfDoc.save();
+
+    // 5. Set Headers so ONLYOFFICE knows it's a PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename="filled-report.pdf"');
+
+    // 6. Send the Buffer
+    return res.send(Buffer.from(pdfBytes));
+
+  } catch (error) {
+    console.error("PDF Generation Error:", error);
+    return res.status(500).json({ message: 'Internal server error', error: String(error) });
   }
 }

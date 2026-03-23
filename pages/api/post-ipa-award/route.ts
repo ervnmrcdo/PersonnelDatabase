@@ -1,28 +1,30 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import sql from "@/config/db";
 import { SubmissionLog } from "@/lib/types";
 import { createPagesServerClient } from "@/lib/supabase/pager-server";
+import formidable from "formidable";
+import fs from "fs";
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (req.method !== "POST") {
       return res.status(405).send("Method Not Allowed");
     }
-    const payload = JSON.parse(await req.body);
-    const {
-      submitter_id,
-      award_id,
-      publication_id,
-      ipaData,
-      buffer,
-      actor_name,
-      form42,
-      form43,
-      form44,
-    } = payload;
 
+    const form = formidable({ maxFileSize: 50 * 1024 * 1024 });
 
-    const foo = Buffer.from(buffer)
+    const [fields, files] = await form.parse(req);
+
+    const submitter_id = Array.isArray(fields.submitter_id) ? fields.submitter_id[0] : fields.submitter_id || "";
+    const award_id = Array.isArray(fields.award_id) ? fields.award_id[0] : fields.award_id || "";
+    const publication_id = Array.isArray(fields.publication_id) ? fields.publication_id[0] : fields.publication_id || "";
+    const actor_name = Array.isArray(fields.actor_name) ? fields.actor_name[0] : fields.actor_name || "";
+    const ipaData = fields.ipaData ? JSON.parse(Array.isArray(fields.ipaData) ? fields.ipaData[0] : fields.ipaData) : {};
+
+    const pdfFile = files.pdf?.[0];
+    if (!pdfFile) {
+      return res.status(400).json({ error: "PDF file is required" });
+    }
+    const pdfBuffer = fs.readFileSync(pdfFile.filepath);
 
     const initialLog: SubmissionLog[] = [
       {
@@ -60,7 +62,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const fileName = `${submission_id}.pdf`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('submissions-documents')
-      .upload(fileName, foo, {
+      .upload(fileName, pdfBuffer, {
         contentType: 'application/pdf',
         upsert: true
       });
@@ -83,8 +85,12 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     // Upload DOCX files if present
     const docxPaths: { form42_path?: string; form43_path?: string; form44_path?: string } = {};
 
-    if (form42) {
-      const form42Buffer = Buffer.from(await form42.arrayBuffer());
+    const form42File = files.form42?.[0];
+    const form43File = files.form43?.[0];
+    const form44File = files.form44?.[0];
+
+    if (form42File) {
+      const form42Buffer = fs.readFileSync(form42File.filepath);
       const form42FileName = `${submission_id}_form42.docx`;
       const { data: form42Upload, error: form42Error } = await supabase.storage
         .from('submissions-documents')
@@ -98,8 +104,8 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       }
     }
 
-    if (form43) {
-      const form43Buffer = Buffer.from(await form43.arrayBuffer());
+    if (form43File) {
+      const form43Buffer = fs.readFileSync(form43File.filepath);
       const form43FileName = `${submission_id}_form43.docx`;
       const { data: form43Upload, error: form43Error } = await supabase.storage
         .from('submissions-documents')
@@ -113,8 +119,8 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       }
     }
 
-    if (form44) {
-      const form44Buffer = Buffer.from(await form44.arrayBuffer());
+    if (form44File) {
+      const form44Buffer = fs.readFileSync(form44File.filepath);
       const form44FileName = `${submission_id}_form44.docx`;
       const { data: form44Upload, error: form44Error } = await supabase.storage
         .from('submissions-documents')

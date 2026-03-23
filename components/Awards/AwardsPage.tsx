@@ -3,11 +3,12 @@ import Awards from "./Awards";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Loader2 } from "lucide-react";
 import PublicationSelection from "./PublicationSelection";
-import FormEditing from "./FormEditing";
 import { Author, Award, Publication, AwardWithPublications } from "@/lib/types";
-import { AuthClient } from "@supabase/supabase-js";
 import { useAuth } from "@/context/AuthContext";
 import { AwardsFlowProvider, useAwardsFlow } from "@/context/AwardsFlowContext";
+import Form41Editor from "../Awards/Form41Editor";
+import Form42Editor from "./Form42Editor";
+import FormEditing from "./FormEditing";
 
 const AwardsPageContent: FC = () => {
   const { step, setStep } = useAwardsFlow();
@@ -133,7 +134,7 @@ const AwardsPageContent: FC = () => {
             </motion.div>
           )}
 
-          {step === "form" && (
+          {step === "form" && selectedAward && selectedPublication && (
             <motion.div
               key="form"
               initial={{ x: 200, opacity: 0 }}
@@ -141,12 +142,11 @@ const AwardsPageContent: FC = () => {
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
+
               <FormEditing
                 handleBack={handleBack}
-                selectedAward={selectedAward!}
-                selectedPublication={selectedPublication!}
-                autoData={selectedPublication!.users[0]}
-              />
+                selectedAward={selectedAward}
+                selectedPublication={selectedPublication} />
             </motion.div>
           )}
         </AnimatePresence>
