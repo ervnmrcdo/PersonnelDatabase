@@ -1,11 +1,14 @@
 'use client'
 
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { login, signup } from './actions'
+import { login } from './actions'
+
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
 
   return (
     <div className="min-h-screen bg-[#0f1117] text-gray-300 flex items-center justify-center p-4">
@@ -59,11 +62,12 @@ export default function LoginPage() {
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </button>
               <button
-                formAction={signup}
+                type="button"
                 disabled={isLoading}
                 className="w-full bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 text-white font-semibold py-2 rounded-lg transition duration-200"
+                onClick={() => router.push('/signup')}
               >
-                {isLoading ? 'Creating account...' : 'Create Account'}
+                Create Account
               </button>
             </div>
           </form>
