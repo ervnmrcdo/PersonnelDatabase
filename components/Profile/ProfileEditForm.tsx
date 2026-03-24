@@ -25,6 +25,10 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
   const [email, setEmail] = useState<string | null>(null)
   const [signaturePath, setSignaturePath] = useState<string | null>(null)
   const [newSignatureFile, setNewSignatureFile] = useState<File | null>(null)
+
+  const [affiliationPath, setAffiliationPath] = useState<string | null>(null)
+  const [newAffiliationFile, setNewAffiliationFile] = useState<File | null>(null)
+
   const [isEditing, setIsEditing] = useState(false)
 
   const getProfile = useCallback(async () => {
@@ -38,7 +42,7 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
 
       const { data, error, status } = await supabase
         .from('users')
-        .select(`first_name, middle_name, last_name, email, university, college, department, contact_number, position, signature_path`)
+        .select(`first_name, middle_name, last_name, email, university, college, department, contact_number, position, signature_path, affiliation_path`)
         .eq('id', user?.id)
         .single()
 
@@ -69,6 +73,17 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
             setSignaturePath(signedUrlData.signedUrl)
           }
         }
+
+        if (data.affiliation_path && user?.id) {
+          const filePath = `${user.id}/${user.id}.png`
+          const { data: signedUrlData, error: signedError } = await supabase.storage
+            .from('proof-of-affiliation')
+            .createSignedUrl(filePath, 3600)
+          
+          if (!signedError && signedUrlData) {
+            setAffiliationPath(signedUrlData.signedUrl)
+          }
+        }
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : JSON.stringify(error)
@@ -88,6 +103,7 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
       setLoading(true)
       
       let signatureUrl = null
+      let affiliationUrl = null
       
       // Upload new signature if one was selected
       if (newSignatureFile && user?.id) {
@@ -111,6 +127,29 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
         // Get the storage path (not full URL)
         signatureUrl = filePath
       }
+      
+      // Upload new proof of affiliation if one was selected
+      if (newAffiliationFile && user?.id) {
+        const fileExt = 'png'
+        const fileName = `${user.id}.${fileExt}`
+        const filePath = `${user.id}/${fileName}`
+        
+        // Upload affiliation (upsert to replace existing)
+        const { error: uploadError } = await supabase.storage
+          .from('proof-of-affiliation')
+          .upload(filePath, newAffiliationFile, {
+            contentType: 'image/png',
+            upsert: true,
+          })
+        
+        if (uploadError) {
+          console.error('Upload error:', uploadError)
+          throw new Error('Failed to upload proof of affiliation')
+        }
+        
+        // Get the storage path (not full URL)
+        affiliationUrl = filePath
+      }
 
       const updateData: any = {
         id: user?.id as string,
@@ -130,6 +169,10 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
         updateData.signature_path = signatureUrl
       }
 
+      if (affiliationUrl) {
+        updateData.affiliation_path = affiliationUrl
+      }
+
       const { error } = await supabase.from('users').upsert(updateData)
       if (error) {
         console.error('Supabase error:', error)
@@ -138,6 +181,7 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
       alert('Profile updated!')
       setIsEditing(false)
       setNewSignatureFile(null)
+      setNewAffiliationFile(null)
       await getProfile() // Reload to get new signed URL
       onSuccess?.()
     } catch (error) {
@@ -191,6 +235,14 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
                 <img src={signaturePath} alt="Signature" className="mt-2 max-w-xs border border-gray-600 rounded-lg bg-white p-2" />
               </div>
             )}
+
+            {affiliationPath && (
+              <div>
+                <label className="text-sm text-gray-500 uppercase">Proof of Affiliation</label>
+                <img src={affiliationPath} alt="Affiliation" className="mt-2 max-w-xs border border-gray-600 rounded-lg bg-white p-2" />
+              </div>
+            )}
+
             <button
               onClick={() => setIsEditing(true)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
@@ -327,6 +379,26 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
               />
               <p className="text-xs text-gray-400 mt-1">Upload a new PNG to replace current signature</p>
             </div>
+          
+            <div>
+              <label htmlFor="affiliation-compact" className="block text-sm text-gray-300 mb-2">
+                Proof of Affiliation (PNG)
+              </label>
+              {affiliationPath && (
+                <div className="mb-2">
+                  <p className="text-xs text-gray-400 mb-2">Current Proof of Affiliation:</p>
+                  <img src={affiliationPath} alt="Current Proof of Affiliation" className="max-w-xs border border-gray-600 rounded-lg bg-white p-2 mb-2" />
+                </div>
+              )}
+              <input
+                id="affiliation-compact"
+                type="file"
+                accept=".png,image/png"
+                onChange={(e) => setNewAffiliationFile(e.target.files?.[0] || null)}
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition"
+              />
+              <p className="text-xs text-gray-400 mt-1">Upload a new PNG to replace current signature</p>
+            </div>
             <div className="flex gap-2">
               <button
                 onClick={updateProfile}
@@ -423,6 +495,31 @@ export default function ProfileEditForm({ user, onSuccess, compact = false }: Pr
         )}
         {!signaturePath && !newSignatureFile && (
           <p className="text-xs text-gray-400 mt-1">No signature uploaded yet</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="affiliation" className="block text-sm font-medium text-gray-300 mb-2">
+          Proof of Affiliation (PNG)
+        </label>
+        {affiliationPath && (
+          <div className="mb-2">
+            <p className="text-xs text-gray-400 mb-2">Current Proof of Affiliation:</p>
+            <img src={affiliationPath} alt="Current Proof of Affiliation" className="max-w-xs border border-gray-600 rounded-lg bg-white p-2 mb-2" />
+          </div>
+        )}
+        <input
+          id="affiliation"
+          type="file"
+          accept=".png,image/png"
+          onChange={(e) => setNewAffiliationFile(e.target.files?.[0] || null)}
+          className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition"
+        />
+        {newAffiliationFile && (
+          <p className="text-xs text-green-400 mt-1">New proof of affiliation selected: {newAffiliationFile.name}</p>
+        )}
+        {!affiliationPath && !newAffiliationFile && (
+          <p className="text-xs text-gray-400 mt-1">No proof of affiliation uploaded yet</p>
         )}
       </div>
 
