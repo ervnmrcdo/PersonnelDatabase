@@ -22,7 +22,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     // Upload new PDF to Supabase Storage bucket
     const fileName = `${submission_id}.pdf`;
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('submissions-documents')
+      .from('submissions-pdf')
       .upload(fileName, foo, {
         contentType: 'application/pdf',
         upsert: true

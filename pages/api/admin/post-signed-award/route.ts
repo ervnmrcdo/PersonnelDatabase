@@ -17,7 +17,7 @@ export default async function ValidateAward(
 		// Upload signed PDF to Supabase Storage bucket
 		const fileName = `${submission_id}.pdf`;
 		const { data: uploadData, error: uploadError } = await supabase.storage
-			.from('submissions-documents')
+			.from('submissions-pdf')
 			.upload(fileName, pdf, {
 				contentType: 'application/pdf',
 				upsert: true

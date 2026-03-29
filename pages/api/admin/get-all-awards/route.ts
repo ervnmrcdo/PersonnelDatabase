@@ -38,7 +38,7 @@ export default async function RetrieveAllAwards(
 			// NEW: Get signed URL from Supabase Storage
 			if (r.attached_file_path) {
 				const { data: signedUrlData } = await supabase.storage
-					.from('submissions-documents')
+					.from('submissions-pdf')
 					.createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
 				
 				pdfUrl = signedUrlData?.signedUrl || null;

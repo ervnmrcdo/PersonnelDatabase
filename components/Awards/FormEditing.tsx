@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Form41Editor from "./Form41Editor";
 import Form42Editor from "./Form42Editor";
@@ -7,15 +7,18 @@ import Form44Editor from "./Form44Editor";
 import FormReview from "./FormReview";
 import { Award, Publication } from "@/lib/types";
 import { useAwardsFlow } from "@/context/AwardsFlowContext";
+import { Trash2, Loader2, Save } from "lucide-react";
 
 interface FormEditingProps {
   handleBack: () => void;
   selectedAward: Award;
   selectedPublication: Publication;
+  userId?: string;
 }
 
-export default function FormEditing({ handleBack, selectedAward, selectedPublication }: FormEditingProps) {
-  const { formStep, setFormStep, setIsJournal } = useAwardsFlow();
+export default function FormEditing({ handleBack, selectedAward, selectedPublication, userId }: FormEditingProps) {
+  const { formStep, setFormStep, setIsJournal, draftUrls, setDraftUrls, setDraftId } = useAwardsFlow();
+  const [isClearing, setIsClearing] = useState(false);
 
   const isJournalType = selectedAward.id === 1;
   const isBookType = selectedAward.id === 2;
@@ -31,6 +34,23 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
       setFormStep('form41');
     }
   }, [selectedAward.id, isJournalType, isBookType, setFormStep, setIsJournal]);
+
+  const clearDraft = async () => {
+    if (!confirm('Are you sure you want to clear your saved progress? This cannot be undone.')) return;
+    
+    setIsClearing(true);
+    try {
+      await fetch(`/api/drafts?publicationId=${selectedPublication.publication_id}&awardId=${selectedAward.id}`, {
+        method: 'DELETE'
+      });
+      setDraftId(null);
+      setDraftUrls({});
+    } catch (err) {
+      console.error('Failed to clear draft:', err);
+    } finally {
+      setIsClearing(false);
+    }
+  };
 
   const getAnimationKey = () => {
     if (isJournalType) {
@@ -49,30 +69,57 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
     setIsSubmitting(false);
   };
 
+  const getCurrentDraftUrl = () => {
+    if (formStep === 'form41') return draftUrls.form41;
+    if (formStep === 'form42') return draftUrls.form42;
+    if (formStep === 'form43') return draftUrls.form43;
+    if (formStep === 'form44') return draftUrls.form44;
+    return null;
+  };
+
+  const hasDraft = (draftUrl: string | null | undefined) => draftUrl && draftUrl.length > 0;
+
   return (
     <>
-      <button
-        onClick={() => {
-          if (formStep === 'form41') {
-            handleBack();
-          } else if (formStep === 'form42') {
-            setFormStep('form41');
-          } else if (formStep === 'form44') {
-            handleBack();
-          } else if (formStep === 'form43') {
-            if (isJournalType) {
-              setFormStep('form42');
-            } else {
-              setFormStep('form44');
+      <div className="flex justify-between items-start mb-4">
+        <button
+          onClick={() => {
+            if (formStep === 'form41') {
+              handleBack();
+            } else if (formStep === 'form42') {
+              setFormStep('form41');
+            } else if (formStep === 'form44') {
+              handleBack();
+            } else if (formStep === 'form43') {
+              if (isJournalType) {
+                setFormStep('form42');
+              } else {
+                setFormStep('form44');
+              }
+            } else if (formStep === 'review') {
+              setFormStep('form43');
             }
-          } else if (formStep === 'review') {
-            setFormStep('form43');
-          }
-        }}
-        className="text-sm text-blue-600 mb-4 hover:underline"
-      >
-        ← Back to {formStep === 'form41' || formStep === 'form44' ? 'Publications' : 'Previous Form'}
-      </button>
+          }}
+          className="text-sm text-blue-600 hover:underline"
+        >
+          ← Back to {formStep === 'form41' || formStep === 'form44' ? 'Publications' : 'Previous Form'}
+        </button>
+        
+        {(Object.keys(draftUrls).length > 0) && (
+          <button
+            onClick={clearDraft}
+            disabled={isClearing}
+            className="flex items-center px-3 py-1 text-sm text-red-400 hover:text-red-300 transition-colors"
+          >
+            {isClearing ? (
+              <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+            ) : (
+              <Trash2 className="w-4 h-4 mr-1" />
+            )}
+            Clear Draft
+          </button>
+        )}
+      </div>
 
       <h1 className="text-2xl font-bold mb-2 text-white">
         {selectedAward?.title} Application
@@ -93,7 +140,12 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form41Editor publicationId={selectedPublication.publication_id} />
+              <Form41Editor 
+                publicationId={selectedPublication.publication_id} 
+                documentUrl={draftUrls.form41 || undefined}
+                awardId={selectedAward.id}
+                userId={userId}
+              />
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setFormStep('form42')}
@@ -113,7 +165,12 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form42Editor publicationId={selectedPublication.publication_id} />
+              <Form42Editor 
+                publicationId={selectedPublication.publication_id}
+                documentUrl={draftUrls.form42 || undefined}
+                awardId={selectedAward.id}
+                userId={userId}
+              />
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setFormStep('form43')}
@@ -133,7 +190,12 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form44Editor publicationId={selectedPublication.publication_id} />
+              <Form44Editor 
+                publicationId={selectedPublication.publication_id}
+                documentUrl={draftUrls.form44 || undefined}
+                awardId={selectedAward.id}
+                userId={userId}
+              />
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setFormStep('form43')}
@@ -153,7 +215,12 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form43Editor publicationId={selectedPublication.publication_id} />
+              <Form43Editor 
+                publicationId={selectedPublication.publication_id}
+                documentUrl={draftUrls.form43 || undefined}
+                awardId={selectedAward.id}
+                userId={userId}
+              />
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setFormStep('review')}

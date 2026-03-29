@@ -9,14 +9,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { publicationId } = req.query;
+  const { publicationId, awardId, user_id } = req.query;
 
   if (!publicationId) {
     return res.status(400).json({ message: 'publicationId is required' });
   }
 
+  if (!user_id) {
+    return res.status(400).json({ message: 'user_id is required' });
+  }
+
+  const awardIdNum = Number(awardId);
+  if (!awardId || awardIdNum !== 1) {
+    return res.status(400).json({ message: 'awardId must be 1 for form 4.1' });
+  }
+
   try {
     const supabase = createPagesServerClient(req, res);
+
+    const { data: existingDraft } = await supabase
+      .from('draft_applications')
+      .select('form41_path')
+      .eq('user_id', user_id)
+      .eq('publication_id', Number(publicationId))
+      .eq('award_id', awardIdNum)
+      .single();
+
+    if (existingDraft?.form41_path) {
+      const { data: urlData } = await supabase.storage
+        .from('drafts-pdf')
+        .createSignedUrl(existingDraft.form41_path, 3600);
+
+      if (urlData?.signedUrl) {
+        return res.redirect(urlData.signedUrl);
+      }
+    }
 
     const { data: publication, error: pubError } = await supabase
       .from('publications')

@@ -61,7 +61,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     // Upload PDF to Supabase Storage bucket
     const fileName = `${submission_id}.pdf`;
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('submissions-documents')
+      .from('submissions-pdf')
       .upload(fileName, pdfBuffer, {
         contentType: 'application/pdf',
         upsert: true
@@ -83,7 +83,8 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Upload DOCX files if present
-    const docxPaths: { form42_path?: string; form43_path?: string; form44_path?: string } = {};
+    const docxPaths: { form42_path?: string; form43_path?: string } = {};
+    let form44PdfPath: string | null = null;
 
     const form42File = files.form42?.[0];
     const form43File = files.form43?.[0];
@@ -93,7 +94,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       const form42Buffer = fs.readFileSync(form42File.filepath);
       const form42FileName = `${submission_id}_form42.docx`;
       const { data: form42Upload, error: form42Error } = await supabase.storage
-        .from('submissions-documents')
+        .from('submissions-docx')
         .upload(form42FileName, form42Buffer, {
           contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           upsert: true
@@ -108,7 +109,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       const form43Buffer = fs.readFileSync(form43File.filepath);
       const form43FileName = `${submission_id}_form43.docx`;
       const { data: form43Upload, error: form43Error } = await supabase.storage
-        .from('submissions-documents')
+        .from('submissions-docx')
         .upload(form43FileName, form43Buffer, {
           contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           upsert: true
@@ -121,28 +122,33 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
     if (form44File) {
       const form44Buffer = fs.readFileSync(form44File.filepath);
-      const form44FileName = `${submission_id}_form44.docx`;
+      const form44FileName = `${submission_id}_form44.pdf`;
       const { data: form44Upload, error: form44Error } = await supabase.storage
-        .from('submissions-documents')
+        .from('submissions-pdf')
         .upload(form44FileName, form44Buffer, {
-          contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          contentType: 'application/pdf',
           upsert: true
         });
       
       if (!form44Error && form44Upload) {
-        docxPaths.form44_path = form44Upload.path;
+        form44PdfPath = form44Upload.path;
       }
     }
 
     // Update submission with DOCX file paths if any
-    if (Object.keys(docxPaths).length > 0) {
+    const updateData: Record<string, string | null> = { ...docxPaths };
+    if (form44PdfPath) {
+      updateData.form44_path = form44PdfPath;
+    }
+    
+    if (Object.keys(updateData).length > 0) {
       const { error: docxUpdateError } = await supabase
         .from('submissions')
-        .update(docxPaths)
+        .update(updateData)
         .eq('submission_id', submission_id);
 
       if (docxUpdateError) {
-        console.error('Failed to update DOCX paths:', docxUpdateError);
+        console.error('Failed to update file paths:', docxUpdateError);
       }
     }
 

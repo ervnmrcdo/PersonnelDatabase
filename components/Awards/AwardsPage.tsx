@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useMemo } from "react";
 import Awards from "./Awards";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Loader2 } from "lucide-react";
@@ -11,7 +11,7 @@ import Form42Editor from "./Form42Editor";
 import FormEditing from "./FormEditing";
 
 const AwardsPageContent: FC = () => {
-  const { step, setStep } = useAwardsFlow();
+  const { step, setStep, setDraftId, setDraftUrls } = useAwardsFlow();
   const [selectedAward, setSelectedAward] = useState<Award | null>(null);
   const [selectedPublication, setSelectedPublication] =
     useState<Publication | null>(null);
@@ -24,7 +24,8 @@ const AwardsPageContent: FC = () => {
   const { user } = useAuth();
   const ADMIN_UUID = user?.id;
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-render
+  useMemo(function() {
     if (!user) return;
 
     setIsLoadingAwards(true);
@@ -43,7 +44,8 @@ const AwardsPageContent: FC = () => {
         console.error("Failed to fetch awards with publications:", err);
         setIsLoadingAwards(false);
       });
-  }, [user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const handleAwardSelect = (award: Award) => {
     setSelectedAward(award);
@@ -79,8 +81,33 @@ const AwardsPageContent: FC = () => {
     setStep("publications");
   };
 
-  const handlePublicationSelect = (pub: Publication) => {
+  const handlePublicationSelect = async (pub: Publication) => {
     setSelectedPublication(pub);
+    
+    if (selectedAward) {
+      try {
+        const res = await fetch(`/api/drafts?publicationId=${pub.publication_id}&awardId=${selectedAward.id}`);
+        const draft = await res.json();
+        
+        if (draft) {
+          setDraftId(draft.id);
+          setDraftUrls({
+            form41: draft.form41 || null,
+            form42: draft.form42 || null,
+            form43: draft.form43 || null,
+            form44: draft.form44 || null,
+          });
+        } else {
+          setDraftId(null);
+          setDraftUrls({});
+        }
+      } catch (err) {
+        console.error("Failed to fetch draft:", err);
+        setDraftId(null);
+        setDraftUrls({});
+      }
+    }
+    
     setStep("form");
   };
 
@@ -146,7 +173,8 @@ const AwardsPageContent: FC = () => {
               <FormEditing
                 handleBack={handleBack}
                 selectedAward={selectedAward}
-                selectedPublication={selectedPublication} />
+                selectedPublication={selectedPublication}
+                userId={ADMIN_UUID} />
             </motion.div>
           )}
         </AnimatePresence>

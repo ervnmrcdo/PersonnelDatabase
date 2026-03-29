@@ -35,7 +35,7 @@ export default async function PendingAwards(
       // Get signed URL for PDF from Supabase Storage
       if (r.attached_file_path) {
         const { data: signedUrlData } = await supabase.storage
-          .from('submissions-documents')
+          .from('submissions-pdf')
           .createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
         
         pdfUrl = signedUrlData?.signedUrl || null;
@@ -44,21 +44,21 @@ export default async function PendingAwards(
       // Get signed URLs for DOCX files
       if (r.form42_path) {
         const { data: form42SignedUrl } = await supabase.storage
-          .from('submissions-documents')
+          .from('submissions-docx')
           .createSignedUrl(r.form42_path, 3600);
         form42Url = form42SignedUrl?.signedUrl || null;
       }
       
       if (r.form43_path) {
         const { data: form43SignedUrl } = await supabase.storage
-          .from('submissions-documents')
+          .from('submissions-docx')
           .createSignedUrl(r.form43_path, 3600);
         form43Url = form43SignedUrl?.signedUrl || null;
       }
       
       if (r.form44_path) {
         const { data: form44SignedUrl } = await supabase.storage
-          .from('submissions-documents')
+          .from('submissions-pdf')
           .createSignedUrl(r.form44_path, 3600);
         form44Url = form44SignedUrl?.signedUrl || null;
       }
