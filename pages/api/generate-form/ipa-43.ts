@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
 import { createPagesServerClient } from '@/lib/supabase/pager-server';
+import { createServiceRoleClient } from '@/lib/supabase/service-role';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -25,27 +26,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const supabase = createPagesServerClient(req, res);
+    const supabaseAdmin = createServiceRoleClient();
 
-    const { data: existingDraft } = await supabase
-      .from('draft_applications')
-      .select('form43_path')
-      .eq('user_id', user_id)
-      .eq('publication_id', Number(publicationId))
-      .eq('award_id', awardIdNum)
-      .single();
+    const filePath = `drafts/${user_id}/${awardId}/${publicationId}/form43.docx`;
 
-    if (existingDraft?.form43_path) {
-      const { data: urlData } = await supabase.storage
-        .from('drafts-docx')
-        .createSignedUrl(existingDraft.form43_path, 3600);
+    const { data: urlData } = await supabaseAdmin.storage
+      .from('drafts-docx')
+      .createSignedUrl(filePath, 3600);
 
-      if (urlData?.signedUrl) {
-        return res.redirect(urlData.signedUrl);
-      }
+    if (urlData?.signedUrl) {
+      const fileResponse = await fetch(urlData.signedUrl);
+      const fileBuffer = await fileResponse.arrayBuffer();
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+      res.setHeader('Content-Disposition', 'inline; filename="form43.docx"');
+      return res.send(Buffer.from(fileBuffer));
     }
 
-    const filePath = path.join(process.cwd(), 'public', '4.3-template.docx');
-    const buffer = fs.readFileSync(filePath);
+    const templatePath = path.join(process.cwd(), 'public', '4.3-template.docx');
+    const buffer = fs.readFileSync(templatePath);
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     res.setHeader('Content-Disposition', 'inline; filename="4.3-template.docx"');

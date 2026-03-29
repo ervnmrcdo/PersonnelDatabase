@@ -13,7 +13,7 @@ interface FormEditorProps {
 
 export default forwardRef(function Form43Editor({ publicationId, documentUrl, awardId, userId }: FormEditorProps, ref) {
   const [token, setToken] = useState("");
-  const documentKey = `form43-${publicationId}`
+  const documentKey = useMemo(() => crypto.randomUUID(), [])
   const detectedIp = useMemo(() => typeof window !== 'undefined' ? window.location.hostname : '', [])
 
   const documentUrlFinal = `http://host.docker.internal:3000/api/generate-form/ipa-43?publicationId=${publicationId}&awardId=${awardId}&user_id=${userId}`;
@@ -66,10 +66,6 @@ export default forwardRef(function Form43Editor({ publicationId, documentUrl, aw
         forcesave: true,
       },
     },
-    events: {
-      onDocumentReady,
-      onRequestRefreshFile,
-    },
 
   }), [publicationId, documentKey, documentUrl, awardId, userId, detectedIp, documentUrlFinal, onDocumentReady, onRequestRefreshFile]);
 
@@ -96,6 +92,7 @@ export default forwardRef(function Form43Editor({ publicationId, documentUrl, aw
           ...config,
           token: token,
         }}
+        events_onDocumentReady={onDocumentReady}
       />
     </div>
   );

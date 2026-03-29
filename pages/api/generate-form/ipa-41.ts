@@ -3,6 +3,7 @@ import { PDFDocument } from 'pdf-lib';
 import fs from 'fs';
 import path from 'path';
 import { createPagesServerClient } from '@/lib/supabase/pager-server';
+import { createServiceRoleClient } from '@/lib/supabase/service-role';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -26,23 +27,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const supabase = createPagesServerClient(req, res);
+    const supabaseAdmin = createServiceRoleClient();
 
-    const { data: existingDraft } = await supabase
-      .from('draft_applications')
-      .select('form41_path')
-      .eq('user_id', user_id)
-      .eq('publication_id', Number(publicationId))
-      .eq('award_id', awardIdNum)
-      .single();
+    const filePath = `drafts/${user_id}/${awardId}/${publicationId}/form41.pdf`;
 
-    if (existingDraft?.form41_path) {
-      const { data: urlData } = await supabase.storage
-        .from('drafts-pdf')
-        .createSignedUrl(existingDraft.form41_path, 3600);
+    const { data: urlData } = await supabaseAdmin.storage
+      .from('drafts-pdf')
+      .createSignedUrl(filePath, 3600);
 
-      if (urlData?.signedUrl) {
-        return res.redirect(urlData.signedUrl);
-      }
+
+    if (urlData?.signedUrl) {
+      console.log(urlData)
+      const fileResponse = await fetch(urlData.signedUrl);
+      const fileBuffer = await fileResponse.arrayBuffer();
+
+      console.log(fileBuffer)
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename="form41.pdf"');
+      return res.send(Buffer.from(fileBuffer));
     }
 
     const { data: publication, error: pubError } = await supabase
@@ -90,8 +93,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ].filter(Boolean);
     const completeCitation = citationParts.join(', ');
 
-    const filePath = path.join(process.cwd(), 'public', '4.1-template-new.pdf');
-    const buffer = fs.readFileSync(filePath);
+    const templatePath = path.join(process.cwd(), 'public', '4.1-template-new.pdf');
+    const buffer = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(buffer);
     const form = pdfDoc.getForm();
 

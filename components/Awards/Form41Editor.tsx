@@ -11,9 +11,9 @@ interface FormEditorProps {
     onSaveNeeded?: () => void;
 }
 
-export default forwardRef(function Form41Editor({ publicationId, documentUrl, awardId, userId, onSaveNeeded }: FormEditorProps, ref) {
+export default forwardRef(function Form41Editor({ publicationId, documentUrl, awardId, userId }: FormEditorProps, ref) {
     const [token, setToken] = useState("");
-    const documentKey = `form41-${publicationId}`
+    const documentKey = useMemo(() => crypto.randomUUID(), [])
     const detectedIp = useMemo(() => typeof window !== 'undefined' ? window.location.hostname : '', [])
 
     const documentUrlFinal = `http://host.docker.internal:3000/api/generate-form/ipa-41?publicationId=${publicationId}&awardId=${awardId}&user_id=${userId}`;
@@ -29,24 +29,6 @@ export default forwardRef(function Form41Editor({ publicationId, documentUrl, aw
             console.error('Error calling force-save command')
         }
     }, [documentKey]);
-
-    const onRequestRefreshFile = useCallback(() => {
-        const docEditor = (window as any).DocEditor?.instances?.["docxEditor"];
-        if (docEditor) {
-            docEditor.refreshFile({
-                document: {
-                    fileType: "pdf",
-                    key: documentKey,
-                    title: "4.1-template",
-                    url: documentUrlFinal,
-                },
-                documentType: "pdf",
-                editorConfig: {
-                    callbackUrl: `http://host.docker.internal:3000/api/drafts/callback?publicationId=${publicationId}&awardId=${awardId}&formType=41&user_id=${userId}`,
-                },
-            });
-        }
-    }, [documentKey, documentUrlFinal, publicationId, awardId, userId]);
 
     const config = useMemo(() => ({
         document: {
@@ -66,7 +48,7 @@ export default forwardRef(function Form41Editor({ publicationId, documentUrl, aw
                 forcesave: true,
             },
         },
-    }), [publicationId, documentKey, documentUrl, awardId, userId, detectedIp, documentUrlFinal, onDocumentReady, onRequestRefreshFile]);
+    }), [publicationId, documentKey, documentUrl, awardId, userId, detectedIp, documentUrlFinal, onDocumentReady]);
 
     useEffect(() => {
         const generateToken = async () => {
@@ -92,8 +74,6 @@ export default forwardRef(function Form41Editor({ publicationId, documentUrl, aw
                     token: token,
                 }}
                 events_onDocumentReady={onDocumentReady}
-                events_onRequestRefreshFile={onRequestRefreshFile}
-
             />
         </div>
     );

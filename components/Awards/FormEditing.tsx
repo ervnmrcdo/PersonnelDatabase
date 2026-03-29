@@ -37,7 +37,7 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
 
   const clearDraft = async () => {
     if (!confirm('Are you sure you want to clear your saved progress? This cannot be undone.')) return;
-    
+
     setIsClearing(true);
     try {
       await fetch(`/api/drafts?publicationId=${selectedPublication.publication_id}&awardId=${selectedAward.id}`, {
@@ -65,8 +65,35 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
 
   const handleFinalSubmit = async () => {
     setIsSubmitting(true);
-    // TODO: implement submission
-    setIsSubmitting(false);
+    try {
+      const res = await fetch('/api/submit-award/route', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          publicationId: selectedPublication.publication_id,
+          awardId: selectedAward.id,
+          userId,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Submission failed');
+      }
+
+      const data = await res.json();
+
+      setDraftUrls({});
+      setDraftId(null);
+
+      alert('Submission successful! Your application has been submitted for review.');
+      handleBack();
+    } catch (err) {
+      console.error('Failed to submit:', err);
+      alert(err instanceof Error ? err.message : 'Failed to submit application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getCurrentDraftUrl = () => {
@@ -104,7 +131,7 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
         >
           ← Back to {formStep === 'form41' || formStep === 'form44' ? 'Publications' : 'Previous Form'}
         </button>
-        
+
         {(Object.keys(draftUrls).length > 0) && (
           <button
             onClick={clearDraft}
@@ -140,8 +167,8 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form41Editor 
-                publicationId={selectedPublication.publication_id} 
+              <Form41Editor
+                publicationId={selectedPublication.publication_id}
                 documentUrl={draftUrls.form41 || undefined}
                 awardId={selectedAward.id}
                 userId={userId}
@@ -165,7 +192,7 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form42Editor 
+              <Form42Editor
                 publicationId={selectedPublication.publication_id}
                 documentUrl={draftUrls.form42 || undefined}
                 awardId={selectedAward.id}
@@ -190,7 +217,7 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form44Editor 
+              <Form44Editor
                 publicationId={selectedPublication.publication_id}
                 documentUrl={draftUrls.form44 || undefined}
                 awardId={selectedAward.id}
@@ -215,7 +242,7 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
               exit={{ x: -200, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Form43Editor 
+              <Form43Editor
                 publicationId={selectedPublication.publication_id}
                 documentUrl={draftUrls.form43 || undefined}
                 awardId={selectedAward.id}
