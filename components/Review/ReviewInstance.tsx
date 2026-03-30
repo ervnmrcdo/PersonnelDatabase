@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { ArrowLeft, ChevronDown, ChevronRight } from "lucide-react";
 import { Application, SubmissionLog } from "@/lib/types";
 import { useAuth } from "@/context/AuthContext";
@@ -39,7 +39,10 @@ export default function ReviewInstance({ data, onBack }: Props) {
   }>({});
   const { user, profile } = useAuth()
 
-  const [isLoadingPreview, setIsLoadingPreview] = useState<boolean>(false);
+  const [loadingForm41, setLoadingForm41] = useState<boolean>(false);
+  const [loadingForm42, setLoadingForm42] = useState<boolean>(false);
+  const [loadingForm43, setLoadingForm43] = useState<boolean>(false);
+  const [loadingForm44, setLoadingForm44] = useState<boolean>(false);
 
   const [errorRemarks, setErrorRemarks] = useState<string>("");
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
@@ -160,102 +163,162 @@ export default function ReviewInstance({ data, onBack }: Props) {
       .sign(secret);
   }, []);
 
-  useEffect(() => {
-    const fetchSignedPreview = async () => {
-      if (!data || !user?.id || !data.form41Url || !data.form44Url) return;
-
-      const hasForm41 = !!data.form41Url
-      const pdfUrl = hasForm41 ? data.form41Url : data.form44Url
-      const title = hasForm41 ? '4.1-signed' : '4.1-signed'
-
-
-      console.log(`http://host.docker.internal:3000/api/admin/preview-signed-form/route?pdfUrl=${pdfUrl}&admin_id=${user.id}`)
-
-      setIsLoadingPreview(true);
-      try {
-        const documentKey = crypto.randomUUID();
-        const config: DocumentConfig = {
-          document: {
-            fileType: "pdf",
-            key: documentKey,
-            title: title,
-            url: `http://host.docker.internal:3000/api/admin/preview-signed-form/route?pdfUrl=${data.form41Url}&admin_id=${user.id}`,
+  const generateForm41Config = useCallback(async () => {
+    if (!data.form41Url || !user?.id) return;
+    setLoadingForm41(true);
+    try {
+      const documentKey = crypto.randomUUID();
+      const config: DocumentConfig = {
+        document: {
+          fileType: "pdf",
+          key: documentKey,
+          title: "4.1-signed",
+          url: `http://host.docker.internal:3000/api/admin/preview-signed-form/route?pdfUrl=${data.form41Url}&admin_id=${user.id}`,
+        },
+        documentType: "pdf",
+        editorConfig: {
+          mode: "view",
+          customization: {
+            forcesave: false,
           },
-          documentType: "pdf",
-          editorConfig: {
-            mode: "view",
-            customization: {
-              forcesave: false,
-            },
-          },
-        };
-
-        const token = await generateToken(config);
-        hasForm41 ?
-          setPdfConfigs({ form41: { config: config, token: token }, form44: undefined })
-          :
-          setPdfConfigs({ form44: { config: config, token: token }, form41: undefined })
-
-        // setPdfConfig(config);
-        // setPdfToken(token);
-      } catch (err) {
-        console.error('Error loading preview:', err);
-      } finally {
-        setIsLoadingPreview(false);
-      }
-    };
-
-    if (data) {
-      fetchSignedPreview();
-    }
-  }, [data, user?.id, generateToken]);
-
-  useEffect(() => {
-    const generateDocumentConfigs = async () => {
-      const configs: typeof docxConfigs = {};
-
-      const generateConfig = async (url: string, key: string, title: string): Promise<{ config: DocumentConfig; token: string }> => {
-        const config: DocumentConfig = {
-          document: {
-            fileType: "docx",
-            key: key,
-            title: title,
-            url: url,
-          },
-          documentType: "word",
-          editorConfig: {
-            mode: "view",
-            customization: {
-              forcesave: false,
-            },
-          },
-        };
-
-        const token = await generateToken(config);
-        return { config, token };
+        },
       };
-
-      if (data.form42Url) {
-        const formUrl = `http://host.docker.internal:3000/api/admin/get-form-file/route?formUrl=${encodeURIComponent(data.form42Url)}`;
-        configs.form42 = await generateConfig(formUrl, crypto.randomUUID(), "4.2");
-      }
-      if (data.form43Url) {
-        const formUrl = `http://host.docker.internal:3000/api/admin/get-form-file/route?formUrl=${encodeURIComponent(data.form43Url)}`;
-        configs.form43 = await generateConfig(formUrl, crypto.randomUUID(), "4.3");
-      }
-      setDocumentConfigs(configs);
-    };
-
-    if (data) {
-      generateDocumentConfigs();
+      const token = await generateToken(config);
+      setPdfConfigs(prev => ({ ...prev, form41: { config, token } }));
+    } catch (err) {
+      console.error('Error loading form 4.1:', err);
+    } finally {
+      setLoadingForm41(false);
     }
-  }, [data, generateToken]);
+  }, [data.form41Url, user?.id, generateToken]);
 
-  // const hasForm42 = !!docxConfigs.form42;
-  const hasForm41 = !!pdfConfigs.form41;
-  const hasForm42 = !!docxConfigs.form42;
-  const hasForm43 = !!docxConfigs.form43;
-  const hasForm44 = !!pdfConfigs.form44;
+  const generateForm44Config = useCallback(async () => {
+    if (!data.form44Url || !user?.id) return;
+    setLoadingForm44(true);
+    try {
+      const documentKey = crypto.randomUUID();
+      const config: DocumentConfig = {
+        document: {
+          fileType: "pdf",
+          key: documentKey,
+          title: "4.4-signed",
+          url: `http://host.docker.internal:3000/api/admin/preview-signed-form/route?pdfUrl=${data.form44Url}&admin_id=${user.id}`,
+        },
+        documentType: "pdf",
+        editorConfig: {
+          mode: "view",
+          customization: {
+            forcesave: false,
+          },
+        },
+      };
+      const token = await generateToken(config);
+      setPdfConfigs(prev => ({ ...prev, form44: { config, token } }));
+    } catch (err) {
+      console.error('Error loading form 4.4:', err);
+    } finally {
+      setLoadingForm44(false);
+    }
+  }, [data.form44Url, user?.id, generateToken]);
+
+  const generateForm42Config = useCallback(async () => {
+    if (!data.form42Url) return;
+    setLoadingForm42(true);
+    try {
+      const formUrl = `http://host.docker.internal:3000/api/admin/get-form-file/route?formUrl=${encodeURIComponent(data.form42Url)}`;
+      const config: DocumentConfig = {
+        document: {
+          fileType: "docx",
+          key: crypto.randomUUID(),
+          title: "4.2",
+          url: formUrl,
+        },
+        documentType: "word",
+        editorConfig: {
+          mode: "view",
+          customization: {
+            forcesave: false,
+          },
+        },
+      };
+      const token = await generateToken(config);
+      setDocumentConfigs(prev => ({ ...prev, form42: { config, token } }));
+    } catch (err) {
+      console.error('Error loading form 4.2:', err);
+    } finally {
+      setLoadingForm42(false);
+    }
+  }, [data.form42Url, generateToken]);
+
+  const generateForm43Config = useCallback(async () => {
+    if (!data.form43Url) return;
+    setLoadingForm43(true);
+    try {
+      const formUrl = `http://host.docker.internal:3000/api/admin/get-form-file/route?formUrl=${encodeURIComponent(data.form43Url)}`;
+      const config: DocumentConfig = {
+        document: {
+          fileType: "docx",
+          key: crypto.randomUUID(),
+          title: "4.3",
+          url: formUrl,
+        },
+        documentType: "word",
+        editorConfig: {
+          mode: "view",
+          customization: {
+            forcesave: false,
+          },
+        },
+      };
+      const token = await generateToken(config);
+      setDocumentConfigs(prev => ({ ...prev, form43: { config, token } }));
+    } catch (err) {
+      console.error('Error loading form 4.3:', err);
+    } finally {
+      setLoadingForm43(false);
+    }
+  }, [data.form43Url, generateToken]);
+
+  const handleToggleForm41 = async () => {
+    if (expandedForm41) {
+      setPdfConfigs(prev => { const { form41, ...rest } = prev; return rest; });
+    } else {
+      await generateForm41Config();
+    }
+    setExpandedForm41(!expandedForm41);
+  };
+
+  const handleToggleForm44 = async () => {
+    if (expandedForm44) {
+      setPdfConfigs(prev => { const { form44, ...rest } = prev; return rest; });
+    } else {
+      await generateForm44Config();
+    }
+    setExpandedForm44(!expandedForm44);
+  };
+
+  const handleToggleForm42 = async () => {
+    if (expandedForm42) {
+      setDocumentConfigs(prev => { const { form42, ...rest } = prev; return rest; });
+    } else {
+      await generateForm42Config();
+    }
+    setExpandedForm42(!expandedForm42);
+  };
+
+  const handleToggleForm43 = async () => {
+    if (expandedForm43) {
+      setDocumentConfigs(prev => { const { form43, ...rest } = prev; return rest; });
+    } else {
+      await generateForm43Config();
+    }
+    setExpandedForm43(!expandedForm43);
+  };
+
+  const hasForm41 = !!data.form41Url;
+  const hasForm42 = !!data.form42Url;
+  const hasForm43 = !!data.form43Url;
+  const hasForm44 = !!data.form44Url;
 
   const getEditorConfig = useCallback((config: DocumentConfig, token: string) => ({
     ...config,
@@ -288,40 +351,42 @@ export default function ReviewInstance({ data, onBack }: Props) {
       </div>
 
       {/* Expandable PDF Section */}
-      <div className="border rounded-lg overflow-hidden">
-        <button
-          onClick={() => setExpandedForm41(!expandedForm41)}
-          className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
-        >
-          <span>Form 4.1 - IPA Form (PDF)</span>
-          {expandedForm41 ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-        </button>
-
-        {expandedForm41 && (
-          <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-[#1a1e2b]">
-            {isLoadingPreview ? (
-              <div className="flex items-center justify-center h-64">
-                <div className="text-gray-400">Generating preview with signature...</div>
-              </div>
-            ) : pdfConfigs.form41?.config && pdfConfigs.form44?.token ? (
-              <div style={{ height: '600px' }}>
-                <DocumentEditor
-                  id="pdfEditor"
-                  documentServerUrl={`http://${detectedIp}:8080/`}
-                  config={getEditorConfig(pdfConfigs.form41.config, pdfConfigs.form44.token)}
-                />
-              </div>
-            ) : (
-              <p className="text-gray-400">No PDF attached.</p>
-            )}
-          </div>
-        )}
-      </div>
-
-      {hasForm42 ? (
+      {hasForm41 && (
         <div className="border rounded-lg overflow-hidden">
           <button
-            onClick={() => setExpandedForm42(!expandedForm42)}
+            onClick={handleToggleForm41}
+            className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
+          >
+            <span>Form 4.1 - IPA Form (PDF)</span>
+            {expandedForm41 ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+          </button>
+
+          {expandedForm41 && (
+            <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
+              {loadingForm41 ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="text-gray-400">Generating preview with signature...</div>
+                </div>
+              ) : pdfConfigs.form41?.config && pdfConfigs.form41?.token ? (
+                <div style={{ height: '100%' }}>
+                  <DocumentEditor
+                    id="pdfEditor-form41"
+                    documentServerUrl={`http://${detectedIp}:8080/`}
+                    config={getEditorConfig(pdfConfigs.form41.config, pdfConfigs.form41.token)}
+                  />
+                </div>
+              ) : (
+                <p className="text-gray-400">No PDF attached.</p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {hasForm42 && (
+        <div className="border rounded-lg overflow-hidden">
+          <button
+            onClick={handleToggleForm42}
             className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
           >
             <span>Form 4.2 - IPA Form (DOCX)</span>
@@ -329,15 +394,15 @@ export default function ReviewInstance({ data, onBack }: Props) {
           </button>
 
           {expandedForm42 && (
-            <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-[#1a1e2b]">
-              {isLoadingPreview ? (
+            <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
+              {loadingForm42 ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="text-gray-400">Generating preview with signature...</div>
                 </div>
               ) : docxConfigs.form42?.config && docxConfigs.form42?.token ? (
-                <div style={{ height: '600px' }}>
+                <div style={{ height: '100%' }}>
                   <DocumentEditor
-                    id="pdfEditor"
+                    id="pdfEditor-form42"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(docxConfigs.form42.config, docxConfigs.form42.token)}
                   />
@@ -347,13 +412,13 @@ export default function ReviewInstance({ data, onBack }: Props) {
               )}
             </div>
           )}
-        </div>)
-        : ''}
+        </div>
+      )}
 
-      {hasForm43 ? (
+      {hasForm43 && (
         <div className="border rounded-lg overflow-hidden">
           <button
-            onClick={() => setExpandedForm43(!expandedForm43)}
+            onClick={handleToggleForm43}
             className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
           >
             <span>Form 4.3 - IPA Form (DOCX)</span>
@@ -361,15 +426,15 @@ export default function ReviewInstance({ data, onBack }: Props) {
           </button>
 
           {expandedForm43 && (
-            <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-[#1a1e2b]">
-              {isLoadingPreview ? (
+            <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
+              {loadingForm43 ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="text-gray-400">Generating preview with signature...</div>
                 </div>
               ) : docxConfigs.form43?.config && docxConfigs.form43?.token ? (
-                <div style={{ height: '600px' }}>
+                <div style={{ height: '100%' }}>
                   <DocumentEditor
-                    id="pdfEditor"
+                    id="pdfEditor-form43"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(docxConfigs.form43.config, docxConfigs.form43.token)}
                   />
@@ -379,14 +444,14 @@ export default function ReviewInstance({ data, onBack }: Props) {
               )}
             </div>
           )}
-        </div>)
-        : ''}
+        </div>
+      )}
 
 
-      {hasForm44 ? (
+      {hasForm44 && (
         <div className="border rounded-lg overflow-hidden">
           <button
-            onClick={() => setExpandedForm44(!expandedForm44)}
+            onClick={handleToggleForm44}
             className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
           >
             <span>Form 4.4 - IPA Form (DOCX)</span>
@@ -394,15 +459,15 @@ export default function ReviewInstance({ data, onBack }: Props) {
           </button>
 
           {expandedForm44 && (
-            <div className="border rounded-lg p-4 max-h-[70vh] overflow-y-scroll bg-[#1a1e2b]">
-              {isLoadingPreview ? (
+            <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
+              {loadingForm44 ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="text-gray-400">Generating preview with signature...</div>
                 </div>
               ) : pdfConfigs.form44?.config && pdfConfigs.form44?.token ? (
-                <div style={{ height: '600px' }}>
+                <div style={{ height: '100%' }}>
                   <DocumentEditor
-                    id="pdfEditor"
+                    id="pdfEditor-form44"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(pdfConfigs.form44.config, pdfConfigs.form44.token)}
                   />
@@ -412,8 +477,8 @@ export default function ReviewInstance({ data, onBack }: Props) {
               )}
             </div>
           )}
-        </div>)
-        : ''}
+        </div>
+      )}
 
 
       {/* Error Remarks Dialog */}
@@ -455,7 +520,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
         )
       }
 
-      {/* Sign Confirmation Dialog */}
       {
         showSignConfirmDialog && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

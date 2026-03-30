@@ -9,7 +9,6 @@ export default async function RetrieveAcceptedForms(
   // const { id } = JSON.parse(req.body)
   const { id } = JSON.parse(req.body)
 
-  console.log(id)
 
   try {
     const supabase = createPagesServerClient(req, res);

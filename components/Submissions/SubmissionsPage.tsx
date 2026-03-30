@@ -17,8 +17,8 @@ const ReturnedFormInstance = dynamic(() => import('./ReturnedFormInstance'), { s
 
 function SubmissionsPageContent() {
     const { selected, setSelected } = useSubmissionsFlow()
-    const selectedAccepted = selected && !('pdf_json_data' in selected) ? selected as AcceptedForm : null
-    const selectedReturned = selected && 'pdf_json_data' in selected ? selected as RejectedForm : null
+    const selectedAccepted = selected && !('remarks' in selected) ? selected as AcceptedForm : null
+    const selectedReturned = selected && 'remarks' in selected ? selected as RejectedForm : null
 
     return (
         <div className="p-6">

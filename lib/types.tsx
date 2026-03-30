@@ -82,18 +82,25 @@ export interface AcceptedForm {
   date_submitted: string;
   award_title: string;
   logs: SubmissionLog[];
+  isReturned: boolean;
 }
 
 export interface RejectedForm {
   first_name: string;
   last_name: string;
   submission_id: string;
-  pdfBufferData: string;
   date_submitted: string;
   award_title: string;
-  pdf_json_data: JSON;
   remarks: string;
   logs: SubmissionLog[];
+  publication_id?: number;
+  award_id?: number;
+  submitter_id?: string;
+  form41_url?: string;
+  form42_url?: string;
+  form43_url?: string;
+  form44_url?: string;
+  isReturned: boolean;
 }
 
 export interface PendingAward {

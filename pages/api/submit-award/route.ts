@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { createPagesServerClient } from "@/lib/supabase/pager-server";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -8,7 +7,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const supabase = createPagesServerClient(req, res);
     const supabaseAdmin = createServiceRoleClient();
 
     const { publicationId, awardId, userId } = req.body;

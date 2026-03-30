@@ -9,13 +9,10 @@ type Props = {
 
 export default function ReturnedListing({ onSelect }: Props) {
 
-    const [step, setStep] = useState<'listing' | 'accepted-review'>('listing')
 
-    // stores retrieved data
     const [returnedData, setReturnedData] = useState<RejectedForm[]>([])
     const { user } = useAuth()
 
-    //hard-coded id of sudent need to be changed
     const payload = {
         id: user?.id,
     }
@@ -28,15 +25,18 @@ export default function ReturnedListing({ onSelect }: Props) {
             console.log(result)
             setReturnedData(result.map((item: any) => ({
                 submission_id: item.submission_id,
-                // NEW: Use pdfUrl from Supabase Storage instead of attached_files
-                pdfBufferData: item.pdfUrl || item.attached_files,
+                publication_id: item.publication_id,
                 first_name: item.authors.first_name,
                 last_name: item.authors.last_name,
                 date_submitted: item.date_submitted,
                 award_title: item.awards.title,
-                pdf_json_data: item.pdf_json_data,
+                award_id: item.awards.award_id,
                 remarks: item.remarks,
-                logs: item.logs
+                logs: item.logs,
+                form41_url: item.form41_url,
+                form42_url: item.form42_url,
+                form43_url: item.form43_url,
+                form44_url: item.form44_url,
             })))
         })
     }, [])
