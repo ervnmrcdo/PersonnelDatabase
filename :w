@@ -1,6 +1,5 @@
 import sql from "@/config/db";
 import { createPagesServerClient } from "@/lib/supabase/pager-server";
-import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 
@@ -10,7 +9,7 @@ export default async function PendingAwards(
 ) {
   try {
 
-    const supabase = createServiceRoleClient();
+    const supabase = createPagesServerClient(req, res);
 
     const { data, error } = await supabase
       .from('submissions')
@@ -28,7 +27,7 @@ export default async function PendingAwards(
 
 
     const formatted = await Promise.all(data.map(async (r: any) => {
-      let form41Url = null;
+      let pdfUrl = null;
       let form42Url = null;
       let form43Url = null;
       let form44Url = null;
@@ -36,17 +35,14 @@ export default async function PendingAwards(
       // Get signed URL for Form 4.1 PDF from Supabase Storage
       if (r.form41_path) {
         console.log(r.form41_path)
-        const { data: signedUrlData, error: errorLog } = await supabase.storage
+        const { data: signedUrlData } = await supabase.storage
           .from('submissions-pdf')
           .createSignedUrl(r.form41_path, 3600); // 1 hour expiry
 
-        if (errorLog) {
-          console.error(errorLog)
-        }
-
-        form41Url = signedUrlData?.signedUrl || null;
+        pdfUrl = signedUrlData?.signedUrl || null;
       }
 
+      console.log(pdfUrl)
 
       // Get signed URLs for DOCX files
       if (r.form42_path) {
@@ -76,10 +72,11 @@ export default async function PendingAwards(
         dateSubmitted: r.date_submitted,
         status: r.status,
         awardId: r.awards.award_id,
+        pdfUrl,
         pdfBase64: null,
         awardTitle: r.awards.title,
         logs: r.logs,
-        form41Url,
+        form41Url: pdfUrl,
         form42Url,
         form43Url,
         form44Url,

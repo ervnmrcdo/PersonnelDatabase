@@ -36,7 +36,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const { data, error } = await supabase
       .from('submissions')
       .update({
-        attached_file_path: uploadData.path,
+        form41_path: uploadData.path,
         pdf_json_data: JSON.stringify(ipaData),
         status: 'PENDING',
         logs: newLogs

@@ -75,7 +75,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     // Update submission with PDF file path
     const { error: updateError } = await supabase
       .from('submissions')
-      .update({ attached_file_path: uploadData.path })
+      .update({ form41_path: uploadData.path })
       .eq('submission_id', submission_id);
 
     if (updateError) {

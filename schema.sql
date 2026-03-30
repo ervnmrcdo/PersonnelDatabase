@@ -243,7 +243,6 @@ CREATE TABLE IF NOT EXISTS "public"."submissions" (
     "remarks" "text",
     "pdf_json_data" "jsonb" DEFAULT '{}'::"jsonb" NOT NULL,
     "logs" "jsonb" DEFAULT '[]'::"jsonb",
-    "attached_file_path" character varying(500),
     "form41_path" character varying(500),
     "form42_path" character varying(500),
     "form43_path" character varying(500),

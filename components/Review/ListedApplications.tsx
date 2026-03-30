@@ -1,9 +1,6 @@
 import { Application, SubmissionLog } from "@/lib/types";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import A from "../AllAwards";
-import AllAwards from "../AllAwards";
-import { createClient } from "@supabase/supabase-js";
 
 type Props = {
   onSelect: (data: Application) => void;
@@ -24,15 +21,16 @@ export default function ListedApplications({ onSelect }: Props) {
             role: item.submitterType,
             award: item.awardTitle,
             dateSubmitted: item.dateSubmitted,
-            pdfBase64: item.pdfBase64,
-            pdfUrl: item.pdfUrl,
             logs: item.logs as SubmissionLog,
+            form41Url: item.form41Url || null,
             form42Url: item.form42Url || null,
             form43Url: item.form43Url || null,
             form44Url: item.form44Url || null,
           })),
         );
       });
+
+    console.log(data)
   }, []);
 
   console.log(data)

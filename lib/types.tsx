@@ -66,9 +66,9 @@ export type Application = {
   role: "Student" | "Faculty";
   award: string;
   dateSubmitted: string;
-  pdfBase64: string;
   pdfUrl: string | null;
   logs: SubmissionLog[];
+  form41Url?: string | null;
   form42Url?: string | null;
   form43Url?: string | null;
   form44Url?: string | null;

@@ -31,7 +31,7 @@ export default async function ValidateAward(
 		const { data: updateData, error: updateError } = await supabase
 			.from('submissions')
 			.update({
-				attached_file_path: uploadData.path,
+				form41_path: uploadData.path,
 				status: 'VALIDATED',
 				reviewed_by_admin_id: admin_id,
 				logs: newLogs

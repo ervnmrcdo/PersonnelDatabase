@@ -37,10 +37,10 @@ export default async function RetrieveAcceptedForms(
           let pdfUrl = null;
 
           // NEW: Get signed URL from Supabase Storage
-          if (r.attached_file_path) {
+          if (r.form41_path) {
             const { data: signedUrlData } = await supabase.storage
               .from('submissions-pdf')
-              .createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
+              .createSignedUrl(r.form41_path, 3600); // 1 hour expiry
 
             pdfUrl = signedUrlData?.signedUrl || null;
           }

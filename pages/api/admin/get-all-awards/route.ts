@@ -2,14 +2,14 @@ import { createPagesServerClient } from "@/lib/supabase/pager-server";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface SubmissionRow {
-	submission_id: number;
-	date_submitted: string;
-	status: string;
-	attached_files: Buffer | null;
-	attached_file_path: string | null;
-	users: { first_name: string; last_name: string }[];
-	awards: { award_id: number; title: string }[];
-}
+ 	submission_id: number;
+ 	date_submitted: string;
+ 	status: string;
+ 	attached_files: Buffer | null;
+ 	form41_path: string | null;
+ 	users: { first_name: string; last_name: string }[];
+ 	awards: { award_id: number; title: string }[];
+ }
 
 export default async function RetrieveAllAwards(
 	req: NextApiRequest,
@@ -23,7 +23,7 @@ export default async function RetrieveAllAwards(
 		const { data, error } = await supabase
 			.from('submissions')
 			.select(`
-				submission_id, date_submitted, status, attached_files, attached_file_path,
+				submission_id, date_submitted, status, attached_files, form41_path,
 				users!submitter_id!inner(first_name, last_name),
 				awards!inner(award_id, title)
 			`);
@@ -36,10 +36,10 @@ export default async function RetrieveAllAwards(
 			let pdfUrl = null;
 			
 			// NEW: Get signed URL from Supabase Storage
-			if (r.attached_file_path) {
+			if (r.form41_path) {
 				const { data: signedUrlData } = await supabase.storage
 					.from('submissions-pdf')
-					.createSignedUrl(r.attached_file_path, 3600); // 1 hour expiry
+					.createSignedUrl(r.form41_path, 3600); // 1 hour expiry
 				
 				pdfUrl = signedUrlData?.signedUrl || null;
 			}
