@@ -1,5 +1,6 @@
 'use client'
 
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from "@supabase/supabase-js";
@@ -74,11 +75,12 @@ export default function LoginPage() {
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </button>
               <button
-                formAction={signup}
+                type="button"
                 disabled={isLoading}
                 className="w-full bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 text-white font-semibold py-2 rounded-lg transition duration-200"
+                onClick={() => router.push('/signup')}
               >
-                {isLoading ? 'Creating account...' : 'Create Account'}
+                Create Account
               </button>
             </div>
           </form>

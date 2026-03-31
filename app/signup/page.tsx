@@ -13,7 +13,17 @@ export default function SignupPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState('student')
+  const [role, setRole] = useState('')
+
+  const [first_name, setFirstName] = useState<string | null>(null)
+  const [middle_name, setMiddleName] = useState<string | null>(null)
+  const [last_name, setLastName] = useState<string | null>(null)
+  const [university, setUniversity] = useState<string | null>(null)
+  const [college, setCollege] = useState<string | null>(null)
+  const [department, setDepartment] = useState<string | null>(null)
+  const [contact_number, setContactNumber] = useState<string | null>(null)
+  const [position, setPosition] = useState<string | null>(null)
+
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -41,13 +51,22 @@ export default function SignupPage() {
       return
     }
 
-    // 2. Insert profile row
+    // 2. Upsert profile row
     const { error: insertError } = await supabase
       .from('users')
-      .insert({
+      .upsert({
         id: user.id,
         email: user.email,
-        role: role,
+        role,
+        first_name,
+        middle_name,
+        last_name,
+        university,
+        college,
+        department,
+        contact_number,
+        position,
+        email_address: user.email
       })
 
     if (insertError) {
@@ -57,7 +76,8 @@ export default function SignupPage() {
     }
 
     // 3. Redirect
-    router.push('/dashboard')
+    router.push('/login')
+    alert('Account created successfully!')
   }
 
   return (
@@ -71,9 +91,7 @@ export default function SignupPage() {
         <div className="bg-[#1b1e2b] rounded-lg p-8 border border-gray-700">
           <form onSubmit={handleSignup} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address
-              </label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
               <input
                 id="email"
                 type="email"
@@ -83,11 +101,8 @@ export default function SignupPage() {
                 className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
               />
             </div>
-
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-                Password
-              </label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">Password</label>
               <input
                 id="password"
                 type="password"
@@ -97,27 +112,105 @@ export default function SignupPage() {
                 className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
               />
             </div>
-
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-300 mb-2">
-                Role
-              </label>
-              <select 
+              <label htmlFor="role" className="block text-sm font-medium text-gray-300 mb-2">Role</label>
+              <select
                 id="role"
-                value={role} 
+                value={role}
                 onChange={e => setRole(e.target.value)}
                 className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                required
               >
-                <option value="nonteaching">Nonteaching</option>
-                <option value="teaching">Teaching</option>
-                <option value="admin">Admin</option>
+                <option value="">Select role</option>
+                <option value="nonteaching">Student</option>
+                <option value="teaching">Faculty</option>
               </select>
             </div>
-
+            <div>
+              <label htmlFor="first_name" className="block text-sm font-medium text-gray-300 mb-2">First Name</label>
+              <input
+                id="first_name"
+                type="text"
+                placeholder="First Name"
+                onChange={e => setFirstName(e.target.value)}
+                required
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label htmlFor="middle_name" className="block text-sm font-medium text-gray-300 mb-2">Middle Name</label>
+              <input
+                id="middle_name"
+                type="text"
+                placeholder="Middle Name"
+                onChange={e => setMiddleName(e.target.value)}
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label htmlFor="last_name" className="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
+              <input
+                id="last_name"
+                type="text"
+                placeholder="Last Name"
+                onChange={e => setLastName(e.target.value)}
+                required
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label htmlFor="university" className="block text-sm font-medium text-gray-300 mb-2">University</label>
+              <input
+                id="university"
+                type="text"
+                placeholder="University"
+                onChange={e => setUniversity(e.target.value)}
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label htmlFor="college" className="block text-sm font-medium text-gray-300 mb-2">College</label>
+              <input
+                id="college"
+                type="text"
+                placeholder="College"
+                onChange={e => setCollege(e.target.value)}
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label htmlFor="department" className="block text-sm font-medium text-gray-300 mb-2">Department</label>
+              <input
+                id="department"
+                type="text"
+                placeholder="Department"
+                onChange={e => setDepartment(e.target.value)}
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label htmlFor="contact_number" className="block text-sm font-medium text-gray-300 mb-2">Contact Number</label>
+              <input
+                id="contact_number"
+                type="text"
+                placeholder="Contact Number"
+                onChange={e => setContactNumber(e.target.value)}
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label htmlFor="position" className="block text-sm font-medium text-gray-300 mb-2">Position</label>
+              <input
+                id="position"
+                type="text"
+                placeholder="Position"
+                onChange={e => setPosition(e.target.value)}
+                className="w-full px-4 py-2 bg-[#0f1117] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
             {error && <p className="text-red-400 text-sm">{error}</p>}
-
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={loading}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-semibold py-2 rounded-lg transition duration-200"
             >
