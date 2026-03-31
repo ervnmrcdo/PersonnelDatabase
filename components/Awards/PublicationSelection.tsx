@@ -19,7 +19,7 @@ const PublicationSelection: FC<PublicationSelectionProps> = ({
     <>
       <button
         onClick={handleBack}
-        className="text-sm text-blue-600 mb-4 hover:underline"
+        className="bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 px-3 py-1 rounded transition text-sm mb-4"
       >
         ← Back to Awards
       </button>

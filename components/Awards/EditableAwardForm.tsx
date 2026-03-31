@@ -126,7 +126,7 @@ export default function EditableAwardForm({
               formData.isResubmitting = true;
               constraints(formData.ipaData) && onResubmit(formData, submission_id, logs!, actor_name, submitter_id);
             }}
-            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="mt-4 mb-4 block mx-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
           >
             Resubmit
           </button>
@@ -330,7 +330,7 @@ export default function EditableAwardForm({
         type="text"
         value={`${formData.ipaData.author1Contact}` || ""}
         onChange={(e) => handleChange("author1Contact", e.target.value)}
-        className="absolute left-[500px] top-[2250px] h-[20px] w-[150px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
+        className="absolute left-[480px] top-[2250px] h-[20px] w-[160px] border border-gray-300 bg-transparent px-2 py-1 text-sm"
         placeholder="Applicant Name"
       />
 

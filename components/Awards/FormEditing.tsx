@@ -276,7 +276,7 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </div >
     </>
   );
 };

@@ -400,10 +400,10 @@ export default function ReviewInstance({ data, onBack }: Props) {
       </div>
 
       <div className="flex gap-3">
-        <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => setShowSignConfirmDialog(true)}>
+        <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition" onClick={() => setShowSignConfirmDialog(true)}>
           Sign and Return
         </button>
-        <button className="px-4 py-2 border rounded-md"
+        <button className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md hover:bg-gray-700 hover:text-white transition"
           onClick={() => setShowErrorDialog(true)}
         >Return with Errors</button>
       </div>
@@ -418,59 +418,61 @@ export default function ReviewInstance({ data, onBack }: Props) {
             {expandedForm41 ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
           </button>
 
-          {expandedForm41 && (
-            <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
-              {loadingForm41 ? (
-                <div className="flex items-center justify-center h-64">
-                  <div className="text-gray-400">Loading form...</div>
-                </div>
-              ) : pdfConfigs.form41?.config && pdfConfigs.form41?.token ? (
-                <div style={{ height: '100%' }}>
-                  <DocumentEditor
-                    id="pdfEditor-form41"
-                    documentServerUrl={`http://${detectedIp}:8080/`}
-                    config={getEditorConfig(pdfConfigs.form41.config, pdfConfigs.form41.token)}
-                  />
-                </div>
-              ) : (
-                <p className="text-gray-400">No PDF attached.</p>
-              )}
-            </div>
-          )}
+          {
+            expandedForm41 && (
+              <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
+                {loadingForm41 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <div className="text-gray-400">Loading form...</div>
+                  </div>
+                ) : pdfConfigs.form41?.config && pdfConfigs.form41?.token ? (
+                  <div style={{ height: '100%' }}>
+                    <DocumentEditor
+                      id="pdfEditor-form41"
+                      documentServerUrl={`http://${detectedIp}:8080/`}
+                      config={getEditorConfig(pdfConfigs.form41.config, pdfConfigs.form41.token)}
+                    />
+                  </div>
+                ) : (
+                  <p className="text-gray-400">No PDF attached.</p>
+                )}
+              </div>
+            )}
         </div>
       )}
 
-      {hasForm42 && (
-        <div className="border rounded-lg overflow-hidden">
-          <button
-            onClick={handleToggleForm42}
-            className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
-          >
-            <span>Form 4.2 - IPA Form (DOCX)</span>
-            {expandedForm42 ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-          </button>
+      {
+        hasForm42 && (
+          <div className="border rounded-lg overflow-hidden">
+            <button
+              onClick={handleToggleForm42}
+              className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
+            >
+              <span>Form 4.2 - IPA Form (DOCX)</span>
+              {expandedForm42 ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+            </button>
 
-          {expandedForm42 && (
-            <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
-              {loadingForm42 ? (
-                <div className="flex items-center justify-center h-64">
-                  <div className="text-gray-400">Loading form...</div>
-                </div>
-              ) : docxConfigs.form42?.config && docxConfigs.form42?.token ? (
-                <div style={{ height: '100%' }}>
-                  <DocumentEditor
-                    id="pdfEditor-form42"
-                    documentServerUrl={`http://${detectedIp}:8080/`}
-                    config={getEditorConfig(docxConfigs.form42.config, docxConfigs.form42.token)}
-                  />
-                </div>
-              ) : (
-                <p className="text-gray-400">No document attached.</p>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+            {expandedForm42 && (
+              <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
+                {loadingForm42 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <div className="text-gray-400">Loading form...</div>
+                  </div>
+                ) : docxConfigs.form42?.config && docxConfigs.form42?.token ? (
+                  <div style={{ height: '100%' }}>
+                    <DocumentEditor
+                      id="pdfEditor-form42"
+                      documentServerUrl={`http://${detectedIp}:8080/`}
+                      config={getEditorConfig(docxConfigs.form42.config, docxConfigs.form42.token)}
+                    />
+                  </div>
+                ) : (
+                  <p className="text-gray-400">No document attached.</p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
       {hasForm43 && (
         <div className="border rounded-lg overflow-hidden">

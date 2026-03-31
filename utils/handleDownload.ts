@@ -3,7 +3,7 @@ import { IPAFormData } from "@/lib/types";
 export const handleDownload = async (data: IPAFormData) => {
   try {
 
-    const generateFormData = { ipaData: data, submitter_id: '', isSubmitting: true }
+    const generateFormData = { data: data, submitter_id: '', isSubmitting: false }
 
     const pdf = await fetch('/api/generate-ipa-award/route', {
       method: "POST",

@@ -5,12 +5,6 @@ import { useRouter } from 'next/navigation'
 import { createClient } from "@supabase/supabase-js";
 import { login, LoginState, signup } from './actions'
 
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -18,7 +12,7 @@ export default function LoginPage() {
   const handleLogin = async (formData: FormData) => {
     setIsLoading(true)
     const result: LoginState = await login({ error: undefined }, formData)
-    
+
     if (result.successPath) {
       window.location.reload()
       router.push(result.successPath)
@@ -89,7 +83,7 @@ export default function LoginPage() {
             </div>
           </form>
         </div>
-        </div>
       </div>
+    </div>
   )
 }

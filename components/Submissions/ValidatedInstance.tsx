@@ -375,6 +375,7 @@ export default function AcceptedFormInstance({ data, onBack }: Props) {
                     <p className="text-gray-400">No documents attached.</p>
                 </div>
             )}
+
         </div >
     )
 }
