@@ -17,6 +17,29 @@ COMMENT ON SCHEMA "public" IS 'standard public schema';
 
 
 
+-- ============================================
+-- STORAGE BUCKETS
+-- ============================================
+-- See supabase/migrations/20260331212928_storage.sql for full storage schema dump
+-- ============================================
+
+-- Create storage buckets
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types) VALUES
+  ('signatures', 'signatures', false, NULL, NULL),
+  ('pdfs', 'pdfs', false, NULL, NULL),
+  ('submissions-pdf', 'submissions-pdf', true, 52428800, ARRAY['application/pdf']),
+  ('submissions-docx', 'submissions-docx', true, 52428800, ARRAY['application/vnd.openxmlformats-officedocument.wordprocessingml.document']),
+  ('drafts-pdf', 'drafts-pdf', false, NULL, NULL),
+  ('drafts-docx', 'drafts-docx', false, NULL, NULL)
+ON CONFLICT (id) DO NOTHING;
+
+GRANT ALL ON storage.objects TO "anon";
+GRANT ALL ON storage.objects TO "authenticated";
+GRANT ALL ON storage.objects TO "service_role";
+
+-- ============================================
+
+
 CREATE EXTENSION IF NOT EXISTS "pg_graphql" WITH SCHEMA "graphql";
 
 

@@ -17,6 +17,29 @@ COMMENT ON SCHEMA "public" IS 'standard public schema';
 
 
 
+-- ============================================
+-- STORAGE BUCKETS
+-- ============================================
+-- See supabase/migrations/20260331212928_storage.sql for full storage schema dump
+-- ============================================
+
+-- Create storage buckets
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types) VALUES
+  ('signatures', 'signatures', false, NULL, NULL),
+  ('pdfs', 'pdfs', false, NULL, NULL),
+  ('submissions-pdf', 'submissions-pdf', true, 52428800, ARRAY['application/pdf']),
+  ('submissions-docx', 'submissions-docx', true, 52428800, ARRAY['application/vnd.openxmlformats-officedocument.wordprocessingml.document']),
+  ('drafts-pdf', 'drafts-pdf', false, NULL, NULL),
+  ('drafts-docx', 'drafts-docx', false, NULL, NULL)
+ON CONFLICT (id) DO NOTHING;
+
+GRANT ALL ON storage.objects TO "anon";
+GRANT ALL ON storage.objects TO "authenticated";
+GRANT ALL ON storage.objects TO "service_role";
+
+-- ============================================
+
+
 CREATE EXTENSION IF NOT EXISTS "pg_graphql" WITH SCHEMA "graphql";
 
 
@@ -127,24 +150,6 @@ ALTER SEQUENCE "public"."departments_department_id_seq" OWNER TO "postgres";
 
 ALTER SEQUENCE "public"."departments_department_id_seq" OWNED BY "public"."departments"."department_id";
 
-
-
-CREATE TABLE IF NOT EXISTS "public"."draft_applications" (
-    "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "user_id" "uuid",
-    "publication_id" integer,
-    "award_id" integer,
-    "form41_path" character varying(500),
-    "form42_path" character varying(500),
-    "form43_path" character varying(500),
-    "form44_path" character varying(500),
-    "status" character varying(20) DEFAULT 'in_progress'::character varying,
-    "created_at" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" timestamp without time zone DEFAULT CURRENT_TIMESTAMP
-);
-
-
-ALTER TABLE "public"."draft_applications" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."publication_authors" (
@@ -354,16 +359,6 @@ ALTER TABLE ONLY "public"."departments"
 
 
 
-ALTER TABLE ONLY "public"."draft_applications"
-    ADD CONSTRAINT "draft_applications_pkey" PRIMARY KEY ("id");
-
-
-
-ALTER TABLE ONLY "public"."draft_applications"
-    ADD CONSTRAINT "draft_applications_user_id_publication_id_award_id_key" UNIQUE ("user_id", "publication_id", "award_id");
-
-
-
 ALTER TABLE ONLY "public"."users"
     ADD CONSTRAINT "profiles_email_key" UNIQUE ("email");
 
@@ -401,21 +396,6 @@ ALTER TABLE ONLY "public"."submissions"
 
 ALTER TABLE ONLY "public"."publication_type"
     ADD CONSTRAINT "types_pkey" PRIMARY KEY ("id");
-
-
-
-ALTER TABLE ONLY "public"."draft_applications"
-    ADD CONSTRAINT "draft_applications_award_id_fkey" FOREIGN KEY ("award_id") REFERENCES "public"."awards"("award_id");
-
-
-
-ALTER TABLE ONLY "public"."draft_applications"
-    ADD CONSTRAINT "draft_applications_publication_id_fkey" FOREIGN KEY ("publication_id") REFERENCES "public"."publications"("publication_id");
-
-
-
-ALTER TABLE ONLY "public"."draft_applications"
-    ADD CONSTRAINT "draft_applications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
 
 
 
@@ -493,14 +473,6 @@ CREATE POLICY "Public profiles are viewable by everyone." ON "public"."users" FO
 
 
 
-CREATE POLICY "Users can delete own drafts" ON "public"."draft_applications" FOR DELETE USING (("user_id" = "auth"."uid"()));
-
-
-
-CREATE POLICY "Users can insert own drafts" ON "public"."draft_applications" FOR INSERT WITH CHECK (("user_id" = "auth"."uid"()));
-
-
-
 CREATE POLICY "Users can insert own profile" ON "public"."users" FOR INSERT WITH CHECK (("auth"."uid"() = "id"));
 
 
@@ -509,19 +481,8 @@ CREATE POLICY "Users can insert their own profile." ON "public"."users" FOR INSE
 
 
 
-CREATE POLICY "Users can update own drafts" ON "public"."draft_applications" FOR UPDATE USING (("user_id" = "auth"."uid"()));
-
-
-
 CREATE POLICY "Users can update own profile." ON "public"."users" FOR UPDATE USING ((( SELECT "auth"."uid"() AS "uid") = "id"));
 
-
-
-CREATE POLICY "Users can view own drafts" ON "public"."draft_applications" FOR SELECT USING (("user_id" = "auth"."uid"()));
-
-
-
-ALTER TABLE "public"."draft_applications" ENABLE ROW LEVEL SECURITY;
 
 
 
@@ -728,12 +689,6 @@ GRANT ALL ON TABLE "public"."departments" TO "service_role";
 GRANT ALL ON SEQUENCE "public"."departments_department_id_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."departments_department_id_seq" TO "authenticated";
 GRANT ALL ON SEQUENCE "public"."departments_department_id_seq" TO "service_role";
-
-
-
-GRANT ALL ON TABLE "public"."draft_applications" TO "anon";
-GRANT ALL ON TABLE "public"."draft_applications" TO "authenticated";
-GRANT ALL ON TABLE "public"."draft_applications" TO "service_role";
 
 
 
