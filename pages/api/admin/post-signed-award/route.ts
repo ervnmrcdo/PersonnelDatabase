@@ -41,7 +41,7 @@ export default async function ValidateAward(
 
 				const { data: fileData, error: downloadError } = await supabaseAdmin.storage
 					.from("drafts-pdf")
-					.download(`drafts/${admin_id}/${submission_id}/${fileName}`);
+					.download(`${admin_id}/${submission_id}/${fileName}`);
 
 				if (!downloadError && fileData) {
 					const fileBuffer = Buffer.from(await fileData.arrayBuffer());
@@ -74,7 +74,7 @@ export default async function ValidateAward(
 
 				const { data: fileData, error: downloadError } = await supabaseAdmin.storage
 					.from("drafts-docx")
-					.download(`drafts/${admin_id}/${submission_id}/${fileName}`);
+					.download(`${admin_id}/${submission_id}/${fileName}`);
 
 				if (!downloadError && fileData) {
 					const fileBuffer = Buffer.from(await fileData.arrayBuffer());

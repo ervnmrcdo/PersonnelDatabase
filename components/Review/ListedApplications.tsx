@@ -51,7 +51,7 @@ export default function ListedApplications({ onSelect }: Props) {
                 <p className="font-semibold text-lg text-white">{item.name}</p>
                 <p className="text-sm text-gray-300">{item.role}</p>
                 <p className="text-sm text-gray-300">{item.award}</p>
-                <p className="text-xs text-gray-400">{item.dateSubmitted}</p>
+                <p className="text-xs text-gray-400">{new Date(item.dateSubmitted).toLocaleString()}</p>
               </div>
               <ChevronRight className="text-gray-400" />
             </div>

@@ -396,7 +396,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
         <p className="font-bold text-lg text-white">{data.name}</p>
         <p className="text-sm text-gray-400">{data.role}</p>
         <p className="text-sm">{data.award}</p>
-        <p className="text-xs text-gray-400">{data.dateSubmitted}</p>
+        <p className="text-xs text-gray-400">{new Date(data.dateSubmitted).toLocaleString()}</p>
       </div>
 
       <div className="flex gap-3">

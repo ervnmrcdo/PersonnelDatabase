@@ -34,10 +34,10 @@ export default async function RetrieveAcceptedForms(
         award_title: r.awards?.title,
         logs: r.logs,
         attached_files: r.attached_files,
-        form41_url: r.form41_path,
-        form42_url: r.form42_path,
-        form43_url: r.form43_path,
-        form44_url: r.form44_path,
+        form41_path: r.form41_path,
+        form42_path: r.form42_path,
+        form43_path: r.form43_path,
+        form44_path: r.form44_path,
       }))
       : [];
 
