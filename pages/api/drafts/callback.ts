@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const fileExt = formType === "41" || formType === "44" ? "pdf" : "docx";
       const bucket = fileExt === "pdf" ? "drafts-pdf" : "drafts-docx";
 
-      const filePath = `drafts/${user_id}/${awardId}/${publicationId}/form${formType}.${fileExt}`;
+      const filePath = `${user_id}/${awardId}/${publicationId}/form${formType}.${fileExt}`;
 
       const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
         .from(bucket)

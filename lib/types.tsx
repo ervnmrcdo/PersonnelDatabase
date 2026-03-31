@@ -78,11 +78,14 @@ export interface AcceptedForm {
   first_name: string;
   last_name: string;
   submission_id: string;
-  pdfBufferData: string;
   date_submitted: string;
   award_title: string;
   logs: SubmissionLog[];
   isReturned: boolean;
+  form41_url?: string;
+  form42_url?: string;
+  form43_url?: string;
+  form44_url?: string;
 }
 
 export interface RejectedForm {

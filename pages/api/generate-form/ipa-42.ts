@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const supabase = createPagesServerClient(req, res);
     const supabaseAdmin = createServiceRoleClient();
 
-    const filePath = `drafts/${user_id}/${awardId}/${publicationId}/form42.docx`;
+    const filePath = `${user_id}/${awardId}/${publicationId}/form42.docx`;
 
     const { data: urlData } = await supabaseAdmin.storage
       .from('drafts-docx')

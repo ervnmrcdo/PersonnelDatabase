@@ -39,11 +39,6 @@ export default async function PendingAwards(
         const { data: signedUrlData, error: errorLog } = await supabase.storage
           .from('submissions-pdf')
           .createSignedUrl(r.form41_path, 3600); // 1 hour expiry
-
-        if (errorLog) {
-          console.error(errorLog)
-        }
-
         form41Url = signedUrlData?.signedUrl || null;
       }
 

@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const fileExt = form_type === "41" || form_type === "44" ? "pdf" : "docx";
       const bucket = fileExt === "pdf" ? "drafts-pdf" : "drafts-docx";
 
-      const filePath = `drafts/${admin_id}/${submission_id}/form${form_type}.${fileExt}`;
+      const filePath = `${admin_id}/${submission_id}/form${form_type}.${fileExt}`;
 
       const contentType = fileExt === "pdf"
         ? "application/pdf"

@@ -78,24 +78,10 @@ export default function ReviewInstance({ data, onBack }: Props) {
       const newLogs = [...data.logs]
       newLogs.push(verifiedLog)
 
-      const form41Url = pdfConfigs.form41?.config?.document?.url;
-      const form44Url = pdfConfigs.form44?.config?.document?.url;
-      const form42Url = docxConfigs.form42?.config?.document?.url;
-      const form43Url = docxConfigs.form43?.config?.document?.url;
-
-      if (!form41Url && !form42Url && !form43Url && !form44Url) {
-        alert('No documents to sign');
-        return;
-      }
-
       const payload = {
         admin_id: user?.id,
         submission_id: data.application_id,
-        newLogs,
-        form41Url: form41Url || null,
-        form42Url: form42Url || null,
-        form43Url: form43Url || null,
-        form44Url: form44Url || null
+        newLogs
       }
 
       const response = await fetch('/api/admin/post-signed-award/route', {
@@ -444,7 +430,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
                     id="pdfEditor-form41"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(pdfConfigs.form41.config, pdfConfigs.form41.token)}
-                    events_onDocumentReady={onForm41Ready}
                   />
                 </div>
               ) : (
@@ -477,7 +462,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
                     id="pdfEditor-form42"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(docxConfigs.form42.config, docxConfigs.form42.token)}
-                    events_onDocumentReady={onForm42Ready}
                   />
                 </div>
               ) : (
@@ -510,7 +494,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
                     id="pdfEditor-form43"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(docxConfigs.form43.config, docxConfigs.form43.token)}
-                    events_onDocumentReady={onForm43Ready}
                   />
                 </div>
               ) : (
@@ -544,7 +527,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
                     id="pdfEditor-form44"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(pdfConfigs.form44.config, pdfConfigs.form44.token)}
-                    events_onDocumentReady={onForm44Ready}
                   />
                 </div>
               ) : (

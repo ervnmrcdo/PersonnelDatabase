@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     for (const formType of formTypes) {
       const fileExt = formType === 41 || formType === 44 ? "pdf" : "docx";
       const bucket = fileExt === "pdf" ? "drafts-pdf" : "drafts-docx";
-      const filePath = `drafts/${userId}/${awardId}/${publicationId}/form${formType}.${fileExt}`;
+      const filePath = `${userId}/${awardId}/${publicationId}/form${formType}.${fileExt}`;
       draftFilePaths.push(filePath);
     }
 

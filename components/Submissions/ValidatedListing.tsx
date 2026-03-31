@@ -28,6 +28,7 @@ export default function AcceptedListing({ onSelect }: Props) {
             method: 'POST',
             body: JSON.stringify(payload)
         }).then((res) => res.json()).then((result) => {
+            console.log(result)
             setAcceptedData(result.map((item: any) => ({
                 submission_id: item.submission_id,
                 // NEW: Use pdfUrl from Supabase Storage instead of attached_files
@@ -36,7 +37,11 @@ export default function AcceptedListing({ onSelect }: Props) {
                 last_name: item.last_name,
                 date_submitted: item.date_submitted,
                 award_title: item.title,
-                logs: item.logs
+                logs: item.logs,
+                form41_url: item.form41_url,
+                form42_url: item.form42_url,
+                form43_url: item.form43_url,
+                form44_url: item.form44_url,
             })))
         })
     }, [])
