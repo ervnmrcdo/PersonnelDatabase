@@ -113,6 +113,7 @@ export default function Publications() {
 
     if (pubError || !pubData || pubData.length === 0) {
       setLoading(false);
+      console.log(pubError)
       alert('Failed to add publication.');
       return;
     }
@@ -233,22 +234,22 @@ export default function Publications() {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-white mb-4">My Publications</h2>
             <div className="flex gap-2">
-            <button
-              onClick={() => {
-                resetForm()
-                setMode("add");
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-              Add Publication
-            </button>
+              <button
+                onClick={() => {
+                  resetForm()
+                  setMode("add");
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                Add Publication
+              </button>
 
-            <button
-              onClick={() => {
-                console.log("refreshed") // to add crawler functionality here
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-              Reload
-            </button>
+              <button
+                onClick={() => {
+                  console.log("refreshed") // to add crawler functionality here
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                Reload
+              </button>
             </div>
           </div>
 
@@ -320,10 +321,9 @@ export default function Publications() {
                     setJournalName(pub.journal_name || '')
                   }}
                   className={`p-4 rounded-lg border cursor-pointer transition
-                    ${
-                      highlightedPubId === pub.publication_id
-                        ? "bg-green-900 border-green-500"
-                        : "bg-[#23263a] border-gray-600 hover:border-blue-500"
+                    ${highlightedPubId === pub.publication_id
+                      ? "bg-green-900 border-green-500"
+                      : "bg-[#23263a] border-gray-600 hover:border-blue-500"
                     }
                   `}
                 >
@@ -375,7 +375,7 @@ export default function Publications() {
                     >
                       Update
                     </button>
-                    
+
                     <button
                       onClick={deletePublication}
                       className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"

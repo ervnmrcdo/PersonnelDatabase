@@ -18,6 +18,7 @@ export default function SignedFormInstance({ data, onBack }: Props) {
     const [numPages, setNumPages] = useState<number>();
 
     async function download() {
+        if (!data.pdfBufferData) return;
         const a = document.createElement("a");
         a.href = data.pdfBufferData;
         a.download = "signed-ipc-award-form.pdf";
@@ -26,7 +27,7 @@ export default function SignedFormInstance({ data, onBack }: Props) {
 
     useEffect(() => {
         if (data) {
-            setPdfUrl(data.pdfBufferData);
+            setPdfUrl(data.pdfBufferData ?? null);
         }
     }, [data])
 

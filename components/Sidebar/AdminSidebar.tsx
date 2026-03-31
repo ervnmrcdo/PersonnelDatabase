@@ -85,7 +85,7 @@ const AdminSidebar: React.FC = () => {
             <span>To Review</span>
           </li>
           <li
-            onClick={() => setActiveComponent("Signed Forms")}
+            onClick={() => router.push("/admin/signed-forms")}
             className={buttonStyle("Signed Forms")}
           >
             <span>Signed Forms</span>

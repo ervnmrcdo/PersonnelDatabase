@@ -87,6 +87,7 @@ export interface AcceptedForm {
   form42_url?: string;
   form43_url?: string;
   form44_url?: string;
+  pdfBufferData?: string;
 }
 
 export interface RejectedForm {
