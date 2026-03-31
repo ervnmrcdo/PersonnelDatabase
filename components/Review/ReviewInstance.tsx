@@ -20,9 +20,11 @@ interface DocumentConfig {
   };
   documentType: string;
   editorConfig: {
+    callbackUrl?: string;
     mode: string;
     customization: {
       forcesave: boolean;
+      autosave: boolean;
     };
   };
 }
@@ -44,6 +46,11 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const [loadingForm43, setLoadingForm43] = useState<boolean>(false);
   const [loadingForm44, setLoadingForm44] = useState<boolean>(false);
 
+  const [form41Key, setForm41Key] = useState<string>("");
+  const [form42Key, setForm42Key] = useState<string>("");
+  const [form43Key, setForm43Key] = useState<string>("");
+  const [form44Key, setForm44Key] = useState<string>("");
+
   const [errorRemarks, setErrorRemarks] = useState<string>("");
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
   const [showSignConfirmDialog, setShowSignConfirmDialog] = useState<boolean>(false);
@@ -52,7 +59,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
   const [expandedForm42, setExpandedForm42] = useState<boolean>(false);
   const [expandedForm43, setExpandedForm43] = useState<boolean>(false);
   const [expandedForm44, setExpandedForm44] = useState<boolean>(false);
-
 
   const detectedIp = useMemo(() => typeof window !== 'undefined' ? window.location.hostname : '', [])
 
@@ -72,36 +78,25 @@ export default function ReviewInstance({ data, onBack }: Props) {
       const newLogs = [...data.logs]
       newLogs.push(verifiedLog)
 
-      let pdfBase64 = "";
+      const form41Url = pdfConfigs.form41?.config?.document?.url;
+      const form44Url = pdfConfigs.form44?.config?.document?.url;
+      const form42Url = docxConfigs.form42?.config?.document?.url;
+      const form43Url = docxConfigs.form43?.config?.document?.url;
 
-      if (data.form41Url) {
-        const response = await fetch(data.form41Url);
-        const blob = await response.blob();
-        const arrayBuffer = await blob.arrayBuffer();
-        const uint8Array = new Uint8Array(arrayBuffer);
-        pdfBase64 = Buffer.from(uint8Array).toString('base64');
+      if (!form41Url && !form42Url && !form43Url && !form44Url) {
+        alert('No documents to sign');
+        return;
       }
-
-      const signPDF = await fetch('/api/admin/sign-form/route', {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          pdfBase64: pdfBase64,
-          admin_id: user?.id,
-        })
-      });
-
-      const { pdfInBytes } = await signPDF.json()
-
-      const foo = Buffer.from(pdfInBytes, 'base64')
 
       const payload = {
-        pdfBytes: foo.toString('base64'),
         admin_id: user?.id,
         submission_id: data.application_id,
-        newLogs
+        newLogs,
+        form41Url: form41Url || null,
+        form42Url: form42Url || null,
+        form43Url: form43Url || null,
+        form44Url: form44Url || null
       }
-
 
       const response = await fetch('/api/admin/post-signed-award/route', {
         method: 'POST',
@@ -112,7 +107,8 @@ export default function ReviewInstance({ data, onBack }: Props) {
         alert('Form Signed and Returned')
         setSelected(null)
       } else {
-        alert('Failed to return signed form')
+        const error = await response.json();
+        alert('Failed to return signed form: ' + (error.error || 'Unknown error'))
       }
     } catch (err) {
       alert(err)
@@ -163,23 +159,81 @@ export default function ReviewInstance({ data, onBack }: Props) {
       .sign(secret);
   }, []);
 
+  const onForm41Ready = useCallback(async () => {
+    if (!form41Key) return;
+    try {
+      await fetch("/api/drafts/forcesave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: form41Key }),
+      });
+    } catch (err) {
+      console.error('Error calling force-save for form 4.1');
+    }
+  }, [form41Key]);
+
+  const onForm42Ready = useCallback(async () => {
+    if (!form42Key) return;
+    try {
+      await fetch("/api/drafts/forcesave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: form42Key }),
+      });
+    } catch (err) {
+      console.error('Error calling force-save for form 4.2');
+    }
+  }, [form42Key]);
+
+  const onForm43Ready = useCallback(async () => {
+    if (!form43Key) return;
+    try {
+      await fetch("/api/drafts/forcesave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: form43Key }),
+      });
+    } catch (err) {
+      console.error('Error calling force-save for form 4.3');
+    }
+  }, [form43Key]);
+
+  const onForm44Ready = useCallback(async () => {
+    if (!form44Key) return;
+    try {
+      await fetch("/api/drafts/forcesave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: form44Key }),
+      });
+    } catch (err) {
+      console.error('Error calling force-save for form 4.4');
+    }
+  }, [form44Key]);
+
   const generateForm41Config = useCallback(async () => {
-    if (!data.form41Url || !user?.id) return;
+    if (!user?.id) return;
     setLoadingForm41(true);
     try {
       const documentKey = crypto.randomUUID();
+      setForm41Key(documentKey);
+      const documentUrl = `http://host.docker.internal:3000/api/admin/get-draft-form/route?submission_id=${data.application_id}&form_type=41&admin_id=${user.id}`;
+      const callbackUrl = `http://host.docker.internal:3000/api/admin/drafts/callback?submission_id=${data.application_id}&form_type=41&admin_id=${user.id}`;
+
       const config: DocumentConfig = {
         document: {
           fileType: "pdf",
           key: documentKey,
           title: "4.1-signed",
-          url: `http://host.docker.internal:3000/api/admin/preview-signed-form/route?pdfUrl=${data.form41Url}&admin_id=${user.id}`,
+          url: documentUrl,
         },
         documentType: "pdf",
         editorConfig: {
-          mode: "view",
+          mode: "edit",
+          callbackUrl: callbackUrl,
           customization: {
-            forcesave: false,
+            forcesave: true,
+            autosave: true,
           },
         },
       };
@@ -190,25 +244,31 @@ export default function ReviewInstance({ data, onBack }: Props) {
     } finally {
       setLoadingForm41(false);
     }
-  }, [data.form41Url, user?.id, generateToken]);
+  }, [data.application_id, user?.id, generateToken, form41Key]);
 
   const generateForm44Config = useCallback(async () => {
-    if (!data.form44Url || !user?.id) return;
+    if (!user?.id) return;
     setLoadingForm44(true);
     try {
       const documentKey = crypto.randomUUID();
+      setForm44Key(documentKey);
+      const documentUrl = `http://host.docker.internal:3000/api/admin/get-draft-form/route?submission_id=${data.application_id}&form_type=44&admin_id=${user.id}`;
+      const callbackUrl = `http://host.docker.internal:3000/api/admin/drafts/callback?submission_id=${data.application_id}&form_type=44&admin_id=${user.id}`;
+
       const config: DocumentConfig = {
         document: {
           fileType: "pdf",
           key: documentKey,
           title: "4.4-signed",
-          url: `http://host.docker.internal:3000/api/admin/preview-signed-form/route?pdfUrl=${data.form44Url}&admin_id=${user.id}`,
+          url: documentUrl,
         },
         documentType: "pdf",
         editorConfig: {
-          mode: "view",
+          callbackUrl: callbackUrl,
+          mode: "edit",
           customization: {
-            forcesave: false,
+            forcesave: true,
+            autosave: true,
           },
         },
       };
@@ -219,25 +279,31 @@ export default function ReviewInstance({ data, onBack }: Props) {
     } finally {
       setLoadingForm44(false);
     }
-  }, [data.form44Url, user?.id, generateToken]);
+  }, [data.application_id, user?.id, generateToken, form44Key]);
 
   const generateForm42Config = useCallback(async () => {
-    if (!data.form42Url) return;
+    if (!user?.id) return;
     setLoadingForm42(true);
     try {
-      const formUrl = `http://host.docker.internal:3000/api/admin/get-form-file/route?formUrl=${encodeURIComponent(data.form42Url)}`;
+      const documentKey = crypto.randomUUID();
+      setForm42Key(documentKey);
+      const documentUrl = `http://host.docker.internal:3000/api/admin/get-draft-form/route?submission_id=${data.application_id}&form_type=42&admin_id=${user.id}`;
+      const callbackUrl = `http://host.docker.internal:3000/api/admin/drafts/callback?submission_id=${data.application_id}&form_type=42&admin_id=${user.id}`;
+
       const config: DocumentConfig = {
         document: {
           fileType: "docx",
-          key: crypto.randomUUID(),
+          key: documentKey,
           title: "4.2",
-          url: formUrl,
+          url: documentUrl,
         },
         documentType: "word",
         editorConfig: {
-          mode: "view",
+          callbackUrl: callbackUrl,
+          mode: "edit",
           customization: {
-            forcesave: false,
+            forcesave: true,
+            autosave: true,
           },
         },
       };
@@ -248,25 +314,31 @@ export default function ReviewInstance({ data, onBack }: Props) {
     } finally {
       setLoadingForm42(false);
     }
-  }, [data.form42Url, generateToken]);
+  }, [data.application_id, user?.id, generateToken, form42Key]);
 
   const generateForm43Config = useCallback(async () => {
-    if (!data.form43Url) return;
+    if (!user?.id) return;
     setLoadingForm43(true);
     try {
-      const formUrl = `http://host.docker.internal:3000/api/admin/get-form-file/route?formUrl=${encodeURIComponent(data.form43Url)}`;
+      const documentKey = crypto.randomUUID();
+      setForm43Key(documentKey);
+      const documentUrl = `http://host.docker.internal:3000/api/admin/get-draft-form/route?submission_id=${data.application_id}&form_type=43&admin_id=${user.id}`;
+      const callbackUrl = `http://host.docker.internal:3000/api/admin/drafts/callback?submission_id=${data.application_id}&form_type=43&admin_id=${user.id}`;
+
       const config: DocumentConfig = {
         document: {
           fileType: "docx",
-          key: crypto.randomUUID(),
+          key: documentKey,
           title: "4.3",
-          url: formUrl,
+          url: documentUrl,
         },
         documentType: "word",
         editorConfig: {
-          mode: "view",
+          callbackUrl: callbackUrl,
+          mode: "edit",
           customization: {
-            forcesave: false,
+            forcesave: true,
+            autosave: true,
           },
         },
       };
@@ -277,7 +349,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
     } finally {
       setLoadingForm43(false);
     }
-  }, [data.form43Url, generateToken]);
+  }, [data.application_id, user?.id, generateToken, form43Key]);
 
   const handleToggleForm41 = async () => {
     if (expandedForm41) {
@@ -350,7 +422,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
         >Return with Errors</button>
       </div>
 
-      {/* Expandable PDF Section */}
       {hasForm41 && (
         <div className="border rounded-lg overflow-hidden">
           <button
@@ -365,7 +436,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
             <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
               {loadingForm41 ? (
                 <div className="flex items-center justify-center h-64">
-                  <div className="text-gray-400">Generating preview with signature...</div>
+                  <div className="text-gray-400">Loading form...</div>
                 </div>
               ) : pdfConfigs.form41?.config && pdfConfigs.form41?.token ? (
                 <div style={{ height: '100%' }}>
@@ -373,6 +444,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
                     id="pdfEditor-form41"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(pdfConfigs.form41.config, pdfConfigs.form41.token)}
+                    events_onDocumentReady={onForm41Ready}
                   />
                 </div>
               ) : (
@@ -397,7 +469,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
             <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
               {loadingForm42 ? (
                 <div className="flex items-center justify-center h-64">
-                  <div className="text-gray-400">Generating preview with signature...</div>
+                  <div className="text-gray-400">Loading form...</div>
                 </div>
               ) : docxConfigs.form42?.config && docxConfigs.form42?.token ? (
                 <div style={{ height: '100%' }}>
@@ -405,10 +477,11 @@ export default function ReviewInstance({ data, onBack }: Props) {
                     id="pdfEditor-form42"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(docxConfigs.form42.config, docxConfigs.form42.token)}
+                    events_onDocumentReady={onForm42Ready}
                   />
                 </div>
               ) : (
-                <p className="text-gray-400">No PDF attached.</p>
+                <p className="text-gray-400">No document attached.</p>
               )}
             </div>
           )}
@@ -429,7 +502,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
             <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
               {loadingForm43 ? (
                 <div className="flex items-center justify-center h-64">
-                  <div className="text-gray-400">Generating preview with signature...</div>
+                  <div className="text-gray-400">Loading form...</div>
                 </div>
               ) : docxConfigs.form43?.config && docxConfigs.form43?.token ? (
                 <div style={{ height: '100%' }}>
@@ -437,10 +510,11 @@ export default function ReviewInstance({ data, onBack }: Props) {
                     id="pdfEditor-form43"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(docxConfigs.form43.config, docxConfigs.form43.token)}
+                    events_onDocumentReady={onForm43Ready}
                   />
                 </div>
               ) : (
-                <p className="text-gray-400">No PDF attached.</p>
+                <p className="text-gray-400">No document attached.</p>
               )}
             </div>
           )}
@@ -454,7 +528,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
             onClick={handleToggleForm44}
             className="w-full px-4 py-3 bg-[#252836] hover:bg-gray-700 flex justify-between items-center text-white"
           >
-            <span>Form 4.4 - IPA Form (DOCX)</span>
+            <span>Form 4.4 - IPA Form (PDF)</span>
             {expandedForm44 ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
           </button>
 
@@ -462,7 +536,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
             <div className="border rounded-lg p-4 h-[calc(100vh-40px)] bg-[#1a1e2b]">
               {loadingForm44 ? (
                 <div className="flex items-center justify-center h-64">
-                  <div className="text-gray-400">Generating preview with signature...</div>
+                  <div className="text-gray-400">Loading form...</div>
                 </div>
               ) : pdfConfigs.form44?.config && pdfConfigs.form44?.token ? (
                 <div style={{ height: '100%' }}>
@@ -470,6 +544,7 @@ export default function ReviewInstance({ data, onBack }: Props) {
                     id="pdfEditor-form44"
                     documentServerUrl={`http://${detectedIp}:8080/`}
                     config={getEditorConfig(pdfConfigs.form44.config, pdfConfigs.form44.token)}
+                    events_onDocumentReady={onForm44Ready}
                   />
                 </div>
               ) : (
@@ -481,7 +556,6 @@ export default function ReviewInstance({ data, onBack }: Props) {
       )}
 
 
-      {/* Error Remarks Dialog */}
       {
         showErrorDialog && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

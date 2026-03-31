@@ -1,4 +1,5 @@
 import { createPagesServerClient } from "@/lib/supabase/pager-server"
+import { createServiceRoleClient } from "@/lib/supabase/service-role"
 import { NextApiRequest, NextApiResponse } from "next"
 
 export default async function ReturnAward(
@@ -11,8 +12,9 @@ export default async function ReturnAward(
 
 	try {
 		const supabase = createPagesServerClient(req, res);
+		const supabaseAdmin = createServiceRoleClient();
 
-		const { data, error } = await supabase
+		const { data: updateData, error } = await supabase
 			.from('submissions')
 			.update({
 				status: 'RETURNED',
@@ -29,7 +31,19 @@ export default async function ReturnAward(
 			return res.status(400).json({ message: error })
 		}
 
-		return res.status(200).json(data);
+		const pdfFiles = [
+			`drafts/${admin_id}/${submission_id}/form41.pdf`,
+			`drafts/${admin_id}/${submission_id}/form44.pdf`
+		];
+		const docxFiles = [
+			`drafts/${admin_id}/${submission_id}/form42.docx`,
+			`drafts/${admin_id}/${submission_id}/form43.docx`
+		];
+
+		await supabaseAdmin.storage.from("drafts-pdf").remove(pdfFiles);
+		await supabaseAdmin.storage.from("drafts-docx").remove(docxFiles);
+
+		return res.status(200).json(updateData);
 
 
 	} catch (err) {
