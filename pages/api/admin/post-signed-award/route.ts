@@ -10,7 +10,6 @@ export default async function ValidateAward(
 	const { admin_id, submission_id, newLogs } = data
 
 	try {
-		const supabase = createPagesServerClient(req, res);
 		const supabaseAdmin = createServiceRoleClient();
 
 		const updateData: Record<string, any> = {
@@ -30,7 +29,7 @@ export default async function ValidateAward(
 
 		const { data: pdfList, error: pdfListError } = await supabaseAdmin.storage
 			.from("drafts-pdf")
-			.list(`drafts/${admin_id}/${submission_id}`, {
+			.list(`${admin_id}/${submission_id}`, {
 				limit: 10
 			});
 
@@ -63,7 +62,7 @@ export default async function ValidateAward(
 
 		const { data: docxList, error: docxListError } = await supabaseAdmin.storage
 			.from("drafts-docx")
-			.list(`drafts/${admin_id}/${submission_id}`, {
+			.list(`${admin_id}/${submission_id}`, {
 				limit: 10
 			});
 
@@ -94,7 +93,7 @@ export default async function ValidateAward(
 			}
 		}
 
-		const { data: updateResult, error: updateError } = await supabase
+		const { data: updateResult, error: updateError } = await supabaseAdmin
 			.from('submissions')
 			.update(updateData)
 			.eq('submission_id', submission_id)
