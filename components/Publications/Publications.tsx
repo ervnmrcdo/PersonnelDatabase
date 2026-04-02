@@ -231,7 +231,7 @@ export default function Publications() {
 
       if (!response.ok) {
         console.error('Crawler execution failed:', result);
-        alert('Failed to run crawler. Check browser console for details.');
+        alert(result.message || 'Failed to fetch publications automatically.');
         return;
       }
 
@@ -240,7 +240,12 @@ export default function Publications() {
         console.warn('Crawler stderr:\n', result.stderr);
       }
 
-      alert('Crawler executed. Check browser console for output.');
+      await fetchPublications();
+
+      const summary = result.summary || {};
+      alert(
+        `Automatic fetch complete. Fetched: ${summary.fetchedPublications || 0}, Added: ${summary.insertedPublications || 0}, Linked to profile: ${summary.linkedPublications || 0}.`
+      );
     } catch (error) {
       console.error('Failed to call crawler endpoint:', error);
       alert('Error running crawler. Check browser console for details.');

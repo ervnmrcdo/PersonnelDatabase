@@ -119,6 +119,9 @@ function loadConfig() {
 
 async function main() {
   const config = loadConfig();
+  const args = process.argv.slice(2);
+  const jsonOutput = args.includes("--json");
+  const authorId = args.find((arg) => !arg.startsWith("--"));
 
   const apikey = config.apikey;
   const insttoken = config.insttoken;
@@ -127,7 +130,9 @@ async function main() {
     throw new Error("Missing 'apikey' in config.json");
   }
 
-  const authorId = process.argv[2] ?? "55615806100";
+  if (!authorId) {
+    throw new Error("Missing author ID. Usage: node crawler.js <authorId> [--json]");
+  }
 
   const url = "https://api.elsevier.com/content/search/scopus";
   const headers = {
@@ -143,8 +148,11 @@ async function main() {
   let allEids = [];
   let start = 0;
   let totalResults = null;
+  const failedEids = [];
 
-  console.log(`Fetching all publications for author ID: ${authorId}`);
+  if (!jsonOutput) {
+    console.log(`Fetching all publications for author ID: ${authorId}`);
+  }
 
   while (totalResults === null || start < totalResults) {
     const params = new URLSearchParams({
@@ -170,7 +178,9 @@ async function main() {
 
     if (totalResults === null) {
       totalResults = parseInt(searchResponse?.["search-results"]?.["opensearch:totalResults"] ?? "0", 10);
-      console.log(`Total results found: ${totalResults}`);
+      if (!jsonOutput) {
+        console.log(`Total results found: ${totalResults}`);
+      }
     }
 
     if (!pageEids.length) {
@@ -178,13 +188,19 @@ async function main() {
     }
 
     allEids = allEids.concat(pageEids);
-    console.log(`Fetched ${pageEids.length} EIDs (total so far: ${allEids.length}/${totalResults})`);
+    if (!jsonOutput) {
+      console.log(`Fetched ${pageEids.length} EIDs (total so far: ${allEids.length}/${totalResults})`);
+    }
 
     start += pageSize;
   }
 
   if (!allEids.length) {
-    console.log("No EIDs found.");
+    if (!jsonOutput) {
+      console.log("No EIDs found.");
+    } else {
+      console.log(JSON.stringify({ authorId, totalResults: 0, publications: [], failedEids: [] }));
+    }
     return;
   }
 
@@ -196,8 +212,24 @@ async function main() {
       const limited = extractPublicationFields(pubData);
       publications.push(limited);
     } catch (error) {
-      console.error(`Failed for ${eid}: ${error.message}`);
+      failedEids.push(eid);
+      if (!jsonOutput) {
+        console.error(`Failed for ${eid}: ${error.message}`);
+      }
     }
+  }
+
+  if (jsonOutput) {
+    console.log(
+      JSON.stringify({
+        authorId,
+        totalResults: totalResults ?? publications.length,
+        fetchedEids: allEids.length,
+        publications,
+        failedEids,
+      })
+    );
+    return;
   }
 
   publications.forEach((pub, index) => {
