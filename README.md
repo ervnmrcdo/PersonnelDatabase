@@ -94,6 +94,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
 
 Replace the values with your Supabase project credentials:
+
 - `NEXT_PUBLIC_SUPABASE_URL` - Found in Project Settings > API
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Found in Project Settings > API (anon key)
 - `SUPABASE_SERVICE_ROLE_KEY` - Found in Project Settings > API (service_role key)
@@ -103,6 +104,7 @@ Replace the values with your Supabase project credentials:
 Run the SQL commands from `schema.sql` in your Supabase SQL Editor. The schema creates:
 
 **Tables:**
+
 - `users` - User profiles (linked to Supabase Auth)
 - `awards` - Available awards (IPA Award - Journal, IPA Award - Book)
 - `publications` - Publication records
@@ -114,18 +116,21 @@ Run the SQL commands from `schema.sql` in your Supabase SQL Editor. The schema c
 - `departments` - Department records
 
 **Storage Buckets:**
+
 - `signatures` - User signature images
 - `pdfs` - PDF documents
 - `award-documents` - Award-related documents
 - `submissions-documents` - Submission PDFs
 
 **Row Level Security (RLS) Policies:**
+
 - Public read access to user profiles
 - Users can insert/update their own profile
 
 #### d. Optional: Seed Data
 
 Run the SQL commands from `supabase/seed.sql` in the Supabase SQL Editor to add test data:
+
 - Sample users (testfaculty1@gmail.com, testadmin@gmail.com, test3@gmail.com)
 - Sample awards
 - Sample publications
@@ -138,7 +143,7 @@ OnlyOffice is used for editing Word documents within the application.
 #### Using Docker Compose
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This starts the OnlyOffice document server on port 8080.
@@ -146,6 +151,7 @@ This starts the OnlyOffice document server on port 8080.
 #### Configuration
 
 The `docker-compose.yaml` includes:
+
 - JWT authentication enabled (secret: `my_super_secret_key`)
 - Macro support enabled
 - Port mapping: `8080:80`
@@ -153,6 +159,7 @@ The `docker-compose.yaml` includes:
 #### Environment Variables for OnlyOffice
 
 If needed, add these to your environment:
+
 ```bash
 ONLYOFFICE_JWT_SECRET=my_super_secret_key
 NEXT_PUBLIC_ONLYOFFICE_URL=http://localhost:8080
@@ -169,17 +176,20 @@ The application will be available at `http://localhost:3000`.
 ## User Roles
 
 ### Teaching Staff
+
 - View and edit profile
 - Add publications
 - Submit publications for awards
 - View submission status
 
 ### Non-Teaching Staff
+
 - View and edit profile
 - Submit publications for awards
 - View submission status
 
 ### Admin
+
 - View all submissions
 - Review and validate submissions
 - Return submissions with remarks
@@ -214,6 +224,7 @@ npx supabase db push
 ```
 
 Update your `.env.local` for local development:
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-local-anon-key>
@@ -224,44 +235,48 @@ DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
 ## Database Schema Overview
 
 ### Users Table
-| Column | Type | Description |
-|--------|------|-------------|
-| id | uuid | Primary key (linked to auth.users) |
-| role | text | 'teaching', 'nonteaching', or 'admin' |
-| email | text | User email |
-| first_name | text | First name |
-| middle_name | text | Middle name |
-| last_name | text | Last name |
-| university | varchar | University |
-| college | varchar | College |
-| department | varchar | Department |
-| position | varchar | Position |
-| contact_number | varchar | Contact number |
-| signature_path | text | Path to signature image |
+
+| Column         | Type    | Description                           |
+| -------------- | ------- | ------------------------------------- |
+| id             | uuid    | Primary key (linked to auth.users)    |
+| role           | text    | 'teaching', 'nonteaching', or 'admin' |
+| email          | text    | User email                            |
+| first_name     | text    | First name                            |
+| middle_name    | text    | Middle name                           |
+| last_name      | text    | Last name                             |
+| university     | varchar | University                            |
+| college        | varchar | College                               |
+| department     | varchar | Department                            |
+| position       | varchar | Position                              |
+| contact_number | varchar | Contact number                        |
+| signature_path | text    | Path to signature image               |
 
 ### Awards Table
-| Column | Type | Description |
-|--------|------|-------------|
-| award_id | integer | Primary key |
-| title | varchar | Award title |
-| description | text | Award description |
+
+| Column      | Type    | Description       |
+| ----------- | ------- | ----------------- |
+| award_id    | integer | Primary key       |
+| title       | varchar | Award title       |
+| description | text    | Award description |
 
 ### Submissions Table
-| Column | Type | Description |
-|--------|------|-------------|
-| submission_id | integer | Primary key |
-| submitter_id | uuid | FK to users |
-| award_id | integer | FK to awards |
-| publication_id | integer | FK to publications |
-| status | varchar | 'PENDING', 'VALIDATED', 'RETURNED' |
-| reviewed_by_admin_id | uuid | FK to users (admin who reviewed) |
-| pdf_json_data | jsonb | Form data |
-| logs | jsonb | Submission history |
-| form41_path | varchar | Path to form 4.1 |
-| form42_path | varchar | Path to form 4.2 |
-| form43_path | varchar | Path to form 4.3 |
-| form44_path | varchar | Path to form 4.4 |
+
+| Column               | Type    | Description                        |
+| -------------------- | ------- | ---------------------------------- |
+| submission_id        | integer | Primary key                        |
+| submitter_id         | uuid    | FK to users                        |
+| award_id             | integer | FK to awards                       |
+| publication_id       | integer | FK to publications                 |
+| status               | varchar | 'PENDING', 'VALIDATED', 'RETURNED' |
+| reviewed_by_admin_id | uuid    | FK to users (admin who reviewed)   |
+| pdf_json_data        | jsonb   | Form data                          |
+| logs                 | jsonb   | Submission history                 |
+| form41_path          | varchar | Path to form 4.1                   |
+| form42_path          | varchar | Path to form 4.2                   |
+| form43_path          | varchar | Path to form 4.3                   |
+| form44_path          | varchar | Path to form 4.4                   |
 
 ## License
 
 ISC
+

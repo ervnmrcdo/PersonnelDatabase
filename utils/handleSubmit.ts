@@ -10,10 +10,10 @@ interface MultiFormSubmitData {
 }
 
 export default async function handleSubmit(
-  submitter_id: string, 
-  award_id: string, 
-  publication_id: string, 
-  data: MultiFormSubmitData, 
+  submitter_id: string,
+  award_id: string,
+  publication_id: string,
+  data: MultiFormSubmitData,
   actor_name: string
 ) {
   try {
@@ -50,7 +50,6 @@ export default async function handleSubmit(
     if (temp.ok) {
       alert('Form Submitted')
     } else {
-      console.log(await temp.json())
       alert('Failed to submit form.')
     }
 

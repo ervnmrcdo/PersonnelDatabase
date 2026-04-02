@@ -27,7 +27,6 @@ interface DocumentConfig {
 }
 
 export default function AcceptedFormInstance({ data, onBack }: Props) {
-    console.log(data)
     const [docxConfigs, setDocxConfigs] = useState<{
         form42?: { config: DocumentConfig; token: string };
         form43?: { config: DocumentConfig; token: string };

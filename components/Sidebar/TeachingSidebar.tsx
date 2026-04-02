@@ -6,8 +6,8 @@ type TeachingPage =
   | "Home"
   | "Profile"
   | "Publications"
-  | "Awards"
-  | "Documents";
+  | "Award Application"
+  | "Submissions";
 
 const TeachingSidebar: React.FC = () => {
   const router = useRouter();
@@ -18,8 +18,8 @@ const TeachingSidebar: React.FC = () => {
     if (path === "home") return "Home";
     if (path === "profile") return "Profile";
     if (path === "publications") return "Publications";
-    if (path === "awards") return "Awards";
-    if (path === "documents") return "Documents";
+    if (path === "awards") return "Award Application";
+    if (path === "submissions") return "Submissions";
     return "Home";
   };
 
@@ -71,15 +71,15 @@ const TeachingSidebar: React.FC = () => {
           </li>
           <li
             onClick={() => router.push("/teaching/awards")}
-            className={buttonStyle("Awards")}
+            className={buttonStyle("Award Application")}
           >
-            <span>Awards</span>
+            <span>Award Application</span>
           </li>
           <li
-            onClick={() => router.push("/teaching/documents")}
-            className={buttonStyle("Documents")}
+            onClick={() => router.push("/teaching/submissions")}
+            className={buttonStyle("Submissions")}
           >
-            <span>Documents</span>
+            <span>Submissions</span>
           </li>
         </ul>
       </div>

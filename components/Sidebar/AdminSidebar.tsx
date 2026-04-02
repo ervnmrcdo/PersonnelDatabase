@@ -5,14 +5,14 @@ import "../../app/globals.css";
 type Page =
   | "Home"
   | "Profile"
-  | "Account Settings"
   | "To Review"
   | "Signed Forms"
   | "Teaching"
   | "NonTeaching"
-  | "Forms"
+  | "Awards"
   | "Crawler"
-  | "Database";
+  | "Database"
+  | "Publication Types";
 
 const AdminSidebar: React.FC = () => {
   const router = useRouter();
@@ -22,12 +22,12 @@ const AdminSidebar: React.FC = () => {
     const path = pathname?.split("/").pop() || "home";
     if (path === "home") return "Home";
     if (path === "profile") return "Profile";
-    if (path === "account-settings") return "Account Settings";
     if (path === "to-review") return "To Review";
     if (path === "teaching") return "Teaching";
     if (path === "nonteaching") return "NonTeaching";
-    if (path === "forms") return "Forms";
+    if (path === "awards") return "Awards";
     if (path === "crawler") return "Crawler";
+    if (path === "publication-types") return "Publication Types";
     if (path === "database") return "Database";
     return "Home";
   };
@@ -73,12 +73,6 @@ const AdminSidebar: React.FC = () => {
             <span>Profile</span>
           </li>
           <li
-            onClick={() => router.push("/admin/account-settings")}
-            className={buttonStyle("Account Settings")}
-          >
-            <span>Account Settings</span>
-          </li>
-          <li
             onClick={() => router.push("/admin/to-review")}
             className={buttonStyle("To Review")}
           >
@@ -113,11 +107,18 @@ const AdminSidebar: React.FC = () => {
         <h2 className="text-xs uppercase text-gray-500 mb-2">Settings</h2>
         <ul className="space-y-1">
           <li
-            onClick={() => router.push("/admin/forms")}
-            className={buttonStyle("Forms")}
+            onClick={() => router.push("/admin/awards")}
+            className={buttonStyle("Awards")}
           >
-            <span>Forms</span>
+            <span>Awards</span>
           </li>
+          <li
+            onClick={() => router.push("/admin/settings/publication-types")}
+            className={buttonStyle("Publication Types")}
+          >
+            <span>Publication Types</span>
+          </li>
+
           <li
             onClick={() => router.push("/admin/crawler")}
             className={buttonStyle("Crawler")}

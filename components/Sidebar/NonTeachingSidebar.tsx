@@ -6,9 +6,8 @@ type NonTeachingPage =
   | "Home"
   | "Profile"
   | "Publications"
-  | "Awards"
-  | "Submissions"
-  | "Documents";
+  | "Award Application"
+  | "Submissions";
 
 const NonTeachingSidebar: React.FC = () => {
   const router = useRouter();
@@ -19,9 +18,8 @@ const NonTeachingSidebar: React.FC = () => {
     if (path === "home") return "Home";
     if (path === "profile") return "Profile";
     if (path === "publications") return "Publications";
-    if (path === "awards") return "Awards";
+    if (path === "awards") return "Award Application";
     if (path === "submissions") return "Submissions";
-    if (path === "documents") return "Documents";
     return "Home";
   };
 
@@ -73,21 +71,15 @@ const NonTeachingSidebar: React.FC = () => {
           </li>
           <li
             onClick={() => router.push("/nonteaching/awards")}
-            className={buttonStyle("Awards")}
+            className={buttonStyle("Award Application")}
           >
-            <span>Awards</span>
+            <span>Award Application</span>
           </li>
           <li
             onClick={() => router.push("/nonteaching/submissions")}
             className={buttonStyle("Submissions")}
           >
             <span>Submissions</span>
-          </li>
-          <li
-            onClick={() => router.push("/nonteaching/documents")}
-            className={buttonStyle("Documents")}
-          >
-            <span>Documents</span>
           </li>
         </ul>
       </div>

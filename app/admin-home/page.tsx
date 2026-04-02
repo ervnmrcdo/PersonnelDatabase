@@ -13,12 +13,11 @@ import { useAuth } from "@/context/AuthContext";
 type Page =
   | "Home"
   | "Profile"
-  | "Account Settings"
   | "To Review"
   | "Signed Forms"
   | "Teaching"
   | "NonTeaching"
-  | "Forms"
+  | "Awards"
   | "Crawler"
   | "Database";
 
@@ -41,12 +40,10 @@ export default function Page() {
         return <PersonnelList role="teaching" />;
       case "NonTeaching":
         return <PersonnelList role="nonteaching" />;
-      case "Forms":
-        return <>Forms</>;
+      case "Awards":
+        return <>Awards</>;
       case "Crawler":
         return <>Crawler</>;
-      case "Account Settings":
-        return <>Account Settings</>;
     }
   };
 
