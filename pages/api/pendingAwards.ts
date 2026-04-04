@@ -13,26 +13,27 @@ export default async function PendingAwards(
     const supabase = createServiceRoleClient();
 
     let id = null;
+    let filterByUser = false;
     if (req.method === "POST") {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
       id = body?.id;
-    } else if (req.method === "GET") {
-      id = req.query.id;
+      filterByUser = true;
     }
 
-    if (!id) {
-      return res.status(400).json({ message: "User ID is required" });
-    }
-
-    const { data, error } = await supabase
+    let query = supabase
       .from('submissions')
       .select(`
         *,
         authors:users!submitter_id(*),
         awards:awards!award_id(*)
        `)
-      .eq('status', 'PENDING')
-      .eq('submitter_id', id)
+      .eq('status', 'PENDING');
+
+    if (filterByUser && id) {
+      query = query.eq('submitter_id', id);
+    }
+
+    const { data, error } = await query;
 
 
     if (error) {

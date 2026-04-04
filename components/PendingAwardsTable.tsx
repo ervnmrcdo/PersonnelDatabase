@@ -16,17 +16,27 @@ export default function PendingAwardsTable() {
 
     const [pendingAwards, setPendingAwards] = useState<PendingAward[]>([]);
     const [isLoadingPending, setIsLoadingPending] = useState(true);
-    const { user } = useAuth();
+    const { user, profile } = useAuth();
 
     useEffect(() => {
-        if (!user) return;
+        if (!user || !profile) return;
         const fetchPendingAwards = async () => {
             try {
-                const response = await fetch("/api/pendingAwards", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: user.id })
-                });
+                let response;
+                // Only admins see all, others see their own
+                if (profile.role === "admin") {
+                    response = await fetch("/api/pendingAwards");
+                } else if (profile.role === "nonteaching" || profile.role === "teaching") {
+                    response = await fetch("/api/pendingAwards", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: user.id })
+                    });
+                } else {
+                    setPendingAwards([]);
+                    setIsLoadingPending(false);
+                    return;
+                }
                 if (response.ok) {
                     const data = await response.json();
                     setPendingAwards(data);
@@ -38,7 +48,7 @@ export default function PendingAwardsTable() {
             }
         };
         fetchPendingAwards();
-    }, [user]);
+    }, [user, profile]);
 
     return (
         <div className="bg-[#1b1e2b] rounded-xl shadow p-6 mt-5">
