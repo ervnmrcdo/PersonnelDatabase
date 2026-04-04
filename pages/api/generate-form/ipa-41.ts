@@ -78,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })) || [];
 
     const firstAuthor = authors[0] || {};
-    console.log(firstAuthor)
+    console.dir(firstAuthor, { depth: null })
     const totalAuthors = authors.length;
 
     const citationParts = [

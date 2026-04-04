@@ -8,7 +8,6 @@ export default async function ReturnAward(
 ) {
 	const data = await req.body;
 	const { admin_id, submission_id, remarks, logs } = JSON.parse(data)
-	console.log(admin_id, submission_id, remarks, logs)
 
 	try {
 		const supabase = createPagesServerClient(req, res);

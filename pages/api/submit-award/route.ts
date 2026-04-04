@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const supabaseAdmin = createServiceRoleClient();
 
-    const { publicationId, awardId, userId } = req.body;
+    const { publicationId, awardId, userId, logs } = req.body;
 
     if (!publicationId || !awardId || !userId) {
       return res.status(400).json({ error: "publicationId, awardId, and userId are required" });
@@ -59,12 +59,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: "No draft files found to submit" });
     }
 
-    const initialLog = [{
-      action: 'SUBMITTED',
-      remarks: '',
-      date: new Date().toLocaleString(),
-      actor_name: userId,
-    }];
 
     const { data: submissionData, error: submissionError } = await supabaseAdmin
       .from("submissions")
@@ -75,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           publication_id: publicationId,
           status: 'PENDING',
           pdf_json_data: {},
-          logs: initialLog,
+          logs,
         }
       ])
       .select();

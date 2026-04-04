@@ -5,9 +5,10 @@ import Form42Editor from "./Form42Editor";
 import Form43Editor from "./Form43Editor";
 import Form44Editor from "./Form44Editor";
 import FormReview from "./FormReview";
-import { Award, Publication } from "@/lib/types";
+import { Award, Publication, SubmissionLog } from "@/lib/types";
 import { useAwardsFlow } from "@/context/AwardsFlowContext";
 import { Save } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 interface FormEditingProps {
   handleBack: () => void;
@@ -17,6 +18,7 @@ interface FormEditingProps {
 }
 
 export default function FormEditing({ handleBack, selectedAward, selectedPublication, userId }: FormEditingProps) {
+  const USER_INFO = useAuth().profile
   const { formStep, setFormStep, setIsJournal, draftUrls, setDraftUrls, setDraftId } = useAwardsFlow();
 
   const isJournalType = selectedAward.id === 1;
@@ -48,12 +50,21 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
   const handleFinalSubmit = async () => {
     setIsSubmitting(true);
     try {
+
+      const log: SubmissionLog = {
+        action: 'SUBMITTED',
+        remarks: '',
+        date: new Date().toLocaleString(),
+        actor_name: USER_INFO ? `${USER_INFO.first_name} ${USER_INFO.middle_name} ${USER_INFO.last_name}` : '',
+      };
+
       const res = await fetch('/api/submit-award/route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           publicationId: selectedPublication.publication_id,
           awardId: selectedAward.id,
+          log,
           userId,
         }),
       });
