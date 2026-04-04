@@ -5,6 +5,11 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { SupabasePublication } from '@/lib/types';
 
+type PublicationType = {
+  id: number;
+  name: string;
+};
+
 export default function Publications() {
   const { user } = useAuth();
   const [publications, setPublications] = useState<SupabasePublication[]>([]);
@@ -27,6 +32,8 @@ export default function Publications() {
   const [journalName, setJournalName] = useState('');
   const [doi, setDOI] = useState('');
 
+  const [publicationTypes, setPublicationTypes] = useState<PublicationType[]>([]);
+
   const [selectedPublication, setSelectedPublication] = useState<SupabasePublication | null>(null);
   const [highlightedPubId, setHighlightedPubId] = useState<number | null>(null)
 
@@ -34,7 +41,20 @@ export default function Publications() {
 
   useEffect(() => {
     fetchPublications();
+    fetchPublicationTypes();
   }, [user]);
+
+  const fetchPublicationTypes = async () => {
+  try {
+    const res = await fetch("/api/admin/publication-types/route");
+    if (!res.ok) throw new Error("Failed to fetch types");
+
+    const data = await res.json();
+    setPublicationTypes(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const fetchPublications = async () => {
     if (!user) {
@@ -259,14 +279,18 @@ export default function Publications() {
                 value={publicationTypeId ?? ''}
                 onChange={(e) => {
                   const value = Number(e.target.value)
+                  const selectedPubType = publicationTypes.find(t=>t.id === value);
                   setPublicationTypeId(value)
-                  setType(value === 1 ? "Journal" : "Book Chapter")
+                  setType(selectedPubType?.name || "")
                 }}
                 className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600"
               >
                 <option value="">Select Type</option>
-                <option value={1}>Journal</option>
-                <option value={2}>Book Chapter</option>
+                {publicationTypes.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
               </select>
               <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
               <input type="text" value={publisher} onChange={(e) => setPublisher(e.target.value)} placeholder="Publisher" className="w-full p-2 rounded bg-[#252836] text-white border border-gray-600" />
