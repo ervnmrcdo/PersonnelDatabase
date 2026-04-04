@@ -11,7 +11,7 @@ import Form42Editor from "./Form42Editor";
 import FormEditing from "./FormEditing";
 
 const AwardsPageContent: FC = () => {
-  const { step, setStep, setDraftId, setDraftUrls } = useAwardsFlow();
+  const { step, setStep, setDraftId, setDraftUrls, draftsMap, setDraftsMap } = useAwardsFlow();
   const [selectedAward, setSelectedAward] = useState<Award | null>(null);
   const [selectedPublication, setSelectedPublication] =
     useState<Publication | null>(null);
@@ -47,7 +47,7 @@ const AwardsPageContent: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
-  const handleAwardSelect = (award: Award) => {
+  const handleAwardSelect = async (award: Award) => {
     setSelectedAward(award);
 
     const awardData = awardsWithPublications.find(
@@ -76,19 +76,34 @@ const AwardsPageContent: FC = () => {
       });
 
       setPublications(allPublications);
+
+      const draftsMap: Record<string, boolean> = {};
+      for (const pub of allPublications) {
+        try {
+          const res = await fetch(`/api/drafts?publicationId=${pub.publication_id}&awardId=${award.id}`);
+          const draft = await res.json();
+          draftsMap[pub.publication_id] = !!(draft?.form41 || draft?.form42 || draft?.form43 || draft?.form44);
+        } catch {
+          draftsMap[pub.publication_id] = false;
+        }
+      }
+      setDraftsMap(draftsMap);
     }
 
     setStep("publications");
   };
 
+  console.log(draftsMap)
+
+
   const handlePublicationSelect = async (pub: Publication) => {
     setSelectedPublication(pub);
-    
+
     if (selectedAward) {
       try {
         const res = await fetch(`/api/drafts?publicationId=${pub.publication_id}&awardId=${selectedAward.id}`);
         const draft = await res.json();
-        
+
         if (draft) {
           setDraftId(draft.id);
           setDraftUrls({
@@ -107,7 +122,7 @@ const AwardsPageContent: FC = () => {
         setDraftUrls({});
       }
     }
-    
+
     setStep("form");
   };
 
@@ -157,6 +172,9 @@ const AwardsPageContent: FC = () => {
                 handlePublicationSelect={(pub) => handlePublicationSelect(pub)}
                 publications={publications}
                 isLoading={isLoadingPublications}
+                draftsMap={draftsMap}
+                setDraftsMap={setDraftsMap}
+                selectedAward={selectedAward}
               />
             </motion.div>
           )}

@@ -17,6 +17,8 @@ interface AwardsFlowContextValue {
   setDraftId: Dispatch<SetStateAction<string | null>>
   draftUrls: Record<string, string | null>
   setDraftUrls: Dispatch<SetStateAction<Record<string, string | null>>>
+  draftsMap: Record<string, boolean>
+  setDraftsMap: Dispatch<SetStateAction<Record<string, boolean>>>
 }
 
 const AwardsFlowContext = createContext<AwardsFlowContextValue | undefined>(undefined)
@@ -27,9 +29,10 @@ export function AwardsFlowProvider({ children }: { children: React.ReactNode }) 
   const [isJournal, setIsJournal] = useState(true)
   const [draftId, setDraftId] = useState<string | null>(null)
   const [draftUrls, setDraftUrls] = useState<Record<string, string | null>>({})
+  const [draftsMap, setDraftsMap] = useState<Record<string, boolean>>({})
 
   return (
-    <AwardsFlowContext.Provider value={{ step, setStep, formStep, setFormStep, isJournal, setIsJournal, draftId, setDraftId, draftUrls, setDraftUrls }}>
+    <AwardsFlowContext.Provider value={{ step, setStep, formStep, setFormStep, isJournal, setIsJournal, draftId, setDraftId, draftUrls, setDraftUrls, draftsMap, setDraftsMap }}>
       {children}
     </AwardsFlowContext.Provider>
   )

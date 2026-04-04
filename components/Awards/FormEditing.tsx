@@ -7,7 +7,7 @@ import Form44Editor from "./Form44Editor";
 import FormReview from "./FormReview";
 import { Award, Publication } from "@/lib/types";
 import { useAwardsFlow } from "@/context/AwardsFlowContext";
-import { Trash2, Loader2, Save } from "lucide-react";
+import { Save } from "lucide-react";
 
 interface FormEditingProps {
   handleBack: () => void;
@@ -18,7 +18,6 @@ interface FormEditingProps {
 
 export default function FormEditing({ handleBack, selectedAward, selectedPublication, userId }: FormEditingProps) {
   const { formStep, setFormStep, setIsJournal, draftUrls, setDraftUrls, setDraftId } = useAwardsFlow();
-  const [isClearing, setIsClearing] = useState(false);
 
   const isJournalType = selectedAward.id === 1;
   const isBookType = selectedAward.id === 2;
@@ -34,23 +33,6 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
       setFormStep('form41');
     }
   }, [selectedAward.id, isJournalType, isBookType, setFormStep, setIsJournal]);
-
-  const clearDraft = async () => {
-    if (!confirm('Are you sure you want to clear your saved progress? This cannot be undone.')) return;
-
-    setIsClearing(true);
-    try {
-      await fetch(`/api/drafts?publicationId=${selectedPublication.publication_id}&awardId=${selectedAward.id}`, {
-        method: 'DELETE'
-      });
-      setDraftId(null);
-      setDraftUrls({});
-    } catch (err) {
-      console.error('Failed to clear draft:', err);
-    } finally {
-      setIsClearing(false);
-    }
-  };
 
   const getAnimationKey = () => {
     if (isJournalType) {
@@ -131,21 +113,6 @@ export default function FormEditing({ handleBack, selectedAward, selectedPublica
         >
           ← Back to {formStep === 'form41' || formStep === 'form44' ? 'Publications' : 'Previous Form'}
         </button>
-
-        {(Object.keys(draftUrls).length > 0) && (
-          <button
-            onClick={clearDraft}
-            disabled={isClearing}
-            className="flex items-center px-3 py-1 text-sm text-red-400 hover:text-red-300 transition-colors"
-          >
-            {isClearing ? (
-              <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-            ) : (
-              <Trash2 className="w-4 h-4 mr-1" />
-            )}
-            Clear Draft
-          </button>
-        )}
       </div>
 
       <h1 className="text-2xl font-bold mb-2 text-white">

@@ -37,11 +37,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
     if (urlData?.signedUrl) {
-      console.log(urlData)
       const fileResponse = await fetch(urlData.signedUrl);
       const fileBuffer = await fileResponse.arrayBuffer();
 
-      console.log(fileBuffer)
 
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', 'inline; filename="form41.pdf"');
@@ -80,8 +78,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })) || [];
 
     const firstAuthor = authors[0] || {};
+    console.log(firstAuthor)
     const totalAuthors = authors.length;
-    console.log(totalAuthors)
 
     const citationParts = [
       publication.journal_name,
@@ -116,8 +114,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ? `${firstAuthor.university} - ${firstAuthor.department}`
         : firstAuthor.university || '';
 
-      form.getTextField('author1-name').setText(author1Name);
       form.getTextField('author1-name-last-first').setText(author1NameLastFirst);
+
+      form.getTextField('author1-name').setText(author1Name);
       form.getTextField('author1-university-and-dept').setText(author1UniversityAndDept);
       form.getTextField('author1-university').setText(firstAuthor.university || '');
       form.getTextField('author1-college').setText(firstAuthor.college || '');
