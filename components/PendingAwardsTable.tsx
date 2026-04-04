@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 interface PendingAward {
     id: number;
@@ -15,11 +16,17 @@ export default function PendingAwardsTable() {
 
     const [pendingAwards, setPendingAwards] = useState<PendingAward[]>([]);
     const [isLoadingPending, setIsLoadingPending] = useState(true);
+    const { user } = useAuth();
 
     useEffect(() => {
+        if (!user) return;
         const fetchPendingAwards = async () => {
             try {
-                const response = await fetch("/api/pendingAwards");
+                const response = await fetch("/api/pendingAwards", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: user.id })
+                });
                 if (response.ok) {
                     const data = await response.json();
                     setPendingAwards(data);
@@ -30,9 +37,8 @@ export default function PendingAwardsTable() {
                 setIsLoadingPending(false);
             }
         };
-
         fetchPendingAwards();
-    }, []);
+    }, [user]);
 
     return (
         <div className="bg-[#1b1e2b] rounded-xl shadow p-6 mt-5">

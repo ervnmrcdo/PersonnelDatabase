@@ -15,7 +15,7 @@ export default function LoginPage() {
     const result: LoginState = await login({ error: undefined }, formData)
 
     if (result.successPath) {
-      window.location.reload()
+      // swindow.location.reload()
       router.push(result.successPath)
     } else if (result.error) {
       alert(result.error)
